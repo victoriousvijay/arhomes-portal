@@ -5,6 +5,7 @@ import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { StickySideMenu } from './components/StickySideMenu';
 import { MobileBottomBar } from './components/MobileBottomBar';
+import { ClickSpark } from './components/ClickSpark';
 import { EnquiryModal } from './components/EnquiryModal';
 import { ResidenceModal } from './components/ResidenceModal';
 
@@ -38,7 +39,14 @@ export function App() {
   return (
     <Router>
       <ScrollToTop />
-      <div className="min-h-screen bg-black text-white flex flex-col font-sans selection:bg-white selection:text-black relative">
+      <ClickSpark
+        sparkColor="#D4AF37"
+        sparkSize={10}
+        sparkRadius={18}
+        sparkCount={8}
+        duration={400}
+      >
+        <div className="min-h-screen bg-black text-white flex flex-col font-sans selection:bg-white selection:text-black relative">
         
         {/* Persistent Floating Navbar across all pages */}
         <Navbar onStartChat={handleOpenEnquiry} onOpenEnquiry={handleOpenEnquiry} />
@@ -151,6 +159,7 @@ export function App() {
         )}
 
       </div>
+      </ClickSpark>
     </Router>
   );
 }
