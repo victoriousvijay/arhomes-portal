@@ -1,23 +1,27 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ChevronDown, Menu, X, ArrowRight, Home, Building2 } from 'lucide-react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { ChevronDown, Menu, X, ArrowRight, Home, Building2, Sparkles } from 'lucide-react';
 
-const BUY_ITEMS = [
-  'Residential',
-  'Commercial',
-  'Apartments',
-  'Villas / Houses',
-  'Plots / Land',
-  'New Properties'
+const BUY_LINKS = [
+  { label: 'Residential', path: '/buy?type=residential' },
+  { label: 'Commercial', path: '/buy?type=commercial' },
+  { label: 'Apartments', path: '/buy?type=apartments' },
+  { label: 'Villas / Houses', path: '/buy?type=villas-houses' },
+  { label: 'Plots / Land', path: '/buy?type=plots-land' },
+  { label: 'New Properties', path: '/buy?type=new-properties' }
 ];
 
-const RENT_ITEMS = [
-  'Apartments',
-  'Houses / Villas',
-  'Commercial',
-  'PG / Co-living'
+const RENT_LINKS = [
+  { label: 'Apartments', path: '/rent?type=apartments' },
+  { label: 'Houses / Villas', path: '/rent?type=houses-villas' },
+  { label: 'Commercial', path: '/rent?type=commercial' },
+  { label: 'PG / Co-living', path: '/rent?type=pg-coliving' }
 ];
 
 export const Navbar = ({ onStartChat, onOpenEnquiry }) => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
   const [buyDropdownOpen, setBuyDropdownOpen] = useState(false);
   const [rentDropdownOpen, setRentDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -29,15 +33,6 @@ export const Navbar = ({ onStartChat, onOpenEnquiry }) => {
   const rentTimeoutRef = useRef(null);
 
   const handleEnquiry = onStartChat || onOpenEnquiry;
-
-  const handleSelectCategory = (type, item) => {
-    setBuyDropdownOpen(false);
-    setRentDropdownOpen(false);
-    setMobileMenuOpen(false);
-    if (handleEnquiry) {
-      handleEnquiry({ title: `${item} (${type})`, location: 'Prime NCR / Hyderabad' });
-    }
-  };
 
   const handleBuyEnter = () => {
     clearTimeout(buyTimeoutRef.current);
@@ -76,15 +71,28 @@ export const Navbar = ({ onStartChat, onOpenEnquiry }) => {
     };
   }, []);
 
+  // Close menus on route change
+  useEffect(() => {
+    setBuyDropdownOpen(false);
+    setRentDropdownOpen(false);
+    setMobileMenuOpen(false);
+  }, [location.pathname, location.search]);
+
+  const isBuyActive = location.pathname.startsWith('/buy');
+  const isRentActive = location.pathname.startsWith('/rent');
+  const isServicesActive = location.pathname === '/services';
+  const isAboutActive = location.pathname === '/about';
+  const isGalleryActive = location.pathname === '/gallery';
+
   return (
-    <header className="relative z-40 w-full px-4 sm:px-8 md:px-12 lg:px-16 pt-5">
+    <header className="fixed top-0 left-0 w-full z-50 px-4 sm:px-8 md:px-12 lg:px-16 pt-4 pointer-events-none">
       <nav
         ref={navRef}
-        className="liquid-glass overflow-visible rounded-2xl px-4 md:px-6 py-2.5 flex items-center justify-between relative border border-white/20 shadow-2xl backdrop-blur-xl z-40"
+        className="liquid-glass overflow-visible rounded-2xl px-4 md:px-6 py-2.5 flex items-center justify-between relative border border-white/20 shadow-2xl backdrop-blur-xl z-50 pointer-events-auto"
       >
         
         {/* Left: AR Homes Brand Logo */}
-        <a href="#" className="flex items-center gap-3 select-none group shrink-0">
+        <Link to="/" className="flex items-center gap-3 select-none group shrink-0">
           <img
             src="/ar-homes-logo.jpg"
             alt="AR Homes Logo"
@@ -98,7 +106,7 @@ export const Navbar = ({ onStartChat, onOpenEnquiry }) => {
               Ghar Bethe, Ghar Dekho
             </span>
           </div>
-        </a>
+        </Link>
 
         {/* Center: Desktop Navigation with Dropdowns */}
         <div className="hidden lg:flex items-center gap-7 text-sm font-medium text-white/90">
@@ -109,35 +117,46 @@ export const Navbar = ({ onStartChat, onOpenEnquiry }) => {
             onMouseEnter={handleBuyEnter}
             onMouseLeave={handleBuyLeave}
           >
-            <button
-              type="button"
-              onClick={() => {
-                setRentDropdownOpen(false);
-                setBuyDropdownOpen(!buyDropdownOpen);
-              }}
-              className="flex items-center gap-1.5 hover:text-white transition-colors cursor-pointer text-sm font-medium select-none"
-            >
-              <span>Buy</span>
-              <ChevronDown className={`w-4 h-4 transition-transform duration-200 text-white/70 ${buyDropdownOpen ? 'rotate-180 text-white' : ''}`} />
-            </button>
+            <div className="flex items-center gap-1.5 cursor-pointer select-none">
+              <Link
+                to="/buy"
+                className={`hover:text-white transition-colors text-sm font-medium ${isBuyActive ? 'text-[#D4AF37] font-semibold' : 'text-gray-200'}`}
+              >
+                Buy
+              </Link>
+              <button
+                type="button"
+                onClick={() => {
+                  setRentDropdownOpen(false);
+                  setBuyDropdownOpen(!buyDropdownOpen);
+                }}
+                className="p-0.5 hover:text-white transition-colors cursor-pointer"
+                aria-label="Toggle Buy menu"
+              >
+                <ChevronDown className={`w-4 h-4 transition-transform duration-200 text-white/70 ${buyDropdownOpen ? 'rotate-180 text-white' : ''}`} />
+              </button>
+            </div>
 
             {buyDropdownOpen && (
               <div className="absolute top-full left-0 pt-2 w-56 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
                 <div className="bg-[#050e0a]/95 backdrop-blur-2xl border border-white/20 rounded-xl shadow-2xl p-2 space-y-1">
-                  <div className="px-3 py-1.5 text-[10px] uppercase tracking-widest text-[#D4AF37] font-semibold border-b border-white/10 flex items-center gap-1.5">
-                    <Home className="w-3 h-3" />
-                    <span>Properties For Sale</span>
+                  <div className="px-3 py-1.5 text-[10px] uppercase tracking-widest text-[#D4AF37] font-semibold border-b border-white/10 flex items-center justify-between">
+                    <span className="flex items-center gap-1.5">
+                      <Home className="w-3 h-3" />
+                      <span>Properties For Sale</span>
+                    </span>
+                    <Link to="/buy" className="text-[9px] hover:underline text-gray-400">All</Link>
                   </div>
-                  {BUY_ITEMS.map((item) => (
-                    <button
-                      key={item}
-                      type="button"
-                      onClick={() => handleSelectCategory('Buy', item)}
+                  {BUY_LINKS.map((item) => (
+                    <Link
+                      key={item.label}
+                      to={item.path}
+                      onClick={() => setBuyDropdownOpen(false)}
                       className="w-full text-left px-3 py-2 text-xs text-gray-200 hover:text-white hover:bg-white/10 rounded-lg transition-colors flex items-center justify-between group cursor-pointer"
                     >
-                      <span>{item}</span>
+                      <span>{item.label}</span>
                       <ArrowRight className="w-3 h-3 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-[#D4AF37]" />
-                    </button>
+                    </Link>
                   ))}
                 </div>
               </div>
@@ -150,60 +169,71 @@ export const Navbar = ({ onStartChat, onOpenEnquiry }) => {
             onMouseEnter={handleRentEnter}
             onMouseLeave={handleRentLeave}
           >
-            <button
-              type="button"
-              onClick={() => {
-                setBuyDropdownOpen(false);
-                setRentDropdownOpen(!rentDropdownOpen);
-              }}
-              className="flex items-center gap-1.5 hover:text-white transition-colors cursor-pointer text-sm font-medium select-none"
-            >
-              <span>Rent</span>
-              <ChevronDown className={`w-4 h-4 transition-transform duration-200 text-white/70 ${rentDropdownOpen ? 'rotate-180 text-white' : ''}`} />
-            </button>
+            <div className="flex items-center gap-1.5 cursor-pointer select-none">
+              <Link
+                to="/rent"
+                className={`hover:text-white transition-colors text-sm font-medium ${isRentActive ? 'text-[#D4AF37] font-semibold' : 'text-gray-200'}`}
+              >
+                Rent
+              </Link>
+              <button
+                type="button"
+                onClick={() => {
+                  setBuyDropdownOpen(false);
+                  setRentDropdownOpen(!rentDropdownOpen);
+                }}
+                className="p-0.5 hover:text-white transition-colors cursor-pointer"
+                aria-label="Toggle Rent menu"
+              >
+                <ChevronDown className={`w-4 h-4 transition-transform duration-200 text-white/70 ${rentDropdownOpen ? 'rotate-180 text-white' : ''}`} />
+              </button>
+            </div>
 
             {rentDropdownOpen && (
               <div className="absolute top-full left-0 pt-2 w-52 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
                 <div className="bg-[#050e0a]/95 backdrop-blur-2xl border border-white/20 rounded-xl shadow-2xl p-2 space-y-1">
-                  <div className="px-3 py-1.5 text-[10px] uppercase tracking-widest text-[#D4AF37] font-semibold border-b border-white/10 flex items-center gap-1.5">
-                    <Building2 className="w-3 h-3" />
-                    <span>Rental Listings</span>
+                  <div className="px-3 py-1.5 text-[10px] uppercase tracking-widest text-[#D4AF37] font-semibold border-b border-white/10 flex items-center justify-between">
+                    <span className="flex items-center gap-1.5">
+                      <Building2 className="w-3 h-3" />
+                      <span>Rental Listings</span>
+                    </span>
+                    <Link to="/rent" className="text-[9px] hover:underline text-gray-400">All</Link>
                   </div>
-                  {RENT_ITEMS.map((item) => (
-                    <button
-                      key={item}
-                      type="button"
-                      onClick={() => handleSelectCategory('Rent', item)}
+                  {RENT_LINKS.map((item) => (
+                    <Link
+                      key={item.label}
+                      to={item.path}
+                      onClick={() => setRentDropdownOpen(false)}
                       className="w-full text-left px-3 py-2 text-xs text-gray-200 hover:text-white hover:bg-white/10 rounded-lg transition-colors flex items-center justify-between group cursor-pointer"
                     >
-                      <span>{item}</span>
+                      <span>{item.label}</span>
                       <ArrowRight className="w-3 h-3 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-[#D4AF37]" />
-                    </button>
+                    </Link>
                   ))}
                 </div>
               </div>
             )}
           </div>
 
-          {/* Direct Links */}
-          <a
-            href="#services"
-            className="hover:text-white transition-colors"
+          {/* Direct Navigation Links to Dedicated Pages */}
+          <Link
+            to="/services"
+            className={`transition-colors hover:text-white ${isServicesActive ? 'text-[#D4AF37] font-semibold' : 'text-gray-200'}`}
           >
             Services
-          </a>
-          <a
-            href="#about"
-            className="hover:text-white transition-colors"
+          </Link>
+          <Link
+            to="/about"
+            className={`transition-colors hover:text-white ${isAboutActive ? 'text-[#D4AF37] font-semibold' : 'text-gray-200'}`}
           >
             About Us
-          </a>
-          <a
-            href="#gallery"
-            className="hover:text-white transition-colors"
+          </Link>
+          <Link
+            to="/gallery"
+            className={`transition-colors hover:text-white ${isGalleryActive ? 'text-[#D4AF37] font-semibold' : 'text-gray-200'}`}
           >
             Gallery
-          </a>
+          </Link>
         </div>
 
         {/* Right CTA & Mobile Hamburger */}
@@ -230,29 +260,37 @@ export const Navbar = ({ onStartChat, onOpenEnquiry }) => {
 
       {/* Mobile Menu Drawer */}
       {mobileMenuOpen && (
-        <div className="lg:hidden mt-2 liquid-glass rounded-2xl p-5 border border-white/20 shadow-2xl backdrop-blur-2xl text-white space-y-4 animate-in fade-in slide-in-from-top-3 duration-200">
+        <div className="lg:hidden mt-2 liquid-glass rounded-2xl p-5 border border-white/20 shadow-2xl backdrop-blur-2xl text-white space-y-4 animate-in fade-in slide-in-from-top-3 duration-200 pointer-events-auto max-h-[80vh] overflow-y-auto">
           
           {/* Mobile Buy Accordion */}
           <div className="border-b border-white/10 pb-3">
-            <button
-              type="button"
-              onClick={() => setMobileBuyOpen(!mobileBuyOpen)}
-              className="w-full flex items-center justify-between text-sm font-semibold py-1 cursor-pointer"
-            >
-              <span>Buy Properties</span>
-              <ChevronDown className={`w-4 h-4 transition-transform ${mobileBuyOpen ? 'rotate-180' : ''}`} />
-            </button>
+            <div className="flex items-center justify-between text-sm font-semibold py-1">
+              <Link
+                to="/buy"
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-white hover:text-[#D4AF37]"
+              >
+                Buy Properties
+              </Link>
+              <button
+                type="button"
+                onClick={() => setMobileBuyOpen(!mobileBuyOpen)}
+                className="p-1 cursor-pointer"
+              >
+                <ChevronDown className={`w-4 h-4 transition-transform ${mobileBuyOpen ? 'rotate-180' : ''}`} />
+              </button>
+            </div>
             {mobileBuyOpen && (
               <div className="mt-2 pl-3 space-y-1.5 border-l-2 border-[#D4AF37]/50">
-                {BUY_ITEMS.map((item) => (
-                  <button
-                    key={item}
-                    type="button"
-                    onClick={() => handleSelectCategory('Buy', item)}
+                {BUY_LINKS.map((item) => (
+                  <Link
+                    key={item.label}
+                    to={item.path}
+                    onClick={() => setMobileMenuOpen(false)}
                     className="block w-full text-left py-1 text-xs text-gray-300 hover:text-white"
                   >
-                    {item}
-                  </button>
+                    {item.label}
+                  </Link>
                 ))}
               </div>
             )}
@@ -260,25 +298,33 @@ export const Navbar = ({ onStartChat, onOpenEnquiry }) => {
 
           {/* Mobile Rent Accordion */}
           <div className="border-b border-white/10 pb-3">
-            <button
-              type="button"
-              onClick={() => setMobileRentOpen(!mobileRentOpen)}
-              className="w-full flex items-center justify-between text-sm font-semibold py-1 cursor-pointer"
-            >
-              <span>Rent Properties</span>
-              <ChevronDown className={`w-4 h-4 transition-transform ${mobileRentOpen ? 'rotate-180' : ''}`} />
-            </button>
+            <div className="flex items-center justify-between text-sm font-semibold py-1">
+              <Link
+                to="/rent"
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-white hover:text-[#D4AF37]"
+              >
+                Rent Properties
+              </Link>
+              <button
+                type="button"
+                onClick={() => setMobileRentOpen(!mobileRentOpen)}
+                className="p-1 cursor-pointer"
+              >
+                <ChevronDown className={`w-4 h-4 transition-transform ${mobileRentOpen ? 'rotate-180' : ''}`} />
+              </button>
+            </div>
             {mobileRentOpen && (
               <div className="mt-2 pl-3 space-y-1.5 border-l-2 border-[#D4AF37]/50">
-                {RENT_ITEMS.map((item) => (
-                  <button
-                    key={item}
-                    type="button"
-                    onClick={() => handleSelectCategory('Rent', item)}
+                {RENT_LINKS.map((item) => (
+                  <Link
+                    key={item.label}
+                    to={item.path}
+                    onClick={() => setMobileMenuOpen(false)}
                     className="block w-full text-left py-1 text-xs text-gray-300 hover:text-white"
                   >
-                    {item}
-                  </button>
+                    {item.label}
+                  </Link>
                 ))}
               </div>
             )}
@@ -286,27 +332,34 @@ export const Navbar = ({ onStartChat, onOpenEnquiry }) => {
 
           {/* Mobile Direct Links */}
           <div className="space-y-3 pt-1 text-sm font-medium">
-            <a
-              href="#services"
+            <Link
+              to="/services"
               onClick={() => setMobileMenuOpen(false)}
               className="block hover:text-[#D4AF37] transition-colors"
             >
               Services
-            </a>
-            <a
-              href="#about"
+            </Link>
+            <Link
+              to="/about"
               onClick={() => setMobileMenuOpen(false)}
               className="block hover:text-[#D4AF37] transition-colors"
             >
               About Us
-            </a>
-            <a
-              href="#gallery"
+            </Link>
+            <Link
+              to="/gallery"
               onClick={() => setMobileMenuOpen(false)}
               className="block hover:text-[#D4AF37] transition-colors"
             >
               Gallery
-            </a>
+            </Link>
+            <Link
+              to="/contact"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block hover:text-[#D4AF37] transition-colors"
+            >
+              Contact Us
+            </Link>
           </div>
 
           <div className="pt-2">
@@ -316,7 +369,7 @@ export const Navbar = ({ onStartChat, onOpenEnquiry }) => {
                 setMobileMenuOpen(false);
                 if (handleEnquiry) handleEnquiry(null);
               }}
-              className="w-full py-2.5 bg-[#D4AF37] text-[#013724] rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-white transition-colors"
+              className="w-full py-2.5 bg-[#D4AF37] text-[#013724] rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-white transition-colors cursor-pointer"
             >
               Book an Enquiry
             </button>

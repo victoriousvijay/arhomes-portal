@@ -1,5 +1,4 @@
 import React from 'react';
-import { Navbar } from './Navbar';
 import { AnimatedHeading } from './AnimatedHeading';
 import { FadeIn } from './FadeIn';
 
@@ -18,8 +17,8 @@ export const Hero = ({ onOpenEnquiry, onStartChat }) => {
         playsInline
       />
 
-      {/* Navbar at top */}
-      <Navbar onStartChat={handleChat} />
+      {/* Top Spacer for Global Fixed Navbar */}
+      <div className="h-24 sm:h-28 w-full shrink-0" />
 
       {/* Hero Content (Bottom of viewport) */}
       <div className="relative z-10 w-full px-6 md:px-12 lg:px-16 flex-1 flex flex-col justify-end pb-12 lg:pb-16">

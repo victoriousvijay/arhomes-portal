@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { BRAND, RESIDENCES } from '../data/projectsData';
 import { ArrowRight, Phone, Mail, MapPin } from 'lucide-react';
 
@@ -65,13 +66,13 @@ export const Footer = ({ onOpenEnquiry }) => {
               Quick Links
             </h4>
             <ul className="space-y-2.5 text-xs text-slate-300 font-light">
-              <li><a href="#" className="hover:text-[#D4AF37] transition-colors">Home</a></li>
-              <li><a href="#philosophy" className="hover:text-[#D4AF37] transition-colors">Corporate</a></li>
-              <li><a href="#residences" className="hover:text-[#D4AF37] transition-colors">Projects</a></li>
-              <li><a href="#floorplans" className="hover:text-[#D4AF37] transition-colors">Upcoming Projects</a></li>
-              <li><a href="#insights" className="hover:text-[#D4AF37] transition-colors">Careers</a></li>
-              <li><a href="#insights" className="hover:text-[#D4AF37] transition-colors">Media</a></li>
-              <li><a href="#contact" className="hover:text-[#D4AF37] transition-colors">Contact</a></li>
+              <li><Link to="/" className="hover:text-[#D4AF37] transition-colors">Home</Link></li>
+              <li><Link to="/buy" className="hover:text-[#D4AF37] transition-colors">Buy Properties</Link></li>
+              <li><Link to="/rent" className="hover:text-[#D4AF37] transition-colors">Rental Listings</Link></li>
+              <li><Link to="/services" className="hover:text-[#D4AF37] transition-colors">Services & Amenities</Link></li>
+              <li><Link to="/about" className="hover:text-[#D4AF37] transition-colors">About Us</Link></li>
+              <li><Link to="/gallery" className="hover:text-[#D4AF37] transition-colors">Visual Gallery</Link></li>
+              <li><Link to="/contact" className="hover:text-[#D4AF37] transition-colors">Contact & Enquiry</Link></li>
             </ul>
           </div>
 
@@ -83,10 +84,10 @@ export const Footer = ({ onOpenEnquiry }) => {
             <ul className="space-y-2.5 text-xs text-slate-300 font-light">
               {RESIDENCES.map((res) => (
                 <li key={res.id}>
-                  <a href="#residences" className="hover:text-[#D4AF37] transition-colors block">
+                  <Link to="/buy" className="hover:text-[#D4AF37] transition-colors block">
                     <span className="font-medium text-white">{res.title}</span>
                     <span className="block text-[10px] text-slate-400">{res.location}</span>
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>

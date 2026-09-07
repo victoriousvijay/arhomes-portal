@@ -1,15 +1,20 @@
 import React, { useState } from 'react';
-import { Hero } from './components/Hero';
-import { MoreThanFourWalls } from './components/MoreThanFourWalls';
-import { FeaturedProjects } from './components/FeaturedProjects';
-import { InteractiveFloorPlans } from './components/InteractiveFloorPlans';
-import { LuxuryAmenities } from './components/LuxuryAmenities';
-import { ParallaxQuote } from './components/ParallaxQuote';
-import { RealEstateJournal } from './components/RealEstateJournal';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { ScrollToTop } from './components/ScrollToTop';
+import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { StickySideMenu } from './components/StickySideMenu';
 import { EnquiryModal } from './components/EnquiryModal';
 import { ResidenceModal } from './components/ResidenceModal';
+
+// Dedicated Pages
+import { HomePage } from './pages/HomePage';
+import { BuyPage } from './pages/BuyPage';
+import { RentPage } from './pages/RentPage';
+import { ServicesPage } from './pages/ServicesPage';
+import { AboutPage } from './pages/AboutPage';
+import { GalleryPage } from './pages/GalleryPage';
+import { ContactPage } from './pages/ContactPage';
 
 export function App() {
   const [enquiryModalOpen, setEnquiryModalOpen] = useState(false);
@@ -27,55 +32,101 @@ export function App() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col font-sans selection:bg-white selection:text-black">
-      
-      {/* AR Homes Full-Screen Hero with Video Background & Liquid Glass Navbar */}
-      <Hero onStartChat={handleOpenEnquiry} onOpenEnquiry={handleOpenEnquiry} />
+    <Router>
+      <ScrollToTop />
+      <div className="min-h-screen bg-black text-white flex flex-col font-sans selection:bg-white selection:text-black relative">
+        
+        {/* Persistent Floating Navbar across all pages */}
+        <Navbar onStartChat={handleOpenEnquiry} onOpenEnquiry={handleOpenEnquiry} />
 
-      {/* 3. Philosophy & Horizontal Gallery: "More Than Four Walls" */}
-      <MoreThanFourWalls />
+        {/* Dynamic Route Pages */}
+        <div className="flex-1">
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <HomePage
+                  onOpenEnquiry={handleOpenEnquiry}
+                  onSelectResidence={setActiveResidenceModal}
+                />
+              }
+            />
+            <Route
+              path="/buy"
+              element={
+                <BuyPage
+                  onOpenEnquiry={handleOpenEnquiry}
+                  onSelectResidence={setActiveResidenceModal}
+                />
+              }
+            />
+            <Route
+              path="/rent"
+              element={
+                <RentPage
+                  onOpenEnquiry={handleOpenEnquiry}
+                />
+              }
+            />
+            <Route
+              path="/services"
+              element={
+                <ServicesPage
+                  onOpenEnquiry={handleOpenEnquiry}
+                />
+              }
+            />
+            <Route
+              path="/about"
+              element={
+                <AboutPage
+                  onOpenEnquiry={handleOpenEnquiry}
+                />
+              }
+            />
+            <Route
+              path="/gallery"
+              element={
+                <GalleryPage
+                  onOpenEnquiry={handleOpenEnquiry}
+                />
+              }
+            />
+            <Route
+              path="/contact"
+              element={
+                <ContactPage />
+              }
+            />
+            {/* Catch-all redirect to home */}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </div>
 
-      {/* 4. Property Showcase: "Find your dream home." */}
-      <FeaturedProjects
-        onSelectResidence={setActiveResidenceModal}
-        onOpenEnquiry={handleOpenEnquiry}
-      />
+        {/* Global Footer */}
+        <Footer onOpenEnquiry={handleOpenEnquiry} />
 
-      {/* 5. Floor Plans Section (3D Render & Materials) */}
-      <InteractiveFloorPlans onOpenEnquiry={handleOpenEnquiry} />
+        {/* Signature Right-Side Sticky Vertical Quick-Action Bar */}
+        <StickySideMenu onOpenCallback={handleOpenEnquiry} />
 
-      {/* 5.5 Luxury Amenities & Services */}
-      <LuxuryAmenities />
+        {/* Global Modals */}
+        {enquiryModalOpen && (
+          <EnquiryModal
+            initialProject={selectedResidenceForEnquiry}
+            onClose={handleCloseEnquiry}
+          />
+        )}
 
-      {/* 6. Fixed Background Scrolling Quote */}
-      <ParallaxQuote />
+        {activeResidenceModal && (
+          <ResidenceModal
+            residence={activeResidenceModal}
+            onClose={() => setActiveResidenceModal(null)}
+            onOpenEnquiry={handleOpenEnquiry}
+          />
+        )}
 
-      {/* 7. Insights & Updates (Vertical Gold Typography Layout) */}
-      <RealEstateJournal />
-
-      {/* 8. Official Emarat-Style Footer */}
-      <Footer onOpenEnquiry={handleOpenEnquiry} />
-
-      {/* 9. Signature Right-Side Sticky Vertical Green Bar */}
-      <StickySideMenu onOpenCallback={handleOpenEnquiry} />
-
-      {/* Modals */}
-      {enquiryModalOpen && (
-        <EnquiryModal
-          initialProject={selectedResidenceForEnquiry}
-          onClose={handleCloseEnquiry}
-        />
-      )}
-
-      {activeResidenceModal && (
-        <ResidenceModal
-          residence={activeResidenceModal}
-          onClose={() => setActiveResidenceModal(null)}
-          onOpenEnquiry={handleOpenEnquiry}
-        />
-      )}
-
-    </div>
+      </div>
+    </Router>
   );
 }
 

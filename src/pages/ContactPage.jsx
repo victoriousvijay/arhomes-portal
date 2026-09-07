@@ -1,0 +1,268 @@
+import React, { useState } from 'react';
+import { PageHeader } from '../components/PageHeader';
+import { BRAND } from '../data/projectsData';
+import { Phone, Mail, MapPin, MessageSquare, Clock, CheckCircle2, Send, ShieldCheck, Sparkles } from 'lucide-react';
+
+export const ContactPage = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    phone: '',
+    email: '',
+    purpose: 'buy-residential',
+    budget: '3-5cr',
+    message: ''
+  });
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setSubmitted(true);
+  };
+
+  return (
+    <div className="min-h-screen bg-black text-white">
+      {/* Header Banner */}
+      <PageHeader
+        badge="Get in Touch"
+        title="Connect with Our"
+        highlight="Advisory Team"
+        subtitle="Whether you are planning to acquire a signature independent floor, schedule a private walkthrough, or discuss bespoke architectural upgrades, our advisory team is at your service."
+        breadcrumbs={[{ label: 'Contact Us' }]}
+      />
+
+      <div className="max-w-[1440px] mx-auto px-6 sm:px-12 py-16 sm:py-24">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
+          
+          {/* Left Column: Office Locations & Channels */}
+          <div className="lg:col-span-5 space-y-8">
+            <div>
+              <span className="text-xs uppercase tracking-[0.25em] text-[#D4AF37] font-semibold block mb-2">
+                Corporate Offices
+              </span>
+              <h2 className="font-serif text-3xl font-normal text-white mb-4">
+                Visit Our Experience Lounges
+              </h2>
+              <p className="text-sm text-gray-300 font-light leading-relaxed">
+                Experience our curated physical sample galleries, scale models, and material palettes at our client lounges.
+              </p>
+            </div>
+
+            {/* Office 1: Gurugram */}
+            <div className="p-6 rounded-2xl bg-[#0b1612] border border-white/10 space-y-3">
+              <div className="flex items-center gap-2 text-[#D4AF37] font-serif text-lg font-bold">
+                <MapPin className="w-5 h-5 shrink-0" />
+                <h4>Gurugram Headquarters</h4>
+              </div>
+              <p className="text-xs text-gray-300 font-light leading-relaxed">
+                2nd Floor, Sector-15, Civil Lines, Gurugram, Haryana - 122001
+              </p>
+              <div className="text-xs text-gray-400 pt-2 border-t border-white/10 flex items-center gap-2">
+                <Clock className="w-3.5 h-3.5 text-[#D4AF37]" />
+                <span>Monday - Sunday: 9:30 AM - 7:30 PM</span>
+              </div>
+            </div>
+
+            {/* Office 2: Hyderabad */}
+            <div className="p-6 rounded-2xl bg-[#0b1612] border border-white/10 space-y-3">
+              <div className="flex items-center gap-2 text-[#D4AF37] font-serif text-lg font-bold">
+                <MapPin className="w-5 h-5 shrink-0" />
+                <h4>Hyderabad Regional Center</h4>
+              </div>
+              <p className="text-xs text-gray-300 font-light leading-relaxed">
+                Outer Ring Road Corridor, Exit 2, Kollur, Hyderabad, Telangana - 502300
+              </p>
+              <div className="text-xs text-gray-400 pt-2 border-t border-white/10 flex items-center gap-2">
+                <Clock className="w-3.5 h-3.5 text-[#D4AF37]" />
+                <span>Monday - Sunday: 10:00 AM - 7:00 PM</span>
+              </div>
+            </div>
+
+            {/* Direct Connect Pills */}
+            <div className="space-y-3 pt-4">
+              <a
+                href={`tel:${BRAND.phone}`}
+                className="flex items-center gap-4 p-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition-colors group"
+              >
+                <div className="w-10 h-10 rounded-lg bg-[#013724] text-[#D4AF37] flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                  <Phone className="w-5 h-5" />
+                </div>
+                <div>
+                  <span className="block text-[10px] uppercase tracking-wider text-gray-400">Direct Phone Helpline</span>
+                  <span className="text-sm font-semibold text-white group-hover:text-[#D4AF37] transition-colors">{BRAND.phoneDisplay}</span>
+                </div>
+              </a>
+
+              <a
+                href={`https://wa.me/${BRAND.whatsapp}?text=Hi%20AR%20Homes%2C%20I%20would%20like%20to%20enquire%20about%20your%20properties.`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-4 p-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition-colors group"
+              >
+                <div className="w-10 h-10 rounded-lg bg-[#013724] text-[#D4AF37] flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                  <MessageSquare className="w-5 h-5" />
+                </div>
+                <div>
+                  <span className="block text-[10px] uppercase tracking-wider text-gray-400">Official WhatsApp Desk</span>
+                  <span className="text-sm font-semibold text-white group-hover:text-[#D4AF37] transition-colors">Instant Chat Connect</span>
+                </div>
+              </a>
+
+              <a
+                href={`mailto:${BRAND.email}`}
+                className="flex items-center gap-4 p-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition-colors group"
+              >
+                <div className="w-10 h-10 rounded-lg bg-[#013724] text-[#D4AF37] flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                  <Mail className="w-5 h-5" />
+                </div>
+                <div>
+                  <span className="block text-[10px] uppercase tracking-wider text-gray-400">Email Correspondence</span>
+                  <span className="text-sm font-semibold text-white group-hover:text-[#D4AF37] transition-colors">{BRAND.email}</span>
+                </div>
+              </a>
+            </div>
+
+          </div>
+
+          {/* Right Column: Full Enquiry Form */}
+          <div className="lg:col-span-7">
+            <div className="p-8 sm:p-12 rounded-3xl bg-[#0b1612] border border-white/15 shadow-2xl relative">
+              
+              <div className="mb-8">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#D4AF37]/10 text-[10px] uppercase tracking-widest text-[#D4AF37] font-semibold mb-2">
+                  <Sparkles className="w-3 h-3" /> Priority Response
+                </div>
+                <h3 className="font-serif text-2xl sm:text-3xl font-normal text-white">
+                  Request a Callback or Private Presentation
+                </h3>
+                <p className="text-xs sm:text-sm text-gray-300 font-light mt-2">
+                  Leave your requirements below and a senior relationship manager will contact you within 60 minutes.
+                </p>
+              </div>
+
+              {submitted ? (
+                <div className="p-8 rounded-2xl bg-[#013724] border border-[#D4AF37] text-center space-y-4 animate-in fade-in duration-300">
+                  <CheckCircle2 className="w-12 h-12 text-[#D4AF37] mx-auto" />
+                  <h4 className="font-serif text-2xl font-bold text-white">
+                    Thank You, We Have Received Your Enquiry.
+                  </h4>
+                  <p className="text-xs text-gray-300 font-light max-w-md mx-auto">
+                    A senior relationship manager has been assigned to your request and will call you shortly on <strong>{formData.phone}</strong>.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => setSubmitted(false)}
+                    className="mt-4 px-6 py-2 rounded-xl bg-white text-black text-xs font-semibold uppercase tracking-wider hover:bg-[#D4AF37] transition-colors"
+                  >
+                    Submit Another Request
+                  </button>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-5">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div>
+                      <label className="block text-xs font-medium text-gray-300 mb-1.5">Your Full Name *</label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="e.g. Vikram Sharma"
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        className="w-full bg-[#050e0a] border border-white/15 rounded-xl px-4 py-3 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#D4AF37] transition-colors"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-medium text-gray-300 mb-1.5">Contact Number *</label>
+                      <input
+                        type="tel"
+                        required
+                        placeholder="+91 98765 43210"
+                        value={formData.phone}
+                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                        className="w-full bg-[#050e0a] border border-white/15 rounded-xl px-4 py-3 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#D4AF37] transition-colors"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-medium text-gray-300 mb-1.5">Email Address *</label>
+                    <input
+                      type="email"
+                      required
+                      placeholder="vikram@example.com"
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      className="w-full bg-[#050e0a] border border-white/15 rounded-xl px-4 py-3 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#D4AF37] transition-colors"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div>
+                      <label className="block text-xs font-medium text-gray-300 mb-1.5">Requirement Type</label>
+                      <select
+                        value={formData.purpose}
+                        onChange={(e) => setFormData({ ...formData, purpose: e.target.value })}
+                        className="w-full bg-[#050e0a] border border-white/15 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-[#D4AF37] transition-colors"
+                      >
+                        <option value="buy-residential">Buy: Luxury Independent Floor</option>
+                        <option value="buy-apartment">Buy: High-Rise Apartment</option>
+                        <option value="buy-villa">Buy: Private Villa</option>
+                        <option value="buy-commercial">Buy: Grade-A Commercial</option>
+                        <option value="rent-floor">Rent: Residential Floor</option>
+                        <option value="rent-apartment">Rent: Executive Apartment</option>
+                        <option value="other">Other Advisory Consultation</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-medium text-gray-300 mb-1.5">Expected Budget</label>
+                      <select
+                        value={formData.budget}
+                        onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
+                        className="w-full bg-[#050e0a] border border-white/15 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-[#D4AF37] transition-colors"
+                      >
+                        <option value="1-3cr">₹1.00 Cr - ₹3.00 Cr</option>
+                        <option value="3-5cr">₹3.00 Cr - ₹5.00 Cr</option>
+                        <option value="5-10cr">₹5.00 Cr - ₹10.00 Cr</option>
+                        <option value="10cr+">₹10.00 Cr+</option>
+                        <option value="rental">Rental Lease Range</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-medium text-gray-300 mb-1.5">Specific Notes or Questions</label>
+                    <textarea
+                      rows="4"
+                      placeholder="Tell us about your preferred sector, possession timeline, or any specific questions..."
+                      value={formData.message}
+                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                      className="w-full bg-[#050e0a] border border-white/15 rounded-xl px-4 py-3 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#D4AF37] transition-colors"
+                    ></textarea>
+                  </div>
+
+                  <div className="flex items-center gap-2 text-[11px] text-gray-400">
+                    <ShieldCheck className="w-4 h-4 text-[#D4AF37] shrink-0" />
+                    <span>Your privacy is guaranteed. No marketing spam. RERA compliant communication.</span>
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="w-full py-4 bg-[#D4AF37] hover:bg-white text-[#013724] font-bold text-xs uppercase tracking-wider rounded-xl transition-all cursor-pointer shadow-xl flex items-center justify-center gap-2"
+                  >
+                    <span>Submit Consultation Request</span>
+                    <Send className="w-3.5 h-3.5" />
+                  </button>
+                </form>
+              )}
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ContactPage;
