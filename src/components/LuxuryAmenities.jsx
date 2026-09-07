@@ -1,6 +1,56 @@
 import React from 'react';
-import { AMENITIES } from '../data/projectsData';
 import { Waves, Castle, Film, Dumbbell, Leaf, ShieldCheck, Zap, Sparkles } from 'lucide-react';
+
+const AMENITIES = [
+  {
+    icon: 'waves',
+    category: 'Wellness & Spa',
+    title: 'Heated Rooftop Pool',
+    desc: 'Temperature-controlled infinity pool with panoramic skyline views and private sun cabanas.'
+  },
+  {
+    icon: 'dumbbell',
+    category: 'Fitness Club',
+    title: 'Technogym Fitness Studio',
+    desc: 'State-of-the-art cardiovascular and strength training equipment with dedicated pilates and yoga zone.'
+  },
+  {
+    icon: 'leaf',
+    category: 'Nature & Landscape',
+    title: 'Landscaped Zen Courtyards',
+    desc: 'Sustainably manicured floral gardens, meditation pathways, and cascading water features.'
+  },
+  {
+    icon: 'shield-check',
+    category: 'Security & Concierge',
+    title: '5-Tier Smart Security',
+    desc: '24/7 biometric access, RFID vehicle gates, private elevator lobbies, and dedicated concierge desk.'
+  },
+  {
+    icon: 'castle',
+    category: 'Exclusive Club',
+    title: 'Private Resident Lounge',
+    desc: 'Bespoke banquet spaces, business boardrooms, and cigar lounge designed for executive hosting.'
+  },
+  {
+    icon: 'film',
+    category: 'Entertainment',
+    title: 'Private Screening Theater',
+    desc: 'Acoustically tuned 16-seat Dolby Atmos private cinema for intimate film screenings.'
+  },
+  {
+    icon: 'zap',
+    category: 'Smart Living',
+    title: 'EV Fast-Charging Bays',
+    desc: 'Dedicated high-voltage charging points for every residence along with 100% DG power backup.'
+  },
+  {
+    icon: 'sparkles',
+    category: 'Family Living',
+    title: "Children's Play Sanctuary",
+    desc: 'Safe, rubberized outdoor adventure play zone and indoor creative learning workshop for young residents.'
+  }
+];
 
 export const LuxuryAmenities = () => {
   const getAmenityIcon = (iconName) => {
@@ -17,7 +67,8 @@ export const LuxuryAmenities = () => {
   };
 
   return (
-    <section id="amenities" className="py-24 bg-luxury-dark relative border-t border-luxury-border/60">
+    <section id="services" className="py-24 bg-luxury-dark relative border-t border-luxury-border/60">
+      <span id="amenities" className="sr-only" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}

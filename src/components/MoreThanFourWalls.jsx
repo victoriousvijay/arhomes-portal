@@ -18,7 +18,8 @@ export const MoreThanFourWalls = () => {
   };
 
   return (
-    <section id="philosophy" className="py-28 bg-[#F6F3EC] text-[#18261F] relative overflow-hidden">
+    <section id="about" className="py-28 bg-[#F6F3EC] text-[#18261F] relative overflow-hidden">
+      <span id="philosophy" className="sr-only" />
       
       <div className="max-w-[1440px] mx-auto px-6 sm:px-12">
         

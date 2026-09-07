@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 
 export const AnimatedHeading = ({
-  text = 'Shaping tomorrow\nwith vision and action.',
-  className = 'text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-normal mb-4 text-white',
-  charDelay = 30,
-  initialDelay = 200,
-  duration = 500
+  text = 'Where families thrive\nand dream homes begin.',
+  className = 'text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-normal mb-4 text-white leading-tight',
+  charDelay = 25,
+  initialDelay = 150,
+  duration = 450
 }) => {
   const [animated, setAnimated] = useState(false);
 
@@ -17,30 +17,40 @@ export const AnimatedHeading = ({
   }, [initialDelay]);
 
   const lines = text.split('\n');
+  let globalCharIndex = 0;
 
   return (
     <h1
       className={className}
-      style={{ letterSpacing: '-0.04em' }}
+      style={{ letterSpacing: '-0.03em' }}
     >
       {lines.map((line, lineIndex) => {
-        const lineLength = lines[0]?.length || line.length;
+        const words = line.split(' ');
         return (
           <span key={lineIndex} className="block">
-            {line.split('').map((char, charIndex) => {
-              const delay = (lineIndex * lineLength * charDelay) + (charIndex * charDelay);
+            {words.map((word, wordIndex) => {
               return (
-                <span
-                  key={charIndex}
-                  className="inline-block"
-                  style={{
-                    opacity: animated ? 1 : 0,
-                    transform: animated ? 'translateX(0)' : 'translateX(-18px)',
-                    transition: `opacity ${duration}ms cubic-bezier(0.16, 1, 0.3, 1), transform ${duration}ms cubic-bezier(0.16, 1, 0.3, 1)`,
-                    transitionDelay: `${delay}ms`
-                  }}
-                >
-                  {char === ' ' ? '\u00A0' : char}
+                <span key={wordIndex} className="inline-block whitespace-nowrap">
+                  {word.split('').map((char, charIndex) => {
+                    const currentDelay = (globalCharIndex++) * charDelay;
+                    return (
+                      <span
+                        key={charIndex}
+                        className="inline-block"
+                        style={{
+                          opacity: animated ? 1 : 0,
+                          transform: animated ? 'translateX(0)' : 'translateX(-14px)',
+                          transition: `opacity ${duration}ms cubic-bezier(0.16, 1, 0.3, 1), transform ${duration}ms cubic-bezier(0.16, 1, 0.3, 1)`,
+                          transitionDelay: `${currentDelay}ms`
+                        }}
+                      >
+                        {char}
+                      </span>
+                    );
+                  })}
+                  {wordIndex < words.length - 1 && (
+                    <span className="inline-block">&nbsp;</span>
+                  )}
                 </span>
               );
             })}

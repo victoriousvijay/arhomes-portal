@@ -52,7 +52,8 @@ export const FeaturedProjects = ({ onSelectResidence, onOpenEnquiry }) => {
   };
 
   return (
-    <section id="residences" className="py-24 bg-[#F6F3EC] text-[#18261F] relative border-t border-[#E8E3D7]">
+    <section id="gallery" className="py-24 bg-[#F6F3EC] text-[#18261F] relative border-t border-[#E8E3D7]">
+      <span id="residences" className="sr-only" />
       <div className="max-w-[1440px] mx-auto px-6 sm:px-12">
         
         {/* Section Pre-title and Title Header */}

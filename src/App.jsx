@@ -3,6 +3,7 @@ import { Hero } from './components/Hero';
 import { MoreThanFourWalls } from './components/MoreThanFourWalls';
 import { FeaturedProjects } from './components/FeaturedProjects';
 import { InteractiveFloorPlans } from './components/InteractiveFloorPlans';
+import { LuxuryAmenities } from './components/LuxuryAmenities';
 import { ParallaxQuote } from './components/ParallaxQuote';
 import { RealEstateJournal } from './components/RealEstateJournal';
 import { Footer } from './components/Footer';
@@ -42,6 +43,9 @@ export function App() {
 
       {/* 5. Floor Plans Section (3D Render & Materials) */}
       <InteractiveFloorPlans onOpenEnquiry={handleOpenEnquiry} />
+
+      {/* 5.5 Luxury Amenities & Services */}
+      <LuxuryAmenities />
 
       {/* 6. Fixed Background Scrolling Quote */}
       <ParallaxQuote />

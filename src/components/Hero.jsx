@@ -29,14 +29,14 @@ export const Hero = ({ onOpenEnquiry, onStartChat }) => {
           <div>
             {/* Animated Character-by-Character Heading */}
             <AnimatedHeading
-              text={"Shaping tomorrow\nwith vision and action."}
-              className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-normal mb-4 text-white"
+              text={"Where families thrive,\nand dream homes begin."}
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-normal mb-4 text-white"
             />
 
             {/* Subheading with Fade-in (800ms delay, 1000ms duration) */}
             <FadeIn delay={800} duration={1000}>
-              <p className="text-base md:text-lg text-gray-300 mb-5">
-                We back visionaries and craft ventures that define what comes next.
+              <p className="text-base md:text-lg text-gray-200 mb-5 max-w-xl font-light">
+                Discover bespoke independent floors and luxury residences crafted for warmth, comfort, and generations to come.
               </p>
             </FadeIn>
 
@@ -46,15 +46,15 @@ export const Hero = ({ onOpenEnquiry, onStartChat }) => {
                 <button
                   type="button"
                   onClick={handleChat}
-                  className="bg-white text-black px-8 py-3 rounded-lg font-medium hover:bg-gray-100 transition-colors cursor-pointer"
+                  className="bg-white text-black px-8 py-3 rounded-lg font-medium hover:bg-gray-100 transition-colors cursor-pointer shadow-lg"
                 >
-                  Start a Chat
+                  Enquire Now
                 </button>
                 <a
-                  href="#explore"
+                  href="#residences"
                   className="liquid-glass border border-white/20 text-white px-8 py-3 rounded-lg font-medium hover:bg-white hover:text-black transition-colors inline-flex items-center justify-center cursor-pointer"
                 >
-                  Explore Now
+                  Explore Residences
                 </a>
               </div>
             </FadeIn>
@@ -64,8 +64,8 @@ export const Hero = ({ onOpenEnquiry, onStartChat }) => {
           <div className="flex items-end justify-start lg:justify-end mt-8 lg:mt-0">
             <FadeIn delay={1400} duration={1000}>
               <div className="liquid-glass border border-white/20 px-6 py-3 rounded-xl">
-                <span className="text-lg md:text-xl lg:text-2xl font-light text-white">
-                  Investing. Building. Advisory.
+                <span className="text-base md:text-lg lg:text-xl font-light text-white tracking-wide">
+                  Family Living • Prime Residences • Modern Luxury
                 </span>
               </div>
             </FadeIn>
