@@ -56,11 +56,11 @@ export const BrandHeritage = () => {
             </div>
 
             <p className="text-sm text-slate-300 leading-relaxed font-light">
-              At AR Homes, real estate development transcends the assembly of concrete and glass. It is an art form centered on human aspiration. Over 15 years, we have cultivated an unwavering reputation for bringing architectural boldness and meticulous precision to Hyderabad's premier landscapes.
+              At AR Homes, real estate development transcends the assembly of concrete and glass. It is an art form centered on human aspiration. Over 15 years, we have cultivated an unwavering reputation for bringing architectural boldness and meticulous precision to Jaipur's premier landscapes.
             </p>
 
             <p className="text-sm text-slate-300 leading-relaxed font-light">
-              From our flagship 6.27-acre sanctuary *AR Homes Rise* in Kollur to the sky-piercing 35-storey monolithic curves of *AR Homes Altura*, every structure is engineered using precision aluminum formwork (Mivan technology), seismic zone compliance, and environmental acoustics.
+              From our boutique luxury low-density independent floors in Civil Lines to the iconic modern residences of Vaishali Nagar and Jagatpura, every structure is engineered using precision aluminum formwork, seismic compliance, and environmental acoustics.
             </p>
 
             {/* Core Pillars */}

@@ -15,6 +15,9 @@ import { ServicesPage } from './pages/ServicesPage';
 import { AboutPage } from './pages/AboutPage';
 import { GalleryPage } from './pages/GalleryPage';
 import { ContactPage } from './pages/ContactPage';
+import { PrivacyPolicyPage } from './pages/PrivacyPolicyPage';
+import { TermsConditionsPage } from './pages/TermsConditionsPage';
+import { FaqsPage } from './pages/FaqsPage';
 
 export function App() {
   const [enquiryModalOpen, setEnquiryModalOpen] = useState(false);
@@ -96,6 +99,24 @@ export function App() {
               path="/contact"
               element={
                 <ContactPage />
+              }
+            />
+            <Route
+              path="/privacy-policy"
+              element={
+                <PrivacyPolicyPage />
+              }
+            />
+            <Route
+              path="/terms-and-conditions"
+              element={
+                <TermsConditionsPage />
+              }
+            />
+            <Route
+              path="/faqs"
+              element={
+                <FaqsPage onOpenEnquiry={handleOpenEnquiry} />
               }
             />
             {/* Catch-all redirect to home */}

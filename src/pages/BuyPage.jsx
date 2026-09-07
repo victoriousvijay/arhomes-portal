@@ -25,7 +25,7 @@ const BUY_CATALOG = [
   {
     id: 'ar-commercial-tower',
     title: 'AR Pinnacle Business Suites',
-    location: 'Golf Course Extension Road, Gurugram',
+    location: 'Tonk Road Commercial District, Jaipur',
     builtForm: 'G + 24 Grade-A Commercial Tower',
     category: 'commercial',
     subCategory: 'commercial',
@@ -36,17 +36,17 @@ const BUY_CATALOG = [
       { label: 'HIGH RENTAL YIELDS (8.4%)', icon: 'sun' },
       { label: 'CENTRAL METRO ACCESS', icon: 'map' }
     ],
-    overview: 'LEED Gold certified commercial floor plates designed for global corporate headquarters and high-net-worth investors looking for stable commercial capital appreciation.',
+    overview: 'LEED Gold certified commercial floor plates designed for corporate headquarters and high-net-worth investors looking for prime commercial capital appreciation in Jaipur.',
     price: '₹2.45 Cr onwards',
-    priceUsd: ',000 onwards',
-    rera: 'RC/REP/HARERA/GGM/890/2026',
+    priceUsd: '$295,000 onwards',
+    rera: 'RAJ/P/2026/890',
     status: 'Ready to Fit-Out',
     isNew: true
   },
   {
     id: 'ar-meadows-plots',
     title: 'AR Palm Meadows Estate Plots',
-    location: 'Sohna - South of Gurgaon',
+    location: 'Ajmer Road Express Corridor, Jaipur',
     builtForm: 'Gated Plotted Enclave',
     category: 'plots-land',
     subCategory: 'plots-land',
@@ -57,17 +57,17 @@ const BUY_CATALOG = [
       { label: 'CLUBHOUSE & POOL ACCESS', icon: 'home' },
       { label: 'IMMEDIATE POSSESSION', icon: 'sun' }
     ],
-    overview: 'Bespoke freehold residential plots surrounded by the Aravalli hills, complete with underground cabling, private security checkpoints, and landscaped avenues.',
+    overview: 'Bespoke freehold residential plots surrounded by serene landscaped avenues, complete with underground cabling, private security checkpoints, and grand club amenities in Jaipur.',
     price: '₹1.80 Cr onwards',
-    priceUsd: ',000 onwards',
-    rera: 'RC/REP/HARERA/GGM/612/2026',
+    priceUsd: '$215,000 onwards',
+    rera: 'RAJ/P/2026/612',
     status: 'Ready for Registry',
     isNew: false
   },
   {
     id: 'ar-imperial-villas',
     title: 'The Imperial Mansions & Villas',
-    location: 'Kollur Luxury Corridor, Hyderabad',
+    location: 'Sirsi Road / Vaishali Estate, Jaipur',
     builtForm: 'Triplex Independent Luxury Villas',
     category: 'villas-houses',
     subCategory: 'villas-houses',
@@ -78,10 +78,10 @@ const BUY_CATALOG = [
       { label: 'PRIVATE ELEVATOR', icon: 'wind' },
       { label: '3-CAR BASEMENT PARKING', icon: 'sun' }
     ],
-    overview: 'Palatial triplex mansions designed with Scandinavian floor-to-ceiling glass pavilions, double-height great rooms, and private rooftop sky lounges.',
+    overview: 'Palatial triplex mansions designed with Scandinavian floor-to-ceiling glass pavilions, double-height great rooms, and private rooftop sky lounges in Jaipur.',
     price: '₹6.75 Cr onwards',
-    priceUsd: ',000 onwards',
-    rera: 'P01100009981',
+    priceUsd: '$815,000 onwards',
+    rera: 'RAJ/P/2026/981',
     status: 'Exclusive Launch',
     isNew: true
   }

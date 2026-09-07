@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { PageHeader } from '../components/PageHeader';
 import { LuxuryAmenities } from '../components/LuxuryAmenities';
 import { ShieldCheck, Compass, Sparkles, Building, KeyRound, Scale, Clock, Award, CheckCircle2, ArrowRight } from 'lucide-react';
@@ -38,7 +38,7 @@ const SERVICES_LIST = [
     icon: Scale,
     title: 'Legal, Title & RERA Advisory',
     desc: 'Transparent legal due-diligence, encumbrance verification, deed registration support, and structured NRI foreign exchange remittance guidance.',
-    benefits: ['100% Clear Title Guarantee', 'HARERA & RERA Filing Support', 'NRI Taxation Consultation']
+    benefits: ['100% Clear Title Guarantee', 'Rajasthan RERA Compliance Support', 'NRI Taxation Consultation']
   }
 ];
 

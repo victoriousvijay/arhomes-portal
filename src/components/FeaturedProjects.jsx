@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { RESIDENCES } from '../data/projectsData';
 import { ChevronLeft, ChevronRight, ArrowRight, Home, Maximize, Wind, Sun } from 'lucide-react';
 
@@ -67,13 +68,13 @@ export const FeaturedProjects = ({ onSelectResidence, onOpenEnquiry }) => {
             </h2>
           </div>
 
-          <a
-            href="#residences"
+          <Link
+            to="/buy"
             className="mt-4 md:mt-0 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#01472E] hover:text-[#0B5B3E] transition-colors border-b border-[#01472E] pb-0.5"
           >
             <span>All residences</span>
             <ArrowRight className="w-3.5 h-3.5" />
-          </a>
+          </Link>
         </div>
 
         {/* Main Showcase Stage (Emarat exact card layout) */}

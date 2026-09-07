@@ -81,7 +81,7 @@ const GALLERY_ITEMS = [
     id: 9,
     category: 'exteriors',
     title: 'AR Homes Altura High-Rise Monolith',
-    subtitle: '35-storey sky mansions in Kollur, Hyderabad',
+    subtitle: '35-storey sky mansions in Jagatpura / Tonk Road, Jaipur',
     image: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=1200&q=85',
     aspect: 'aspect-[4/3]'
   }
@@ -191,7 +191,7 @@ export const GalleryPage = ({ onOpenEnquiry }) => {
               Schedule an Exclusive Physical Site Tour
             </h3>
             <p className="text-xs sm:text-sm text-gray-300 font-light max-w-xl">
-              Visit our fully furnished show residences in DLF Garden City, Gurugram or Kollur, Hyderabad. Our hospitality team will guide you through materials and finishes.
+              Visit our fully furnished show residences in Civil Lines and Vaishali Nagar, Jaipur. Our hospitality team will guide you through materials and finishes.
             </p>
           </div>
           <button

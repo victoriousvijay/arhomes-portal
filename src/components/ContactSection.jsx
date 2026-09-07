@@ -52,7 +52,7 @@ export const ContactSection = () => {
                 </div>
                 <div>
                   <h4 className="font-serif text-base font-bold text-white">Experience Centre & Corporate Galleria</h4>
-                  <span className="text-[11px] text-luxury-gold font-medium uppercase tracking-wider">Kollur Corridor, Hyderabad</span>
+                  <span className="text-[11px] text-luxury-gold font-medium uppercase tracking-wider">Civil Lines / C-Scheme, Jaipur, Rajasthan</span>
                 </div>
               </div>
 

@@ -9,15 +9,15 @@ export const BRAND = {
   phoneDisplay: "+91 84509 84509",
   whatsapp: "918450984509",
   email: "info@arhomes.in",
-  corporateAddress: "2nd Floor, Sector-15, Civil Lines, Gurugram, Haryana / Kollur Corridor, Hyderabad",
+  corporateAddress: "Civil Lines / C-Scheme, Jaipur, Rajasthan - 302006",
   reraDisclaimer: "The information provided on this website is for general informational purposes only and does not constitute an offer to sell or a solicitation of an offer to buy any property. All artist impressions, specifications, floor plans, and perspectives are artistic representations designed to convey design intent."
 };
 
 export const RESIDENCES = [
   {
-    id: "c2-garden-city",
-    title: "C2 at DLF Garden City",
-    location: "Sector 93, Gurugram",
+    id: "c2-civil-lines",
+    title: "C2 at Civil Lines",
+    location: "Civil Lines, Jaipur, Rajasthan",
     builtForm: "S + 4",
     image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1400&q=85",
     features: [
@@ -26,16 +26,16 @@ export const RESIDENCES = [
       { label: "VRV/VRF AIR CONDITIONING", icon: "wind" },
       { label: "THREE SIDE OPEN", icon: "sun" }
     ],
-    overview: "C2 at DLF Garden City represents a benchmark in low-density boutique floor living. With three sides open to sunlit avenues and verdant parklands, each independent floor delivers uncompromised light, natural cross-ventilation, and private basement spaces.",
+    overview: "C2 at Civil Lines represents a benchmark in low-density boutique floor living in Jaipur. With three sides open to sunlit avenues and verdant parklands, each independent floor delivers uncompromised light, natural cross-ventilation, and private basement spaces.",
     price: "₹3.85 Cr onwards",
     priceUsd: "$465,000 onwards",
-    rera: "RC/REP/HARERA/GGM/745/2026",
+    rera: "RAJ/P/2026/745",
     status: "Ready for Fit-outs"
   },
   {
-    id: "c5-garden-city",
-    title: "C5 at DLF Garden City",
-    location: "Sector 93, Gurugram",
+    id: "c5-vaishali-nagar",
+    title: "C5 at Vaishali Nagar",
+    location: "Vaishali Nagar, Jaipur, Rajasthan",
     builtForm: "S + 4",
     image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1400&q=85",
     features: [
@@ -47,13 +47,13 @@ export const RESIDENCES = [
     overview: "Exquisitely engineered with imported Italian statuario marble in living suites, acoustic double-glazed windows, and bespoke walk-in wardrobes, C5 is conceived for families prioritizing timeless elegance.",
     price: "₹4.10 Cr onwards",
     priceUsd: "$495,000 onwards",
-    rera: "RC/REP/HARERA/GGM/746/2026",
+    rera: "RAJ/P/2026/746",
     status: "Under Construction"
   },
   {
-    id: "e11-garden-city",
-    title: "E11 at DLF Garden City",
-    location: "Sector 93, Gurugram",
+    id: "e11-c-scheme",
+    title: "E11 at C-Scheme",
+    location: "C-Scheme, Jaipur, Rajasthan",
     builtForm: "S + 4",
     image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1400&q=85",
     features: [
@@ -62,16 +62,16 @@ export const RESIDENCES = [
       { label: "SMART AUTOMATION", icon: "wind" },
       { label: "2-CAR COVERED PARKING", icon: "sun" }
     ],
-    overview: "Positioned directly opposite lush central landscaped greens, E11 combines architectural symmetry with bespoke timber millwork and terrace entertainment pavilions.",
+    overview: "Positioned in Jaipur's most coveted diplomatic neighborhood, E11 combines architectural symmetry with bespoke timber millwork and terrace entertainment pavilions.",
     price: "₹4.35 Cr onwards",
     priceUsd: "$525,000 onwards",
-    rera: "RC/REP/HARERA/GGM/748/2026",
+    rera: "RAJ/P/2026/748",
     status: "New Launch"
   },
   {
-    id: "ea04-alameda",
-    title: "EA 04 at Alameda",
-    location: "Sector 73, Gurugram",
+    id: "ea04-jagatpura",
+    title: "EA 04 at Jagatpura",
+    location: "Jagatpura, Jaipur, Rajasthan",
     builtForm: "S + 4",
     image: "https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=1400&q=85",
     features: [
@@ -80,34 +80,34 @@ export const RESIDENCES = [
       { label: "GERMAN MODULAR KITCHEN", icon: "wind" },
       { label: "PRIVATE TERRACE DECK", icon: "sun" }
     ],
-    overview: "Featuring the signature sculpted curved white balconies and horizontal wooden louvers seen in our flagship campaigns, EA 04 at Alameda is our crowning statement in contemporary luxury.",
+    overview: "Featuring signature sculpted curved white balconies and horizontal wooden louvers, EA 04 at Jagatpura is our crowning statement in contemporary Rajasthani luxury living.",
     price: "₹5.25 Cr onwards",
     priceUsd: "$630,000 onwards",
-    rera: "RC/REP/HARERA/GGM/752/2026",
+    rera: "RAJ/P/2026/752",
     status: "Exclusive Release"
   },
   {
     id: "ar-homes-rise",
-    title: "AR Homes Rise",
-    location: "Kollur, Outer Ring Road",
+    title: "AR Homes Rise, Mansarovar",
+    location: "Mansarovar Extension, Jaipur, Rajasthan",
     builtForm: "G + 15 High-Rise Towers",
     image: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1400&q=85",
     features: [
       { label: "2, 3 & 4 BHK APARTMENTS", icon: "home" },
       { label: "6.27 ACRES GREEN ENCLAVE", icon: "maximize" },
       { label: "40,000 SQ.FT CLUBHOUSE", icon: "wind" },
-      { label: "2 MINS TO ORR EXIT 2", icon: "sun" }
+      { label: "MINUTES TO METRO", icon: "sun" }
     ],
-    overview: "A majestic high-rise sanctuary spread over 6.27 acres with 80% open recreational grounds, Olympic-sized swimming facilities, and seamless access to the Financial District.",
+    overview: "A majestic high-rise sanctuary spread over 6.27 acres with 80% open recreational grounds, Olympic-sized swimming facilities, and seamless highway access in Jaipur.",
     price: "₹1.15 Cr - ₹2.65 Cr",
     priceUsd: "$138,000 - $318,000",
-    rera: "P01100007000",
+    rera: "RAJ/P/2026/890",
     status: "Under Construction"
   },
   {
     id: "ar-homes-altura",
-    title: "AR Homes Altura",
-    location: "Kollur Micro-Market",
+    title: "AR Homes Altura, Tonk Road",
+    location: "Tonk Road Corridor, Jaipur, Rajasthan",
     builtForm: "G + 35 Sky Monolith",
     image: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=1400&q=85",
     features: [
@@ -116,10 +116,10 @@ export const RESIDENCES = [
       { label: "PRIVATE HIGH-SPEED LIFTS", icon: "wind" },
       { label: "DOLBY ATMOS SCREENING", icon: "sun" }
     ],
-    overview: "Rising 35 levels above the skyline with an iconic U-shaped silhouette, AR Homes Altura is engineered for visionary leaders who demand the ultimate elevated lifestyle.",
+    overview: "Rising 35 levels above the Jaipur skyline with an iconic silhouette, AR Homes Altura is engineered for visionary leaders who demand the ultimate elevated lifestyle.",
     price: "₹1.95 Cr - ₹4.40 Cr",
     priceUsd: "$234,000 - $528,000",
-    rera: "P01100008450",
+    rera: "RAJ/P/2026/990",
     status: "Fast-Track Build"
   }
 ];

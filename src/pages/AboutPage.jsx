@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { PageHeader } from '../components/PageHeader';
 import { BRAND } from '../data/projectsData';
@@ -61,7 +61,7 @@ export const AboutPage = ({ onOpenEnquiry }) => {
               {BRAND.philosophyText}
             </p>
             <p className="text-sm text-gray-400 font-light leading-relaxed mb-8">
-              Whether it is the gentle morning sunlight filtering across three open facades in Gurugram, or the expansive panoramic sunset from a sky mansion in Kollur, Hyderabad — AR Homes builds residences where everyday life feels elevated and peaceful.
+              Whether it is the gentle morning sunlight filtering across three open facades in Civil Lines, or the expansive panoramic sunset from a terrace residence in Vaishali Nagar and C-Scheme, Jaipur — AR Homes builds residences where everyday life feels elevated and peaceful.
             </p>
 
             <div className="flex flex-wrap gap-4">

@@ -137,7 +137,7 @@ export const NeighborhoodMatrix = () => {
             {/* Direct Directions CTA */}
             <div className="mt-8 pt-4 border-t border-luxury-border/60 relative z-10">
               <a
-                href="https://maps.google.com/?q=AR+Homes+Kollur+Hyderabad"
+                href="https://maps.google.com/?q=AR+Homes+Jaipur+Rajasthan"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full py-3 bg-luxury-black hover:bg-luxury-gold text-slate-200 hover:text-luxury-black border border-luxury-border hover:border-luxury-gold rounded text-xs uppercase tracking-wider font-semibold flex items-center justify-center gap-2 transition-all"

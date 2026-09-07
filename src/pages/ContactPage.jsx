@@ -47,14 +47,14 @@ export const ContactPage = () => {
               </p>
             </div>
 
-            {/* Office 1: Gurugram */}
+            {/* Office 1: Jaipur Headquarters */}
             <div className="p-6 rounded-2xl bg-[#0b1612] border border-white/10 space-y-3">
               <div className="flex items-center gap-2 text-[#D4AF37] font-serif text-lg font-bold">
                 <MapPin className="w-5 h-5 shrink-0" />
-                <h4>Gurugram Headquarters</h4>
+                <h4>Jaipur Headquarters</h4>
               </div>
               <p className="text-xs text-gray-300 font-light leading-relaxed">
-                2nd Floor, Sector-15, Civil Lines, Gurugram, Haryana - 122001
+                2nd Floor, Royal Enclave, Civil Lines / C-Scheme, Jaipur, Rajasthan - 302006
               </p>
               <div className="text-xs text-gray-400 pt-2 border-t border-white/10 flex items-center gap-2">
                 <Clock className="w-3.5 h-3.5 text-[#D4AF37]" />
@@ -62,14 +62,14 @@ export const ContactPage = () => {
               </div>
             </div>
 
-            {/* Office 2: Hyderabad */}
+            {/* Office 2: Vaishali Nagar Experience Lounge */}
             <div className="p-6 rounded-2xl bg-[#0b1612] border border-white/10 space-y-3">
               <div className="flex items-center gap-2 text-[#D4AF37] font-serif text-lg font-bold">
                 <MapPin className="w-5 h-5 shrink-0" />
-                <h4>Hyderabad Regional Center</h4>
+                <h4>Vaishali Nagar Experience Lounge</h4>
               </div>
               <p className="text-xs text-gray-300 font-light leading-relaxed">
-                Outer Ring Road Corridor, Exit 2, Kollur, Hyderabad, Telangana - 502300
+                Amrapali Circle, Vaishali Nagar, Jaipur, Rajasthan - 302021
               </p>
               <div className="text-xs text-gray-400 pt-2 border-t border-white/10 flex items-center gap-2">
                 <Clock className="w-3.5 h-3.5 text-[#D4AF37]" />

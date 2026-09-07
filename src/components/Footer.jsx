@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { BRAND, RESIDENCES } from '../data/projectsData';
-import { ArrowRight, Phone, Mail, MapPin } from 'lucide-react';
+import { BRAND } from '../data/projectsData';
+import { Phone, Mail, MapPin } from 'lucide-react';
 
 export const Footer = ({ onOpenEnquiry }) => {
   const [email, setEmail] = useState('');
@@ -20,7 +20,7 @@ export const Footer = ({ onOpenEnquiry }) => {
       <div className="max-w-[1440px] mx-auto px-6 sm:px-12">
         
         {/* Top Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 pb-16 border-b border-[#205843]/60">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 pb-16 border-b border-[#205843]/60">
           
           {/* Brand Col */}
           <div className="lg:col-span-2 space-y-5">
@@ -41,7 +41,7 @@ export const Footer = ({ onOpenEnquiry }) => {
             </div>
 
             <p className="text-xs text-slate-300 font-light leading-relaxed max-w-sm">
-              AR Homes builds residences where quality is the foundation, not a feature. Dedicated to crafting low-density independent floors and iconic residences across prime corridors.
+              AR Homes builds residences where quality is the foundation, not a feature. Dedicated to crafting low-density independent floors, luxury villas, and iconic residences across prime corridors of Jaipur, Rajasthan.
             </p>
 
             <div className="space-y-2 text-xs text-slate-300 pt-2 font-light">
@@ -72,24 +72,8 @@ export const Footer = ({ onOpenEnquiry }) => {
               <li><Link to="/services" className="hover:text-[#D4AF37] transition-colors">Services & Amenities</Link></li>
               <li><Link to="/about" className="hover:text-[#D4AF37] transition-colors">About Us</Link></li>
               <li><Link to="/gallery" className="hover:text-[#D4AF37] transition-colors">Visual Gallery</Link></li>
+              <li><Link to="/faqs" className="hover:text-[#D4AF37] transition-colors">FAQs & Knowledge Base</Link></li>
               <li><Link to="/contact" className="hover:text-[#D4AF37] transition-colors">Contact & Enquiry</Link></li>
-            </ul>
-          </div>
-
-          {/* Residences */}
-          <div>
-            <h4 className="font-serif text-sm font-normal text-[#D4AF37] uppercase tracking-widest mb-4">
-              Residences
-            </h4>
-            <ul className="space-y-2.5 text-xs text-slate-300 font-light">
-              {RESIDENCES.map((res) => (
-                <li key={res.id}>
-                  <Link to="/buy" className="hover:text-[#D4AF37] transition-colors block">
-                    <span className="font-medium text-white">{res.title}</span>
-                    <span className="block text-[10px] text-slate-400">{res.location}</span>
-                  </Link>
-                </li>
-              ))}
             </ul>
           </div>
 
@@ -99,7 +83,7 @@ export const Footer = ({ onOpenEnquiry }) => {
               Stay Connected
             </h4>
             <p className="text-xs text-slate-300 font-light mb-4 leading-relaxed">
-              Subscribe to receive project launch notifications and construction milestone updates.
+              Subscribe to receive Jaipur project launch notifications and construction milestone updates.
             </p>
 
             {subscribed ? (
@@ -135,7 +119,7 @@ export const Footer = ({ onOpenEnquiry }) => {
 
         </div>
 
-        {/* Bottom Disclaimer & RERA (Emarat exact) */}
+        {/* Bottom Disclaimer & RERA */}
         <div className="pt-8 text-[11px] text-slate-400 font-light space-y-4">
           <p className="leading-relaxed">
             <strong className="text-slate-300 uppercase">Disclaimer:</strong> {BRAND.reraDisclaimer}
@@ -146,11 +130,13 @@ export const Footer = ({ onOpenEnquiry }) => {
               © {new Date().getFullYear()} {BRAND.name}. All rights reserved.
             </div>
             <div className="flex items-center gap-4 text-slate-400">
-              <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
+              <Link to="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</Link>
               <span>•</span>
-              <a href="#" className="hover:text-white transition-colors">Terms & Conditions</a>
+              <Link to="/terms-and-conditions" className="hover:text-white transition-colors">Terms & Conditions</Link>
               <span>•</span>
-              <span className="text-[#D4AF37]">Gurugram • Hyderabad</span>
+              <Link to="/faqs" className="hover:text-white transition-colors">FAQs</Link>
+              <span>•</span>
+              <span className="text-[#D4AF37] font-medium">Jaipur, Rajasthan</span>
             </div>
           </div>
         </div>

@@ -186,7 +186,7 @@ export const VIPBookingModal = ({ initialProject, onClose }) => {
                     <Car className="w-4 h-4 text-luxury-gold shrink-0" />
                     <div>
                       <div className="text-xs font-semibold text-white">Request Chauffeur Pick-Up</div>
-                      <div className="text-[10px] text-slate-400">Available from Hyderabad Airport (RGIA) or Gachibowli Hotels</div>
+                      <div className="text-[10px] text-slate-400">Available from Jaipur International Airport (JAI) or Prime Hotels</div>
                     </div>
                   </div>
                   <input
