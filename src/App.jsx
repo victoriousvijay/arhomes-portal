@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ScrollToTop } from './components/ScrollToTop';
+import { SmoothScroll } from './components/SmoothScroll';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { StickySideMenu } from './components/StickySideMenu';
@@ -39,6 +40,7 @@ export function App() {
   return (
     <Router>
       <ScrollToTop />
+      <SmoothScroll />
       <ClickSpark
         sparkColor="#D4AF37"
         sparkSize={10}

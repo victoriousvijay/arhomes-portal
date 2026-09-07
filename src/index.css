@@ -74,3 +74,44 @@
 .transition-smooth {
   transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
+
+/* Lenis Smooth Scroll resets */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+/* Luxury card hover elevation */
+.hover-luxury-lift {
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.45s ease;
+}
+.hover-luxury-lift:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.75);
+}
+
+/* Image zoom on hover */
+.img-zoom-hover {
+  overflow: hidden;
+}
+.img-zoom-hover img {
+  transition: transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.img-zoom-hover:hover img {
+  transform: scale(1.05);
+}

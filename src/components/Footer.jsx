@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { BRAND } from '../data/projectsData';
 import { Phone, Mail, MapPin } from 'lucide-react';
+import { ScrollReveal } from './ScrollReveal';
 
 export const Footer = ({ onOpenEnquiry }) => {
   const [email, setEmail] = useState('');
@@ -23,7 +24,7 @@ export const Footer = ({ onOpenEnquiry }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 pb-16 border-b border-[#205843]/60">
           
           {/* Brand Col */}
-          <div className="lg:col-span-2 space-y-5">
+          <ScrollReveal animation="up" delay={0} duration={850} className="lg:col-span-2 space-y-5">
             <div className="flex items-center gap-3.5">
               <img
                 src="/ar-homes-logo.jpg"
@@ -58,10 +59,10 @@ export const Footer = ({ onOpenEnquiry }) => {
                 <span>{BRAND.corporateAddress}</span>
               </div>
             </div>
-          </div>
+          </ScrollReveal>
 
           {/* Quick Links */}
-          <div>
+          <ScrollReveal animation="up" delay={120} duration={850}>
             <h4 className="font-serif text-sm font-normal text-[#D4AF37] uppercase tracking-widest mb-4">
               Quick Links
             </h4>
@@ -75,10 +76,10 @@ export const Footer = ({ onOpenEnquiry }) => {
               <li><Link to="/faqs" className="hover:text-[#D4AF37] transition-colors">FAQs & Knowledge Base</Link></li>
               <li><Link to="/contact" className="hover:text-[#D4AF37] transition-colors">Contact & Enquiry</Link></li>
             </ul>
-          </div>
+          </ScrollReveal>
 
           {/* Newsletter / Enquiry CTA */}
-          <div>
+          <ScrollReveal animation="up" delay={200} duration={850}>
             <h4 className="font-serif text-sm font-normal text-[#D4AF37] uppercase tracking-widest mb-4">
               Stay Connected
             </h4>
@@ -115,31 +116,33 @@ export const Footer = ({ onOpenEnquiry }) => {
             >
               ENQUIRE NOW
             </button>
-          </div>
+          </ScrollReveal>
 
         </div>
 
         {/* Bottom Disclaimer & RERA */}
-        <div className="pt-8 text-[11px] text-slate-400 font-light space-y-4">
-          <p className="leading-relaxed">
-            <strong className="text-slate-300 uppercase">Disclaimer:</strong> {BRAND.reraDisclaimer}
-          </p>
+        <ScrollReveal animation="fade" delay={100} duration={900}>
+          <div className="pt-8 text-[11px] text-slate-400 font-light space-y-4">
+            <p className="leading-relaxed">
+              <strong className="text-slate-300 uppercase">Disclaimer:</strong> {BRAND.reraDisclaimer}
+            </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-[#205843]/40 text-[11px]">
-            <div>
-              © {new Date().getFullYear()} {BRAND.name}. All rights reserved.
-            </div>
-            <div className="flex flex-wrap items-center justify-center sm:justify-end gap-x-3 gap-y-1.5 text-slate-400">
-              <Link to="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</Link>
-              <span>•</span>
-              <Link to="/terms-and-conditions" className="hover:text-white transition-colors">Terms & Conditions</Link>
-              <span>•</span>
-              <Link to="/faqs" className="hover:text-white transition-colors">FAQs</Link>
-              <span>•</span>
-              <span className="text-[#D4AF37] font-medium">Jaipur, Rajasthan</span>
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-[#205843]/40 text-[11px]">
+              <div>
+                © {new Date().getFullYear()} {BRAND.name}. All rights reserved.
+              </div>
+              <div className="flex flex-wrap items-center justify-center sm:justify-end gap-x-3 gap-y-1.5 text-slate-400">
+                <Link to="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</Link>
+                <span>•</span>
+                <Link to="/terms-and-conditions" className="hover:text-white transition-colors">Terms & Conditions</Link>
+                <span>•</span>
+                <Link to="/faqs" className="hover:text-white transition-colors">FAQs</Link>
+                <span>•</span>
+                <span className="text-[#D4AF37] font-medium">Jaipur, Rajasthan</span>
+              </div>
             </div>
           </div>
-        </div>
+        </ScrollReveal>
 
       </div>
     </footer>

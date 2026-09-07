@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { RESIDENCES } from '../data/projectsData';
 import { ChevronLeft, ChevronRight, ArrowRight, Home, Maximize, Wind, Sun } from 'lucide-react';
+import { ScrollReveal } from './ScrollReveal';
 
 export const FeaturedProjects = ({ onSelectResidence, onOpenEnquiry }) => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -83,32 +84,35 @@ export const FeaturedProjects = ({ onSelectResidence, onOpenEnquiry }) => {
       <div className="max-w-[1440px] mx-auto px-6 sm:px-12">
         
         {/* Section Pre-title and Title Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
-          <div>
-            <div className="text-xs uppercase tracking-[0.25em] text-[#01472E] font-medium mb-3">
-              — The Residences
+        <ScrollReveal animation="up" duration={900}>
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
+            <div>
+              <div className="text-xs uppercase tracking-[0.25em] text-[#01472E] font-medium mb-3">
+                — The Residences
+              </div>
+              <h2 className="font-serif text-4xl sm:text-6xl font-normal text-[#01472E] tracking-tight">
+                Find your dream home<span className="text-[#D4AF37]">.</span>
+              </h2>
             </div>
-            <h2 className="font-serif text-4xl sm:text-6xl font-normal text-[#01472E] tracking-tight">
-              Find your dream home<span className="text-[#D4AF37]">.</span>
-            </h2>
-          </div>
 
-          <Link
-            to="/buy"
-            className="mt-4 md:mt-0 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#01472E] hover:text-[#0B5B3E] transition-colors border-b border-[#01472E] pb-0.5"
-          >
-            <span>All residences</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </Link>
-        </div>
+            <Link
+              to="/buy"
+              className="mt-4 md:mt-0 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#01472E] hover:text-[#0B5B3E] transition-colors border-b border-[#01472E] pb-0.5"
+            >
+              <span>All residences</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+        </ScrollReveal>
 
         {/* Main Showcase Stage (Emarat exact card layout with Mobile Touch Swipe) */}
-        <div
-          onTouchStart={onTouchStartHandler}
-          onTouchMove={onTouchMoveHandler}
-          onTouchEnd={onTouchEndHandler}
-          className="bg-white rounded-2xl p-4 sm:p-8 md:p-10 shadow-sm border border-[#E5E0D4] mb-8 sm:mb-10 transition-all duration-500 select-none"
-        >
+        <ScrollReveal animation="up" delay={150} duration={900}>
+          <div
+            onTouchStart={onTouchStartHandler}
+            onTouchMove={onTouchMoveHandler}
+            onTouchEnd={onTouchEndHandler}
+            className="bg-white rounded-2xl p-4 sm:p-8 md:p-10 shadow-sm border border-[#E5E0D4] mb-8 sm:mb-10 transition-all duration-500 select-none hover-luxury-lift"
+          >
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-center">
             
             {/* Left: Building Photography */}
@@ -206,14 +210,16 @@ export const FeaturedProjects = ({ onSelectResidence, onOpenEnquiry }) => {
 
           </div>
         </div>
+      </ScrollReveal>
 
-        {/* Bottom 4 Horizontal Project Tabs (Emarat exact bottom bar) */}
+      {/* Bottom 4 Horizontal Project Tabs (Emarat exact bottom bar) */}
+      <ScrollReveal animation="up" delay={250} duration={800}>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4">
           {RESIDENCES.slice(0, 4).map((res, idx) => (
             <button
               key={res.id}
               onClick={() => setActiveIndex(idx)}
-              className={`p-4 rounded-sm text-left transition-all duration-300 border ${
+              className={`p-4 rounded-xl text-left transition-all duration-300 border hover-luxury-lift ${
                 activeIndex === idx
                   ? 'bg-[#01472E] text-white border-[#01472E] shadow-md'
                   : 'bg-white text-[#18261F] border-[#ECE7DC] hover:border-[#01472E]/50'
@@ -228,6 +234,7 @@ export const FeaturedProjects = ({ onSelectResidence, onOpenEnquiry }) => {
             </button>
           ))}
         </div>
+      </ScrollReveal>
 
       </div>
     </section>
