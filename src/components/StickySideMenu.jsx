@@ -4,7 +4,7 @@ import { BRAND } from '../data/projectsData';
 
 export const StickySideMenu = ({ onOpenCallback }) => {
   return (
-    <aside aria-label="Quick contact links" className="fixed right-0 top-1/2 -translate-y-1/2 z-40 flex flex-col items-center bg-[#01472E] border-l border-t border-b border-[#205843] rounded-l-md shadow-2xl text-white overflow-hidden">
+    <aside aria-label="Quick contact links" className="hidden md:flex fixed right-0 top-1/2 -translate-y-1/2 z-40 flex-col items-center bg-[#01472E] border-l border-t border-b border-[#205843] rounded-l-md shadow-2xl text-white overflow-hidden">
       
       {/* 1. WhatsApp Button */}
       <a

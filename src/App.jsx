@@ -4,6 +4,7 @@ import { ScrollToTop } from './components/ScrollToTop';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { StickySideMenu } from './components/StickySideMenu';
+import { MobileBottomBar } from './components/MobileBottomBar';
 import { EnquiryModal } from './components/EnquiryModal';
 import { ResidenceModal } from './components/ResidenceModal';
 
@@ -43,7 +44,7 @@ export function App() {
         <Navbar onStartChat={handleOpenEnquiry} onOpenEnquiry={handleOpenEnquiry} />
 
         {/* Dynamic Route Pages */}
-        <div className="flex-1">
+        <div className="flex-1 pb-16 md:pb-0">
           <Routes>
             <Route
               path="/"
@@ -127,8 +128,11 @@ export function App() {
         {/* Global Footer */}
         <Footer onOpenEnquiry={handleOpenEnquiry} />
 
-        {/* Signature Right-Side Sticky Vertical Quick-Action Bar */}
+        {/* Signature Right-Side Sticky Vertical Quick-Action Bar (Desktop/Tablet) */}
         <StickySideMenu onOpenCallback={handleOpenEnquiry} />
+
+        {/* Dedicated Mobile-First Sticky Action Bar (Phone Viewers) */}
+        <MobileBottomBar onOpenCallback={handleOpenEnquiry} />
 
         {/* Global Modals */}
         {enquiryModalOpen && (

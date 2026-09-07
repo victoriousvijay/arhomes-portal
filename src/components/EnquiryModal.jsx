@@ -18,8 +18,8 @@ export const EnquiryModal = ({ initialProject, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
-      <div className="relative w-full max-w-lg bg-[#013724] border border-[#D4AF37]/40 rounded-lg shadow-2xl p-6 sm:p-8 my-8 text-white">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 animate-fade-in">
+      <div className="relative w-full max-w-lg bg-[#013724] border border-[#D4AF37]/40 rounded-2xl shadow-2xl p-5 sm:p-8 my-auto text-white max-h-[92vh] overflow-y-auto">
         
         {/* Close */}
         <button
@@ -71,7 +71,7 @@ export const EnquiryModal = ({ initialProject, onClose }) => {
                   placeholder="Enter your full name"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full bg-[#002719] border border-[#205843] rounded px-3 py-2 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-[#D4AF37]"
+                  className="w-full bg-[#002719] border border-[#205843] rounded-lg px-3.5 py-2.5 text-sm sm:text-xs text-white placeholder-slate-400 focus:outline-none focus:border-[#D4AF37]"
                 />
               </div>
 
@@ -86,7 +86,7 @@ export const EnquiryModal = ({ initialProject, onClose }) => {
                     placeholder="+91 98765 00000"
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    className="w-full bg-[#002719] border border-[#205843] rounded px-3 py-2 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-[#D4AF37]"
+                    className="w-full bg-[#002719] border border-[#205843] rounded-lg px-3.5 py-2.5 text-sm sm:text-xs text-white placeholder-slate-400 focus:outline-none focus:border-[#D4AF37]"
                   />
                 </div>
                 <div>
@@ -99,7 +99,7 @@ export const EnquiryModal = ({ initialProject, onClose }) => {
                     placeholder="email@example.com"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full bg-[#002719] border border-[#205843] rounded px-3 py-2 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-[#D4AF37]"
+                    className="w-full bg-[#002719] border border-[#205843] rounded-lg px-3.5 py-2.5 text-sm sm:text-xs text-white placeholder-slate-400 focus:outline-none focus:border-[#D4AF37]"
                   />
                 </div>
               </div>
@@ -111,7 +111,7 @@ export const EnquiryModal = ({ initialProject, onClose }) => {
                 <select
                   value={formData.project}
                   onChange={(e) => setFormData({ ...formData, project: e.target.value })}
-                  className="w-full bg-[#002719] border border-[#205843] rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D4AF37]"
+                  className="w-full bg-[#002719] border border-[#205843] rounded-lg px-3.5 py-2.5 text-sm sm:text-xs text-white focus:outline-none focus:border-[#D4AF37]"
                 >
                   {RESIDENCES.map((r) => (
                     <option key={r.id} value={r.title} className="bg-[#002719]">
@@ -130,13 +130,13 @@ export const EnquiryModal = ({ initialProject, onClose }) => {
                   placeholder="Share details regarding preferred unit facing, floor height, or schedule a visit..."
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  className="w-full bg-[#002719] border border-[#205843] rounded px-3 py-2 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-[#D4AF37] resize-none"
+                  className="w-full bg-[#002719] border border-[#205843] rounded-lg px-3.5 py-2.5 text-sm sm:text-xs text-white placeholder-slate-400 focus:outline-none focus:border-[#D4AF37] resize-none"
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full py-3 bg-[#D4AF37] hover:bg-[#E5C86C] text-[#013724] font-bold text-xs uppercase tracking-wider rounded transition-all shadow-md active:scale-98"
+                className="w-full py-3.5 bg-gradient-to-r from-[#D4AF37] via-[#E5C86C] to-[#D4AF37] text-[#013724] font-bold text-xs uppercase tracking-wider rounded-xl hover:brightness-105 transition-all shadow-md active:scale-95 cursor-pointer"
               >
                 Submit Enquiry
               </button>

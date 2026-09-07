@@ -16,7 +16,7 @@ export const Footer = ({ onOpenEnquiry }) => {
   };
 
   return (
-    <footer id="contact" className="bg-[#013724] text-white border-t border-[#205843] pt-20 pb-12 relative overflow-hidden">
+    <footer id="contact" className="bg-[#013724] text-white border-t border-[#205843] pt-16 sm:pt-20 pb-28 sm:pb-12 relative overflow-hidden">
       <div className="max-w-[1440px] mx-auto px-6 sm:px-12">
         
         {/* Top Grid */}
@@ -129,7 +129,7 @@ export const Footer = ({ onOpenEnquiry }) => {
             <div>
               © {new Date().getFullYear()} {BRAND.name}. All rights reserved.
             </div>
-            <div className="flex items-center gap-4 text-slate-400">
+            <div className="flex flex-wrap items-center justify-center sm:justify-end gap-x-3 gap-y-1.5 text-slate-400">
               <Link to="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</Link>
               <span>•</span>
               <Link to="/terms-and-conditions" className="hover:text-white transition-colors">Terms & Conditions</Link>

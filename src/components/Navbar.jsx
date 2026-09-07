@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { ChevronDown, Menu, X, ArrowRight, Home, Building2, Sparkles } from 'lucide-react';
+import { BRAND } from '../data/projectsData';
+import { ChevronDown, Menu, X, ArrowRight, Home, Building2, Sparkles, Phone, MessageCircle } from 'lucide-react';
 
 const BUY_LINKS = [
   { label: 'Residential', path: '/buy?type=residential' },
@@ -237,11 +238,12 @@ export const Navbar = ({ onStartChat, onOpenEnquiry }) => {
         </div>
 
         {/* Right CTA & Mobile Hamburger */}
+        {/* Right CTA & Mobile Hamburger */}
         <div className="flex items-center gap-3">
           <button
             type="button"
             onClick={() => handleEnquiry && handleEnquiry(null)}
-            className="bg-white text-black px-5 sm:px-6 py-2 rounded-xl text-xs sm:text-sm font-semibold hover:bg-[#D4AF37] hover:text-[#013724] transition-all cursor-pointer shadow-lg active:scale-95"
+            className="hidden lg:inline-flex bg-white text-black px-5 sm:px-6 py-2 rounded-xl text-xs sm:text-sm font-semibold hover:bg-[#D4AF37] hover:text-[#013724] transition-all cursor-pointer shadow-lg active:scale-95"
           >
             Enquire Now
           </button>
@@ -250,44 +252,68 @@ export const Navbar = ({ onStartChat, onOpenEnquiry }) => {
           <button
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer"
+            className="lg:hidden p-2.5 rounded-xl bg-white/10 hover:bg-white/20 active:bg-white/30 text-white transition-colors cursor-pointer border border-white/15 shadow-sm"
             aria-label="Toggle Navigation Menu"
           >
-            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            {mobileMenuOpen ? <X className="w-5 h-5 text-[#D4AF37]" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
       </nav>
 
       {/* Mobile Menu Drawer */}
       {mobileMenuOpen && (
-        <div className="lg:hidden mt-2 liquid-glass rounded-2xl p-5 border border-white/20 shadow-2xl backdrop-blur-2xl text-white space-y-4 animate-in fade-in slide-in-from-top-3 duration-200 pointer-events-auto max-h-[80vh] overflow-y-auto">
+        <div className="lg:hidden mt-2 liquid-glass rounded-2xl p-4 sm:p-5 border border-white/20 shadow-2xl backdrop-blur-2xl text-white space-y-4 animate-in fade-in slide-in-from-top-3 duration-200 pointer-events-auto max-h-[82vh] overflow-y-auto">
           
+          {/* Top Primary Action Inside Mobile Menu */}
+          <div className="p-3.5 rounded-xl bg-[#013724]/80 border border-[#D4AF37]/40 shadow-inner flex items-center justify-between gap-3">
+            <div>
+              <span className="block text-[10px] uppercase font-bold tracking-widest text-[#D4AF37]">
+                Ready to Find Your Home?
+              </span>
+              <span className="text-xs text-slate-300 font-light">
+                Jaipur Luxury Residences & Plots
+              </span>
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                if (handleEnquiry) handleEnquiry(null);
+              }}
+              className="px-4 py-2 bg-gradient-to-r from-[#D4AF37] to-[#F3E5AB] text-[#013724] rounded-lg text-xs font-bold uppercase tracking-wider hover:brightness-105 active:scale-95 transition-all shadow-md shrink-0 cursor-pointer"
+            >
+              Enquire Now
+            </button>
+          </div>
+
           {/* Mobile Buy Accordion */}
           <div className="border-b border-white/10 pb-3">
             <div className="flex items-center justify-between text-sm font-semibold py-1">
               <Link
                 to="/buy"
                 onClick={() => setMobileMenuOpen(false)}
-                className="text-white hover:text-[#D4AF37]"
+                className="text-white hover:text-[#D4AF37] flex items-center gap-2"
               >
-                Buy Properties
+                <span>Buy Properties</span>
+                <span className="text-[10px] px-2 py-0.5 rounded bg-[#D4AF37]/20 text-[#D4AF37] font-normal">Sale</span>
               </Link>
               <button
                 type="button"
                 onClick={() => setMobileBuyOpen(!mobileBuyOpen)}
-                className="p-1 cursor-pointer"
+                className="p-2 cursor-pointer text-white/80 hover:text-[#D4AF37]"
+                aria-label="Expand Buy categories"
               >
-                <ChevronDown className={`w-4 h-4 transition-transform ${mobileBuyOpen ? 'rotate-180' : ''}`} />
+                <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${mobileBuyOpen ? 'rotate-180 text-[#D4AF37]' : ''}`} />
               </button>
             </div>
             {mobileBuyOpen && (
-              <div className="mt-2 pl-3 space-y-1.5 border-l-2 border-[#D4AF37]/50">
+              <div className="mt-2 pl-3 space-y-2 border-l-2 border-[#D4AF37]/50 py-1">
                 {BUY_LINKS.map((item) => (
                   <Link
                     key={item.label}
                     to={item.path}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="block w-full text-left py-1 text-xs text-gray-300 hover:text-white"
+                    className="block w-full text-left py-1 text-xs text-gray-300 hover:text-white transition-colors"
                   >
                     {item.label}
                   </Link>
@@ -302,26 +328,28 @@ export const Navbar = ({ onStartChat, onOpenEnquiry }) => {
               <Link
                 to="/rent"
                 onClick={() => setMobileMenuOpen(false)}
-                className="text-white hover:text-[#D4AF37]"
+                className="text-white hover:text-[#D4AF37] flex items-center gap-2"
               >
-                Rent Properties
+                <span>Rent Properties</span>
+                <span className="text-[10px] px-2 py-0.5 rounded bg-white/10 text-gray-300 font-normal">Lease</span>
               </Link>
               <button
                 type="button"
                 onClick={() => setMobileRentOpen(!mobileRentOpen)}
-                className="p-1 cursor-pointer"
+                className="p-2 cursor-pointer text-white/80 hover:text-[#D4AF37]"
+                aria-label="Expand Rent categories"
               >
-                <ChevronDown className={`w-4 h-4 transition-transform ${mobileRentOpen ? 'rotate-180' : ''}`} />
+                <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${mobileRentOpen ? 'rotate-180 text-[#D4AF37]' : ''}`} />
               </button>
             </div>
             {mobileRentOpen && (
-              <div className="mt-2 pl-3 space-y-1.5 border-l-2 border-[#D4AF37]/50">
+              <div className="mt-2 pl-3 space-y-2 border-l-2 border-[#D4AF37]/50 py-1">
                 {RENT_LINKS.map((item) => (
                   <Link
                     key={item.label}
                     to={item.path}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="block w-full text-left py-1 text-xs text-gray-300 hover:text-white"
+                    className="block w-full text-left py-1 text-xs text-gray-300 hover:text-white transition-colors"
                   >
                     {item.label}
                   </Link>
@@ -331,48 +359,62 @@ export const Navbar = ({ onStartChat, onOpenEnquiry }) => {
           </div>
 
           {/* Mobile Direct Links */}
-          <div className="space-y-3 pt-1 text-sm font-medium">
+          <div className="space-y-3 pt-1 text-sm font-medium border-b border-white/10 pb-4">
             <Link
               to="/services"
               onClick={() => setMobileMenuOpen(false)}
-              className="block hover:text-[#D4AF37] transition-colors"
+              className="block hover:text-[#D4AF37] transition-colors py-0.5"
             >
-              Services
+              Services & Amenities
             </Link>
             <Link
               to="/about"
               onClick={() => setMobileMenuOpen(false)}
-              className="block hover:text-[#D4AF37] transition-colors"
+              className="block hover:text-[#D4AF37] transition-colors py-0.5"
             >
-              About Us
+              About AR Homes
             </Link>
             <Link
               to="/gallery"
               onClick={() => setMobileMenuOpen(false)}
-              className="block hover:text-[#D4AF37] transition-colors"
+              className="block hover:text-[#D4AF37] transition-colors py-0.5"
             >
-              Gallery
+              Visual Gallery
+            </Link>
+            <Link
+              to="/faqs"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block hover:text-[#D4AF37] transition-colors py-0.5"
+            >
+              Frequently Asked Questions (FAQs)
             </Link>
             <Link
               to="/contact"
               onClick={() => setMobileMenuOpen(false)}
-              className="block hover:text-[#D4AF37] transition-colors"
+              className="block hover:text-[#D4AF37] transition-colors py-0.5"
             >
-              Contact Us
+              Contact & Experience Lounges
             </Link>
           </div>
 
-          <div className="pt-2">
-            <button
-              type="button"
-              onClick={() => {
-                setMobileMenuOpen(false);
-                if (handleEnquiry) handleEnquiry(null);
-              }}
-              className="w-full py-2.5 bg-[#D4AF37] text-[#013724] rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-white transition-colors cursor-pointer"
+          {/* Direct Quick Contact Buttons */}
+          <div className="grid grid-cols-2 gap-2 pt-1">
+            <a
+              href={`tel:${BRAND.phone}`}
+              className="flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-semibold border border-white/10 transition-colors"
             >
-              Book an Enquiry
-            </button>
+              <Phone className="w-3.5 h-3.5 text-[#D4AF37]" />
+              <span>{BRAND.phoneDisplay}</span>
+            </a>
+            <a
+              href={`https://wa.me/${BRAND.whatsapp}?text=Hello%20AR%20Homes,%20I%20am%20interested%20in%20your%20properties.`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-[#25D366]/20 hover:bg-[#25D366]/30 text-white text-xs font-semibold border border-[#25D366]/30 transition-colors"
+            >
+              <MessageCircle className="w-3.5 h-3.5 text-[#25D366]" />
+              <span>WhatsApp Chat</span>
+            </a>
           </div>
         </div>
       )}

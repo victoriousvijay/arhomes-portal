@@ -34,13 +34,13 @@ export const ResidenceModal = ({ residence, onClose, onOpenEnquiry }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6 animate-fade-in">
-      <div className="relative w-full max-w-4xl bg-[#013724] border border-[#205843] rounded-lg shadow-2xl overflow-hidden my-8 text-white">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 animate-fade-in">
+      <div className="relative w-full max-w-4xl bg-[#013724] border border-[#205843] rounded-2xl shadow-2xl overflow-hidden my-auto text-white max-h-[92vh] overflow-y-auto">
         
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 z-20 p-2 bg-[#002719] hover:bg-[#D4AF37] text-white hover:text-[#013724] rounded-full border border-[#205843] transition-colors"
+          className="absolute top-3 right-3 sm:top-4 sm:right-4 z-20 p-2 bg-[#002719] hover:bg-[#D4AF37] text-white hover:text-[#013724] rounded-full border border-[#205843] transition-colors"
           aria-label="Close modal"
         >
           <X className="w-5 h-5" />
@@ -49,27 +49,27 @@ export const ResidenceModal = ({ residence, onClose, onOpenEnquiry }) => {
         <div className="grid grid-cols-1 lg:grid-cols-12">
           
           {/* Left: Image Container */}
-          <div className="lg:col-span-6 h-64 lg:h-auto relative">
+          <div className="lg:col-span-6 h-52 sm:h-72 lg:h-auto relative">
             <img
               src={residence.image}
               alt={residence.title}
               className="w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#013724] via-transparent to-transparent lg:hidden" />
-            <div className="absolute top-4 left-4 bg-[#01472E] text-[#D4AF37] text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded">
+            <div className="absolute top-3 left-3 bg-[#01472E] text-[#D4AF37] text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded">
               {residence.status}
             </div>
           </div>
 
           {/* Right: Detailed Specs */}
-          <div className="lg:col-span-6 p-6 sm:p-8 flex flex-col justify-between">
+          <div className="lg:col-span-6 p-5 sm:p-8 flex flex-col justify-between">
             <div>
               <div className="flex items-center gap-1 text-xs text-[#D4AF37] mb-1">
                 <MapPin className="w-3.5 h-3.5" />
                 <span>{residence.location}</span>
               </div>
 
-              <h3 className="font-serif text-3xl font-normal text-white mb-2">
+              <h3 className="font-serif text-2xl sm:text-3xl font-normal text-white mb-2">
                 {residence.title}
               </h3>
               

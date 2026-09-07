@@ -5,8 +5,33 @@ import { ChevronLeft, ChevronRight, ArrowRight, Home, Maximize, Wind, Sun } from
 
 export const FeaturedProjects = ({ onSelectResidence, onOpenEnquiry }) => {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [touchStart, setTouchStart] = useState(null);
+  const [touchEnd, setTouchEnd] = useState(null);
 
   const activeResidence = RESIDENCES[activeIndex];
+
+  const minSwipeDistance = 50;
+
+  const onTouchStartHandler = (e) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMoveHandler = (e) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEndHandler = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+    if (isLeftSwipe) {
+      handleNext();
+    } else if (isRightSwipe) {
+      handlePrev();
+    }
+  };
 
   const handlePrev = () => {
     setActiveIndex((prev) => (prev === 0 ? RESIDENCES.length - 1 : prev - 1));
@@ -77,73 +102,78 @@ export const FeaturedProjects = ({ onSelectResidence, onOpenEnquiry }) => {
           </Link>
         </div>
 
-        {/* Main Showcase Stage (Emarat exact card layout) */}
-        <div className="bg-white rounded-md p-6 sm:p-10 shadow-sm border border-[#E5E0D4] mb-10 transition-all duration-500">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+        {/* Main Showcase Stage (Emarat exact card layout with Mobile Touch Swipe) */}
+        <div
+          onTouchStart={onTouchStartHandler}
+          onTouchMove={onTouchMoveHandler}
+          onTouchEnd={onTouchEndHandler}
+          className="bg-white rounded-2xl p-4 sm:p-8 md:p-10 shadow-sm border border-[#E5E0D4] mb-8 sm:mb-10 transition-all duration-500 select-none"
+        >
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-center">
             
             {/* Left: Building Photography */}
-            <div className="lg:col-span-6 h-[340px] sm:h-[460px] rounded overflow-hidden shadow-md relative group">
+            <div className="lg:col-span-6 h-[250px] sm:h-[380px] md:h-[460px] rounded-xl overflow-hidden shadow-md relative group">
               <img
                 src={activeResidence.image}
                 alt={activeResidence.title}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
               />
-              <div className="absolute top-4 left-4 bg-[#01472E] text-[#D4AF37] px-3.5 py-1 rounded-full text-[10px] uppercase font-bold tracking-wider">
+              <div className="absolute top-3 left-3 sm:top-4 sm:left-4 bg-[#01472E] text-[#D4AF37] px-3 sm:px-3.5 py-1 rounded-full text-[9px] sm:text-[10px] uppercase font-bold tracking-wider shadow-md">
                 {activeResidence.status}
               </div>
             </div>
 
             {/* Right: Specifications & CTA */}
-            <div className="lg:col-span-6 flex flex-col justify-between h-full py-2">
+            <div className="lg:col-span-6 flex flex-col justify-between h-full py-1 sm:py-2">
               <div>
-                <h3 className="font-serif text-3xl sm:text-5xl font-normal text-[#01472E] mb-6">
+                <h3 className="font-serif text-2xl sm:text-4xl md:text-5xl font-normal text-[#01472E] mb-4 sm:mb-6 leading-snug">
                   {activeResidence.title}
                 </h3>
 
                 {/* Location & Built Form Grid */}
-                <div className="grid grid-cols-2 gap-6 py-4 border-y border-[#ECE7DC] mb-8 text-xs">
+                <div className="grid grid-cols-2 gap-3 sm:gap-6 py-3 sm:py-4 border-y border-[#ECE7DC] mb-6 sm:mb-8 text-xs">
                   <div>
-                    <span className="block text-[10px] uppercase tracking-widest text-[#7D8F86] font-semibold mb-1">
+                    <span className="block text-[9.5px] sm:text-[10px] uppercase tracking-widest text-[#7D8F86] font-semibold mb-1">
                       LOCATION
                     </span>
-                    <span className="font-medium text-[#18261F] text-sm sm:text-base">
+                    <span className="font-medium text-[#18261F] text-xs sm:text-sm md:text-base line-clamp-2">
                       {activeResidence.location}
                     </span>
                   </div>
                   <div>
-                    <span className="block text-[10px] uppercase tracking-widest text-[#7D8F86] font-semibold mb-1">
+                    <span className="block text-[9.5px] sm:text-[10px] uppercase tracking-widest text-[#7D8F86] font-semibold mb-1">
                       BUILT FORM
                     </span>
-                    <span className="font-medium text-[#18261F] text-sm sm:text-base">
+                    <span className="font-medium text-[#18261F] text-xs sm:text-sm md:text-base line-clamp-2">
                       {activeResidence.builtForm}
                     </span>
                   </div>
                 </div>
 
-                {/* 4 Feature Icons Row (Emarat exact) */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+                {/* 4 Feature Icons Row */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
                   {activeResidence.features.map((feat, i) => (
                     <div key={i} className="flex flex-col items-start">
-                      <div className="w-10 h-10 rounded bg-[#F6F3EC] border border-[#ECE7DC] flex items-center justify-center mb-2">
+                      <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-[#F6F3EC] border border-[#ECE7DC] flex items-center justify-center mb-1.5">
                         {getFeatureIcon(feat.icon)}
                       </div>
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-[#18261F] leading-tight">
+                      <span className="text-[9.5px] sm:text-[10px] font-bold uppercase tracking-wider text-[#18261F] leading-tight">
                         {feat.label}
                       </span>
                     </div>
                   ))}
                 </div>
 
-                <p className="text-xs text-[#5A6E64] font-light leading-relaxed mb-8">
+                <p className="text-xs text-[#5A6E64] font-light leading-relaxed mb-6 sm:mb-8 line-clamp-3 sm:line-clamp-none">
                   {activeResidence.overview}
                 </p>
               </div>
 
               {/* View Residence Pill Button & Slider Arrows */}
-              <div className="flex items-center justify-between pt-4 border-t border-[#ECE7DC]">
+              <div className="flex items-center justify-between pt-4 border-t border-[#ECE7DC] gap-3">
                 <button
                   onClick={() => onSelectResidence(activeResidence)}
-                  className="px-8 py-3.5 rounded-full bg-[#01472E] hover:bg-[#0B5B3E] text-white text-xs uppercase font-semibold tracking-wider transition-all duration-300 shadow-sm"
+                  className="px-6 sm:px-8 py-3 rounded-full bg-[#01472E] hover:bg-[#0B5B3E] active:scale-95 text-white text-xs uppercase font-semibold tracking-wider transition-all duration-300 shadow-md"
                 >
                   VIEW RESIDENCE
                 </button>
@@ -152,19 +182,24 @@ export const FeaturedProjects = ({ onSelectResidence, onOpenEnquiry }) => {
                 <div className="flex items-center gap-2 text-[#01472E]">
                   <button
                     onClick={handlePrev}
-                    className="w-10 h-10 rounded-full border border-[#01472E]/30 hover:border-[#01472E] hover:bg-[#01472E] hover:text-white flex items-center justify-center transition-all"
+                    className="w-10 h-10 rounded-full border border-[#01472E]/30 hover:border-[#01472E] hover:bg-[#01472E] hover:text-white active:scale-90 flex items-center justify-center transition-all"
                     aria-label="Previous residence"
                   >
                     <ChevronLeft className="w-4 h-4" />
                   </button>
                   <button
                     onClick={handleNext}
-                    className="w-10 h-10 rounded-full border border-[#01472E]/30 hover:border-[#01472E] hover:bg-[#01472E] hover:text-white flex items-center justify-center transition-all"
+                    className="w-10 h-10 rounded-full border border-[#01472E]/30 hover:border-[#01472E] hover:bg-[#01472E] hover:text-white active:scale-90 flex items-center justify-center transition-all"
                     aria-label="Next residence"
                   >
                     <ChevronRight className="w-4 h-4" />
                   </button>
                 </div>
+              </div>
+
+              {/* Mobile swipe hint */}
+              <div className="sm:hidden text-[10px] text-gray-400 text-center pt-3 flex items-center justify-center gap-1.5">
+                <span>← Swipe card to browse Jaipur residences →</span>
               </div>
 
             </div>
