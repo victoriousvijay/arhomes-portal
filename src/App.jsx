@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { MoreThanFourWalls } from './components/MoreThanFourWalls';
 import { FeaturedProjects } from './components/FeaturedProjects';
@@ -27,13 +26,10 @@ export function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#01472E] text-slate-100 flex flex-col font-sans selection:bg-[#D4AF37] selection:text-[#01472E]">
+    <div className="min-h-screen bg-black text-white flex flex-col font-sans selection:bg-white selection:text-black">
       
-      {/* 1. Exact Emarat Top Navigation */}
-      <Navbar onOpenEnquiry={handleOpenEnquiry} />
-
-      {/* 2. Hero Section: "Building Spaces That Feel Like Home" */}
-      <Hero onOpenEnquiry={handleOpenEnquiry} />
+      {/* AR Homes Full-Screen Hero with Video Background & Liquid Glass Navbar */}
+      <Hero onStartChat={handleOpenEnquiry} onOpenEnquiry={handleOpenEnquiry} />
 
       {/* 3. Philosophy & Horizontal Gallery: "More Than Four Walls" */}
       <MoreThanFourWalls />

@@ -23,16 +23,20 @@ export const Footer = ({ onOpenEnquiry }) => {
           
           {/* Brand Col */}
           <div className="lg:col-span-2 space-y-5">
-            <div className="flex flex-col items-start">
-              <svg viewBox="0 0 40 40" className="w-9 h-9 text-[#D4AF37] stroke-current fill-none mb-1" strokeWidth="1.5">
-                <line x1="20" y1="2" x2="20" y2="28" stroke="#D4AF37" strokeWidth="1.8" />
-                <line x1="16" y1="8" x2="16" y2="26" stroke="#D4AF37" strokeWidth="1.2" />
-                <line x1="24" y1="8" x2="24" y2="26" stroke="#D4AF37" strokeWidth="1.2" />
-                <polygon points="20,22 30,30 20,38 10,30" stroke="#D4AF37" strokeWidth="1.5" />
-              </svg>
-              <span className="font-sans text-xs font-bold tracking-[0.35em] text-[#D4AF37] uppercase">
-                {BRAND.name}
-              </span>
+            <div className="flex items-center gap-3.5">
+              <img
+                src="/ar-homes-logo.jpg"
+                alt="AR Homes Logo"
+                className="w-12 h-12 rounded-full object-cover border border-[#D4AF37]/50 shadow-md"
+              />
+              <div className="flex flex-col">
+                <span className="font-sans text-sm font-bold tracking-[0.25em] text-[#D4AF37] uppercase">
+                  {BRAND.name}
+                </span>
+                <span className="text-[10px] tracking-widest text-slate-400 font-light uppercase">
+                  Ghar Bethe, Ghar Dekho
+                </span>
+              </div>
             </div>
 
             <p className="text-xs text-slate-300 font-light leading-relaxed max-w-sm">

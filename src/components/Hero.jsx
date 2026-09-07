@@ -1,65 +1,80 @@
-import React, { useState, useEffect } from 'react';
-import { ChevronDown } from 'lucide-react';
+import React from 'react';
+import { Navbar } from './Navbar';
+import { AnimatedHeading } from './AnimatedHeading';
+import { FadeIn } from './FadeIn';
 
-export const Hero = ({ onOpenEnquiry }) => {
-  const [headlineIndex, setHeadlineIndex] = useState(0);
-
-  const headlines = [
-    { line1: "Building Spaces That", line2: "Feel Like Home" },
-    { line1: "Designed With", line2: "Quality That Lasts" }
-  ];
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setHeadlineIndex((prev) => (prev === 0 ? 1 : 0));
-    }, 5500);
-    return () => clearInterval(timer);
-  }, []);
+export const Hero = ({ onOpenEnquiry, onStartChat }) => {
+  const handleChat = onStartChat || onOpenEnquiry;
 
   return (
-    <section className="relative min-h-screen flex items-end pb-20 sm:pb-28 pt-24 overflow-hidden">
-      
-      {/* Exact Emarat Dusk Architectural Background */}
-      <div className="absolute inset-0 z-0">
-        <img
-          src="/assets/hero-building.jpeg"
-          alt="AR Homes Luxury Architectural Residence"
-          className="w-full h-full object-cover object-center brightness-[0.9] contrast-[1.05]"
-        />
-        {/* Subtle vignette gradient to ensure white text readability */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-transparent" />
-      </div>
+    <section className="relative min-h-screen w-full flex flex-col justify-between overflow-hidden bg-black text-white">
+      {/* Full-screen background video: NO dark overlay, NO gradient overlay, NO dimming */}
+      <video
+        className="absolute inset-0 w-full h-full object-cover z-0"
+        src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260403_050628_c4e32401-fab4-4a27-b7a8-6e9291cd5959.mp4"
+        autoPlay
+        loop
+        muted
+        playsInline
+      />
 
-      <div className="relative z-10 max-w-[1440px] mx-auto px-6 sm:px-12 w-full">
-        
-        {/* Editorial Serif Headline at Bottom-Left (Emarat exact placement & typography) */}
-        <div className="max-w-3xl">
-          <h1 className="font-serif text-4xl sm:text-6xl md:text-7xl lg:text-8xl text-white font-normal leading-[1.05] tracking-tight drop-shadow-lg transition-all duration-700">
-            <span className="block font-serif">
-              {headlines[headlineIndex].line1}
-            </span>
-            <span className="block font-serif italic text-white/95">
-              {headlines[headlineIndex].line2}
-            </span>
-          </h1>
+      {/* Navbar at top */}
+      <Navbar onStartChat={handleChat} />
+
+      {/* Hero Content (Bottom of viewport) */}
+      <div className="relative z-10 w-full px-6 md:px-12 lg:px-16 flex-1 flex flex-col justify-end pb-12 lg:pb-16">
+        <div className="w-full lg:grid lg:grid-cols-2 lg:items-end gap-8">
+          
+          {/* Left Column - Main content */}
+          <div>
+            {/* Animated Character-by-Character Heading */}
+            <AnimatedHeading
+              text={"Shaping tomorrow\nwith vision and action."}
+              className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-normal mb-4 text-white"
+            />
+
+            {/* Subheading with Fade-in (800ms delay, 1000ms duration) */}
+            <FadeIn delay={800} duration={1000}>
+              <p className="text-base md:text-lg text-gray-300 mb-5">
+                We back visionaries and craft ventures that define what comes next.
+              </p>
+            </FadeIn>
+
+            {/* Buttons row with Fade-in (1200ms delay, 1000ms duration) */}
+            <FadeIn delay={1200} duration={1000}>
+              <div className="flex flex-wrap gap-4">
+                <button
+                  type="button"
+                  onClick={handleChat}
+                  className="bg-white text-black px-8 py-3 rounded-lg font-medium hover:bg-gray-100 transition-colors cursor-pointer"
+                >
+                  Start a Chat
+                </button>
+                <a
+                  href="#explore"
+                  className="liquid-glass border border-white/20 text-white px-8 py-3 rounded-lg font-medium hover:bg-white hover:text-black transition-colors inline-flex items-center justify-center cursor-pointer"
+                >
+                  Explore Now
+                </a>
+              </div>
+            </FadeIn>
+          </div>
+
+          {/* Right Column - Tag */}
+          <div className="flex items-end justify-start lg:justify-end mt-8 lg:mt-0">
+            <FadeIn delay={1400} duration={1000}>
+              <div className="liquid-glass border border-white/20 px-6 py-3 rounded-xl">
+                <span className="text-lg md:text-xl lg:text-2xl font-light text-white">
+                  Investing. Building. Advisory.
+                </span>
+              </div>
+            </FadeIn>
+          </div>
+
         </div>
-
-        {/* Center Bottom SCROLL Indicator */}
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 hidden sm:flex flex-col items-center">
-          <a
-            href="#philosophy"
-            className="flex flex-col items-center gap-1 text-white/80 hover:text-white transition-colors"
-          >
-            <span className="text-[10px] tracking-[0.3em] font-medium uppercase">
-              SCROLL
-            </span>
-            <ChevronDown className="w-4 h-4 animate-bounce text-[#D4AF37]" />
-          </a>
-        </div>
-
       </div>
-
     </section>
   );
 };
+
+export default Hero;
