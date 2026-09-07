@@ -27,7 +27,7 @@ export const AnimatedHeading = ({
       {lines.map((line, lineIndex) => {
         const words = line.split(' ');
         return (
-          <span key={lineIndex} className="block">
+          <span key={lineIndex} className="block md:whitespace-nowrap">
             {words.map((word, wordIndex) => {
               return (
                 <span key={wordIndex} className="inline-block whitespace-nowrap">

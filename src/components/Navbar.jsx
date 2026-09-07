@@ -24,6 +24,7 @@ export const Navbar = ({ onStartChat, onOpenEnquiry }) => {
   const [mobileBuyOpen, setMobileBuyOpen] = useState(false);
   const [mobileRentOpen, setMobileRentOpen] = useState(false);
 
+  const navRef = useRef(null);
   const buyTimeoutRef = useRef(null);
   const rentTimeoutRef = useRef(null);
 
@@ -40,34 +41,47 @@ export const Navbar = ({ onStartChat, onOpenEnquiry }) => {
 
   const handleBuyEnter = () => {
     clearTimeout(buyTimeoutRef.current);
+    setRentDropdownOpen(false);
     setBuyDropdownOpen(true);
   };
   const handleBuyLeave = () => {
     buyTimeoutRef.current = setTimeout(() => {
       setBuyDropdownOpen(false);
-    }, 150);
+    }, 200);
   };
 
   const handleRentEnter = () => {
     clearTimeout(rentTimeoutRef.current);
+    setBuyDropdownOpen(false);
     setRentDropdownOpen(true);
   };
   const handleRentLeave = () => {
     rentTimeoutRef.current = setTimeout(() => {
       setRentDropdownOpen(false);
-    }, 150);
+    }, 200);
   };
 
   useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (navRef.current && !navRef.current.contains(e.target)) {
+        setBuyDropdownOpen(false);
+        setRentDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
       clearTimeout(buyTimeoutRef.current);
       clearTimeout(rentTimeoutRef.current);
     };
   }, []);
 
   return (
-    <header className="relative z-30 w-full px-4 sm:px-8 md:px-12 lg:px-16 pt-5">
-      <nav className="liquid-glass rounded-2xl px-4 md:px-6 py-2.5 flex items-center justify-between relative border border-white/20 shadow-2xl backdrop-blur-xl">
+    <header className="relative z-40 w-full px-4 sm:px-8 md:px-12 lg:px-16 pt-5">
+      <nav
+        ref={navRef}
+        className="liquid-glass overflow-visible rounded-2xl px-4 md:px-6 py-2.5 flex items-center justify-between relative border border-white/20 shadow-2xl backdrop-blur-xl z-40"
+      >
         
         {/* Left: AR Homes Brand Logo */}
         <a href="#" className="flex items-center gap-3 select-none group shrink-0">
@@ -97,16 +111,19 @@ export const Navbar = ({ onStartChat, onOpenEnquiry }) => {
           >
             <button
               type="button"
-              onClick={() => setBuyDropdownOpen(!buyDropdownOpen)}
-              className="flex items-center gap-1.5 hover:text-white transition-colors cursor-pointer text-sm font-medium"
+              onClick={() => {
+                setRentDropdownOpen(false);
+                setBuyDropdownOpen(!buyDropdownOpen);
+              }}
+              className="flex items-center gap-1.5 hover:text-white transition-colors cursor-pointer text-sm font-medium select-none"
             >
               <span>Buy</span>
               <ChevronDown className={`w-4 h-4 transition-transform duration-200 text-white/70 ${buyDropdownOpen ? 'rotate-180 text-white' : ''}`} />
             </button>
 
             {buyDropdownOpen && (
-              <div className="absolute top-full left-0 pt-2 w-56 animate-in fade-in slide-in-from-top-2 duration-150">
-                <div className="bg-[#0b1612]/95 backdrop-blur-2xl border border-white/15 rounded-xl shadow-2xl p-2 space-y-1">
+              <div className="absolute top-full left-0 pt-2 w-56 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+                <div className="bg-[#050e0a]/95 backdrop-blur-2xl border border-white/20 rounded-xl shadow-2xl p-2 space-y-1">
                   <div className="px-3 py-1.5 text-[10px] uppercase tracking-widest text-[#D4AF37] font-semibold border-b border-white/10 flex items-center gap-1.5">
                     <Home className="w-3 h-3" />
                     <span>Properties For Sale</span>
@@ -135,16 +152,19 @@ export const Navbar = ({ onStartChat, onOpenEnquiry }) => {
           >
             <button
               type="button"
-              onClick={() => setRentDropdownOpen(!rentDropdownOpen)}
-              className="flex items-center gap-1.5 hover:text-white transition-colors cursor-pointer text-sm font-medium"
+              onClick={() => {
+                setBuyDropdownOpen(false);
+                setRentDropdownOpen(!rentDropdownOpen);
+              }}
+              className="flex items-center gap-1.5 hover:text-white transition-colors cursor-pointer text-sm font-medium select-none"
             >
               <span>Rent</span>
               <ChevronDown className={`w-4 h-4 transition-transform duration-200 text-white/70 ${rentDropdownOpen ? 'rotate-180 text-white' : ''}`} />
             </button>
 
             {rentDropdownOpen && (
-              <div className="absolute top-full left-0 pt-2 w-52 animate-in fade-in slide-in-from-top-2 duration-150">
-                <div className="bg-[#0b1612]/95 backdrop-blur-2xl border border-white/15 rounded-xl shadow-2xl p-2 space-y-1">
+              <div className="absolute top-full left-0 pt-2 w-52 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+                <div className="bg-[#050e0a]/95 backdrop-blur-2xl border border-white/20 rounded-xl shadow-2xl p-2 space-y-1">
                   <div className="px-3 py-1.5 text-[10px] uppercase tracking-widest text-[#D4AF37] font-semibold border-b border-white/10 flex items-center gap-1.5">
                     <Building2 className="w-3 h-3" />
                     <span>Rental Listings</span>
