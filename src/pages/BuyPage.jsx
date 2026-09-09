@@ -8,14 +8,10 @@ import {
   Building2, 
   CheckCircle2, 
   ArrowRight, 
-  ShieldCheck, 
   MapPin, 
   Search, 
-  Award, 
-  FileCheck, 
   PhoneCall, 
-  BadgeCheck,
-  Landmark
+  BadgeCheck 
 } from 'lucide-react';
 
 const formatImageUrl = (url) => {
@@ -369,64 +365,7 @@ export const BuyPage = ({ onOpenEnquiry, onSelectResidence }) => {
           </div>
         )}
 
-        {/* 3. FOUR TRUST PILLARS (Why Buy Directly with AR Homes) */}
-        <div className="mt-20 pt-16 border-t border-slate-200">
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <span className="text-xs uppercase tracking-widest text-[#013724] font-bold bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full">
-              Buyer Assurance Framework
-            </span>
-            <h3 className="font-serif text-3xl sm:text-4xl font-normal text-slate-900 mt-3">
-              Why Discerning Buyers Choose <span className="italic text-[#013724]">AR Homes</span>
-            </h3>
-            <p className="text-sm text-slate-600 mt-2">
-              We eliminate friction, middlemen, and uncertainty. When you buy with AR Homes, you invest with unshakeable peace of mind.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
-              <div className="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-[#013724] mb-4">
-                <FileCheck className="w-6 h-6 text-emerald-700" />
-              </div>
-              <h4 className="font-serif text-lg font-bold text-slate-900 mb-2">100% Clear Freehold Titles</h4>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                Complete transparency. All lands and structures are free from litigation, fully registered with Rajasthan RERA, and open for legal verification.
-              </p>
-            </div>
-
-            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
-              <div className="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-[#013724] mb-4">
-                <Award className="w-6 h-6 text-emerald-700" />
-              </div>
-              <h4 className="font-serif text-lg font-bold text-slate-900 mb-2">0% Brokerage Direct Developer</h4>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                Purchase directly from the principal developer. Enjoy absolute price transparency with zero hidden charges or intermediate fees.
-              </p>
-            </div>
-
-            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
-              <div className="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-[#013724] mb-4">
-                <Landmark className="w-6 h-6 text-emerald-700" />
-              </div>
-              <h4 className="font-serif text-lg font-bold text-slate-900 mb-2">8.35% Pre-Approved Loans</h4>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                Exclusive banking partnerships with SBI, HDFC, ICICI, and Axis Bank for preferential rates, zero processing delay, and maximum tax benefits.
-              </p>
-            </div>
-
-            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
-              <div className="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-[#013724] mb-4">
-                <ShieldCheck className="w-6 h-6 text-emerald-700" />
-              </div>
-              <h4 className="font-serif text-lg font-bold text-slate-900 mb-2">10-Year Structural Guarantee</h4>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                Constructed with FE550D TMT reinforcement, acoustic double-glazed joinery, and backed by a comprehensive builder defect warranty.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* 4. REAL-TIME MORTGAGE & CIBIL CALCULATOR */}
+        {/* 3. REAL-TIME MORTGAGE & CIBIL CALCULATOR */}
         <div className="mt-16">
           <LoanCalculator onOpenEnquiry={onOpenEnquiry} defaultAmount={25000000} />
         </div>

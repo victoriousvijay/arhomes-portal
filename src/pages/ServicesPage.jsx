@@ -75,11 +75,12 @@ export const ServicesPage = ({ onOpenEnquiry }) => {
   const phoneVal = settings?.phone || BRAND.phone;
   const phoneDisplayVal = settings?.phone_display || settings?.phone || BRAND.phoneDisplay;
 
-  // Ultra-smooth video scrub with requestAnimationFrame and lerp
+  // Ultra-smooth video scrub with direct cursor mapping & frame queue
   const videoRef = useRef(null);
-  const targetTimeRef = useRef(0);
-  const currentTimeRef = useRef(0);
+  const targetProgressRef = useRef(0.25);
+  const currentProgressRef = useRef(0.25);
   const isSeekingRef = useRef(false);
+  const pendingSeekTimeRef = useRef(null);
   const rafIdRef = useRef(null);
 
   // Typewriter heading & subtitle text
@@ -101,67 +102,46 @@ export const ServicesPage = ({ onOpenEnquiry }) => {
     setTimeout(() => setCopied(false), 2200);
   };
 
-  // Ultra-smooth video mouse & touch scrub engine
+  // Ultra-smooth, freely movable video mouse & touch scrub engine
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
     const handleLoadedMetadata = () => {
-      const initial = (video.duration * 0.15) || 0;
-      targetTimeRef.current = initial;
-      currentTimeRef.current = initial;
+      const initial = (video.duration * 0.25) || 0;
+      currentProgressRef.current = 0.25;
+      targetProgressRef.current = 0.25;
       video.currentTime = initial;
     };
 
     video.addEventListener('loadedmetadata', handleLoadedMetadata);
 
-    let prevX = null;
-
-    const handleMouseMove = (e) => {
+    // Direct 1:1 cursor tracking across the screen
+    const handlePointerMove = (e) => {
       if (!video || !video.duration) return;
-      const currentX = e.clientX;
-      if (prevX === null) {
-        prevX = currentX;
-        return;
-      }
-      const deltaX = currentX - prevX;
-      prevX = currentX;
-
-      const sensitivity = 0.85;
-      const deltaSec = (deltaX / window.innerWidth) * sensitivity * video.duration;
-      targetTimeRef.current = Math.max(0, Math.min(video.duration, targetTimeRef.current + deltaSec));
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const width = window.innerWidth || 1;
+      const progress = Math.max(0, Math.min(1, clientX / width));
+      targetProgressRef.current = progress;
     };
 
-    let touchStartX = null;
-    const handleTouchMove = (e) => {
-      if (!video || !video.duration || !e.touches[0]) return;
-      const touchX = e.touches[0].clientX;
-      if (touchStartX === null) {
-        touchStartX = touchX;
-        return;
-      }
-      const deltaX = touchX - touchStartX;
-      touchStartX = touchX;
-      const deltaSec = (deltaX / window.innerWidth) * 0.9 * video.duration;
-      targetTimeRef.current = Math.max(0, Math.min(video.duration, targetTimeRef.current + deltaSec));
-    };
-    const handleTouchEnd = () => {
-      touchStartX = null;
-    };
-
-    // Smooth continuous animation frame loop (60/120fps LERP)
+    // Smooth continuous animation frame loop (60/120fps responsive follow)
     const updateVideoFrame = () => {
-      if (video && video.duration && !isSeekingRef.current) {
-        const diff = targetTimeRef.current - currentTimeRef.current;
-        if (Math.abs(diff) > 0.015) {
-          currentTimeRef.current += diff * 0.28;
-          currentTimeRef.current = Math.max(0, Math.min(video.duration, currentTimeRef.current));
-          
-          isSeekingRef.current = true;
-          if ('fastSeek' in video) {
-            video.fastSeek(currentTimeRef.current);
+      if (video && video.duration) {
+        const diff = targetProgressRef.current - currentProgressRef.current;
+        if (Math.abs(diff) > 0.001) {
+          currentProgressRef.current += diff * 0.35;
+          const desiredTime = Math.max(0, Math.min(video.duration, currentProgressRef.current * video.duration));
+
+          if (!isSeekingRef.current) {
+            isSeekingRef.current = true;
+            if ('fastSeek' in video) {
+              video.fastSeek(desiredTime);
+            } else {
+              video.currentTime = desiredTime;
+            }
           } else {
-            video.currentTime = currentTimeRef.current;
+            pendingSeekTimeRef.current = desiredTime;
           }
         }
       }
@@ -170,12 +150,21 @@ export const ServicesPage = ({ onOpenEnquiry }) => {
 
     const handleSeeked = () => {
       isSeekingRef.current = false;
+      if (pendingSeekTimeRef.current !== null && video && video.duration) {
+        const nextTime = pendingSeekTimeRef.current;
+        pendingSeekTimeRef.current = null;
+        isSeekingRef.current = true;
+        if ('fastSeek' in video) {
+          video.fastSeek(nextTime);
+        } else {
+          video.currentTime = nextTime;
+        }
+      }
     };
 
     video.addEventListener('seeked', handleSeeked);
-    window.addEventListener('mousemove', handleMouseMove, { passive: true });
-    window.addEventListener('touchmove', handleTouchMove, { passive: true });
-    window.addEventListener('touchend', handleTouchEnd, { passive: true });
+    window.addEventListener('mousemove', handlePointerMove, { passive: true });
+    window.addEventListener('touchmove', handlePointerMove, { passive: true });
 
     rafIdRef.current = requestAnimationFrame(updateVideoFrame);
 
@@ -183,9 +172,8 @@ export const ServicesPage = ({ onOpenEnquiry }) => {
       if (rafIdRef.current) cancelAnimationFrame(rafIdRef.current);
       video.removeEventListener('loadedmetadata', handleLoadedMetadata);
       video.removeEventListener('seeked', handleSeeked);
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('touchmove', handleTouchMove);
-      window.removeEventListener('touchend', handleTouchEnd);
+      window.removeEventListener('mousemove', handlePointerMove);
+      window.removeEventListener('touchmove', handlePointerMove);
     };
   }, []);
 
@@ -196,7 +184,7 @@ export const ServicesPage = ({ onOpenEnquiry }) => {
     <div className="min-h-screen bg-[#F8FAFC] text-slate-900 font-sans selection:bg-[#013724] selection:text-white">
       
       {/* 1. FULL-SCREEN MOUSE-SCRUB VIDEO HERO SECTION */}
-      <section className="relative min-h-screen w-full flex flex-col justify-end pb-12 md:justify-center md:pb-0 px-5 sm:px-8 md:px-14 overflow-hidden select-none">
+      <section className="relative min-h-screen w-full flex items-center justify-start overflow-hidden select-none px-6 sm:px-12 md:px-16 lg:px-24">
         
         {/* Background Video (Mouse-Scrub controlled, contained inside hero) */}
         <video
@@ -212,16 +200,16 @@ export const ServicesPage = ({ onOpenEnquiry }) => {
         <div className="absolute inset-0 bg-gradient-to-t from-[#F8FAFC] via-[#F8FAFC]/30 to-transparent pointer-events-none z-[1]" />
 
         {/* Breadcrumb Navigation at Top-Left */}
-        <div className="absolute top-24 left-6 sm:left-14 z-10">
-          <nav className="flex items-center gap-2 text-xs text-slate-700 font-medium px-3.5 py-1.5 rounded-full bg-white/75 backdrop-blur-md border border-black/5 shadow-sm">
+        <div className="absolute top-24 left-6 sm:left-12 md:left-16 lg:left-24 z-10">
+          <nav className="flex items-center gap-2 text-xs text-slate-700 font-medium px-3.5 py-1.5 rounded-full bg-white/80 backdrop-blur-md border border-black/5 shadow-sm">
             <Link to="/" className="hover:text-[#013724] transition-colors">Home</Link>
             <span className="text-slate-300">/</span>
             <span className="text-slate-900 font-semibold">Services & Advisory</span>
           </nav>
         </div>
 
-        {/* Content Container (Shifted to LEFT side on Desktop: md:mr-auto md:ml-2 lg:ml-6) */}
-        <div className="max-w-xl md:mr-auto md:ml-2 lg:ml-6 relative z-10 text-left pt-20 md:pt-0">
+        {/* Content Container (Anchored on LEFT with generous padding) */}
+        <div className="max-w-xl relative z-10 text-left pt-24 md:pt-0">
           
           {/* 1. Blurred Intro Label */}
           <div 

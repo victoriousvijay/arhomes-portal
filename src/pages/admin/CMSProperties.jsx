@@ -403,8 +403,9 @@ export const CMSProperties = () => {
 
       {/* Simplified, Non-Tech Friendly Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-[#071710] border border-white/20 rounded-3xl w-full max-w-xl p-6 sm:p-7 shadow-2xl space-y-5 my-8 animate-in fade-in zoom-in-95">
+        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md overflow-y-auto p-4 sm:p-6">
+          <div className="min-h-full flex items-center justify-center py-6 sm:py-10">
+            <div className="bg-[#071710] border border-white/20 rounded-3xl w-full max-w-xl p-6 sm:p-7 shadow-2xl space-y-5 my-auto animate-in fade-in zoom-in-95">
             
             {/* Modal Header */}
             <div className="flex items-center justify-between border-b border-white/10 pb-4">
@@ -714,7 +715,8 @@ export const CMSProperties = () => {
             </form>
           </div>
         </div>
-      )}
+      </div>
+    )}
     </div>
   );
 };
