@@ -1,12 +1,19 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useSiteData } from '../context/SiteDataContext';
 import { BRAND } from '../data/projectsData';
-import { Phone, Mail, MapPin } from 'lucide-react';
+import { Phone, Mail, MapPin, Shield, ExternalLink } from 'lucide-react';
 import { ScrollReveal } from './ScrollReveal';
 
 export const Footer = ({ onOpenEnquiry }) => {
+  const { settings } = useSiteData();
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
+
+  const phoneVal = settings?.phone || BRAND.phone;
+  const phoneDisplayVal = settings?.phone_display || settings?.phone || BRAND.phoneDisplay;
+  const emailVal = settings?.email || BRAND.email;
+  const addressVal = settings?.corporate_address || BRAND.corporateAddress;
 
   const handleSubscribe = (e) => {
     e.preventDefault();
@@ -48,15 +55,15 @@ export const Footer = ({ onOpenEnquiry }) => {
             <div className="space-y-2 text-xs text-slate-300 pt-2 font-light">
               <div className="flex items-center gap-2">
                 <Phone className="w-3.5 h-3.5 text-[#D4AF37]" />
-                <a href={`tel:${BRAND.phone}`} className="hover:text-[#D4AF37] transition-colors">{BRAND.phoneDisplay}</a>
+                <a href={`tel:${phoneVal}`} className="hover:text-[#D4AF37] transition-colors">{phoneDisplayVal}</a>
               </div>
               <div className="flex items-center gap-2">
                 <Mail className="w-3.5 h-3.5 text-[#D4AF37]" />
-                <a href={`mailto:${BRAND.email}`} className="hover:text-[#D4AF37] transition-colors">{BRAND.email}</a>
+                <a href={`mailto:${emailVal}`} className="hover:text-[#D4AF37] transition-colors">{emailVal}</a>
               </div>
               <div className="flex items-start gap-2">
                 <MapPin className="w-3.5 h-3.5 text-[#D4AF37] shrink-0 mt-0.5" />
-                <span>{BRAND.corporateAddress}</span>
+                <span>{addressVal}</span>
               </div>
             </div>
           </ScrollReveal>
@@ -136,6 +143,10 @@ export const Footer = ({ onOpenEnquiry }) => {
                 <Link to="/terms-and-conditions" className="hover:text-white transition-colors">Terms & Conditions</Link>
                 <span>•</span>
                 <Link to="/faqs" className="hover:text-white transition-colors">FAQs</Link>
+                <span>•</span>
+                <Link to="/admin" className="hover:text-[#D4AF37] transition-colors font-medium flex items-center gap-1">
+                  <span>Executive Portal (CMS/CRM)</span>
+                </Link>
                 <span>•</span>
                 <span className="text-[#D4AF37] font-medium">Jaipur, Rajasthan</span>
               </div>

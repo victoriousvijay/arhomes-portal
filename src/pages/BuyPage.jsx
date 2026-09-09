@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { useSiteData } from '../context/SiteDataContext';
 import { BuyHeroCarousel } from '../components/BuyHeroCarousel';
 import { LoanCalculator } from '../components/LoanCalculator';
 import { RESIDENCES } from '../data/projectsData';
@@ -16,6 +17,15 @@ import {
   BadgeCheck,
   Landmark
 } from 'lucide-react';
+
+const formatImageUrl = (url) => {
+  if (!url) return '';
+  const match = url.match(/(?:drive\.google\.com\/(?:file\/d\/|open\?id=)|docs\.google\.com\/uc\?id=)([a-zA-Z0-9_-]+)/);
+  if (match && match[1]) {
+    return `https://drive.google.com/thumbnail?id=${match[1]}&sz=w1600`;
+  }
+  return url;
+};
 
 const CATEGORIES = [
   { id: 'all', label: 'All Properties' },
@@ -101,6 +111,9 @@ export const BUY_CATALOG = [
 ];
 
 export const BuyPage = ({ onOpenEnquiry, onSelectResidence }) => {
+  const { properties } = useSiteData();
+  const catalog = properties && properties.length > 0 ? properties : BUY_CATALOG;
+
   const [searchParams, setSearchParams] = useSearchParams();
   const rawType = searchParams.get('type') || 'all';
   
@@ -118,7 +131,7 @@ export const BuyPage = ({ onOpenEnquiry, onSelectResidence }) => {
     setSearchParams(id === 'all' ? {} : { type: id });
   };
 
-  const filteredProperties = BUY_CATALOG.filter((item) => {
+  const filteredProperties = catalog.filter((item) => {
     const matchesCategory =
       selectedCategory === 'all' ||
       item.category === selectedCategory ||
@@ -128,23 +141,17 @@ export const BuyPage = ({ onOpenEnquiry, onSelectResidence }) => {
 
     const matchesSearch =
       searchQuery === '' ||
-      item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.overview.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.builtForm.toLowerCase().includes(searchQuery.toLowerCase());
+      (item.title || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (item.location || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (item.overview || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (item.builtForm || '').toLowerCase().includes(searchQuery.toLowerCase());
 
     return matchesCategory && matchesSearch;
   });
 
   // Top showcase properties for the hero banner carousel
-  const carouselProperties = [
-    BUY_CATALOG.find(p => p.id === 'c2-civil-lines') || BUY_CATALOG[0],
-    BUY_CATALOG.find(p => p.id === 'ar-imperial-villas') || BUY_CATALOG[2],
-    BUY_CATALOG.find(p => p.id === 'c5-vaishali-nagar') || BUY_CATALOG[1],
-    BUY_CATALOG.find(p => p.id === 'e11-c-scheme') || BUY_CATALOG[3],
-    BUY_CATALOG.find(p => p.id === 'ea04-jagatpura') || BUY_CATALOG[4],
-    BUY_CATALOG.find(p => p.id === 'ar-commercial-tower') || BUY_CATALOG[5]
-  ].filter(Boolean);
+  const heroOnly = catalog.filter(p => p.is_hero_carousel);
+  const carouselProperties = heroOnly.length > 0 ? heroOnly : catalog.slice(0, 5);
 
   return (
     <div className="w-full bg-[#F8FAFC] text-slate-900 font-sans selection:bg-[#013724] selection:text-white">
@@ -270,7 +277,7 @@ export const BuyPage = ({ onOpenEnquiry, onSelectResidence }) => {
                 {/* Image Banner */}
                 <div className="relative aspect-[16/10] overflow-hidden bg-slate-100">
                   <img
-                    src={prop.image}
+                    src={formatImageUrl(prop.image)}
                     alt={prop.title}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     loading="lazy"
@@ -281,7 +288,7 @@ export const BuyPage = ({ onOpenEnquiry, onSelectResidence }) => {
                   <div className="absolute top-3 left-3 right-3 flex items-center justify-between gap-2">
                     <div className="flex items-center gap-1.5">
                       <span className="px-3 py-1 rounded-full bg-[#013724]/90 backdrop-blur-md text-[10px] font-bold uppercase tracking-wider text-[#F3E5AB] border border-[#D4AF37]/30 shadow-md">
-                        {prop.builtForm}
+                        {prop.builtForm || prop.category}
                       </span>
                       {prop.isNew && (
                         <span className="px-2.5 py-1 rounded-full bg-[#D4AF37] text-[10px] font-bold uppercase tracking-wider text-[#013724] shadow-sm">
@@ -313,13 +320,13 @@ export const BuyPage = ({ onOpenEnquiry, onSelectResidence }) => {
 
                     {/* Highlights 2x2 Grid */}
                     <div className="grid grid-cols-2 gap-2 mb-5 pt-3 border-t border-slate-100">
-                      {prop.features.slice(0, 4).map((feat, fIdx) => (
+                      {(prop.features || []).slice(0, 4).map((feat, fIdx) => (
                         <div 
                           key={fIdx} 
                           className="flex items-center gap-1.5 text-[11px] text-slate-700 bg-slate-50 border border-slate-100 rounded-lg px-2.5 py-1.5"
                         >
                           <CheckCircle2 className="w-3 h-3 text-emerald-600 shrink-0" />
-                          <span className="truncate font-medium">{feat.label}</span>
+                          <span className="truncate font-medium">{feat?.label || feat || 'Verified Feature'}</span>
                         </div>
                       ))}
                     </div>

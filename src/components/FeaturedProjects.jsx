@@ -1,15 +1,30 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useSiteData } from '../context/SiteDataContext';
 import { RESIDENCES } from '../data/projectsData';
 import { ChevronLeft, ChevronRight, ArrowRight, Home, Maximize, Wind, Sun } from 'lucide-react';
 import { ScrollReveal } from './ScrollReveal';
 
+const formatImageUrl = (url) => {
+  if (!url) return '';
+  const match = url.match(/(?:drive\.google\.com\/(?:file\/d\/|open\?id=)|docs\.google\.com\/uc\?id=)([a-zA-Z0-9_-]+)/);
+  if (match && match[1]) {
+    return `https://drive.google.com/thumbnail?id=${match[1]}&sz=w1600`;
+  }
+  return url;
+};
+
 export const FeaturedProjects = ({ onSelectResidence, onOpenEnquiry }) => {
+  const { properties } = useSiteData();
+  const featured = properties && properties.filter(p => p.is_featured_home);
+  const residencesList = featured && featured.length > 0 ? featured : (properties && properties.length > 0 ? properties : RESIDENCES);
+
   const [activeIndex, setActiveIndex] = useState(0);
   const [touchStart, setTouchStart] = useState(null);
   const [touchEnd, setTouchEnd] = useState(null);
 
-  const activeResidence = RESIDENCES[activeIndex];
+  const safeIndex = activeIndex < residencesList.length ? activeIndex : 0;
+  const activeResidence = residencesList[safeIndex];
 
   const minSwipeDistance = 50;
 
@@ -35,11 +50,11 @@ export const FeaturedProjects = ({ onSelectResidence, onOpenEnquiry }) => {
   };
 
   const handlePrev = () => {
-    setActiveIndex((prev) => (prev === 0 ? RESIDENCES.length - 1 : prev - 1));
+    setActiveIndex((prev) => (prev === 0 ? residencesList.length - 1 : prev - 1));
   };
 
   const handleNext = () => {
-    setActiveIndex((prev) => (prev === RESIDENCES.length - 1 ? 0 : prev + 1));
+    setActiveIndex((prev) => (prev === residencesList.length - 1 ? 0 : prev + 1));
   };
 
   const getFeatureIcon = (type) => {
@@ -118,12 +133,12 @@ export const FeaturedProjects = ({ onSelectResidence, onOpenEnquiry }) => {
             {/* Left: Building Photography */}
             <div className="lg:col-span-6 h-[250px] sm:h-[380px] md:h-[460px] rounded-xl overflow-hidden shadow-md relative group">
               <img
-                src={activeResidence.image}
+                src={formatImageUrl(activeResidence.image)}
                 alt={activeResidence.title}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
               />
               <div className="absolute top-3 left-3 sm:top-4 sm:left-4 bg-[#01472E] text-[#D4AF37] px-3 sm:px-3.5 py-1 rounded-full text-[9px] sm:text-[10px] uppercase font-bold tracking-wider shadow-md">
-                {activeResidence.status}
+                {activeResidence.status || 'Verified Project'}
               </div>
             </div>
 
@@ -215,12 +230,12 @@ export const FeaturedProjects = ({ onSelectResidence, onOpenEnquiry }) => {
       {/* Bottom 4 Horizontal Project Tabs (Emarat exact bottom bar) */}
       <ScrollReveal animation="up" delay={250} duration={800}>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4">
-          {RESIDENCES.slice(0, 4).map((res, idx) => (
+          {residencesList.slice(0, 4).map((res, idx) => (
             <button
-              key={res.id}
+              key={res.id || idx}
               onClick={() => setActiveIndex(idx)}
               className={`p-4 rounded-xl text-left transition-all duration-300 border hover-luxury-lift ${
-                activeIndex === idx
+                safeIndex === idx
                   ? 'bg-[#01472E] text-white border-[#01472E] shadow-md'
                   : 'bg-white text-[#18261F] border-[#ECE7DC] hover:border-[#01472E]/50'
               }`}

@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useSiteData } from '../context/SiteDataContext';
 import { BRAND } from '../data/projectsData';
-import { ChevronDown, Menu, X, ArrowRight, Home, Phone, MessageCircle } from 'lucide-react';
+import { ChevronDown, Menu, X, ArrowRight, Home, Phone, MessageCircle, ShieldCheck } from 'lucide-react';
 
 const BUY_LINKS = [
   { label: 'Residential Floors', path: '/buy?type=residential' },
@@ -14,6 +15,11 @@ const BUY_LINKS = [
 
 export const Navbar = ({ onStartChat, onOpenEnquiry }) => {
   const location = useLocation();
+  const { settings } = useSiteData();
+
+  const phoneVal = settings?.phone || BRAND.phone;
+  const phoneDisplayVal = settings?.phone_display || settings?.phone || BRAND.phoneDisplay;
+  const whatsappVal = settings?.whatsapp || BRAND.whatsapp;
 
   const [buyDropdownOpen, setBuyDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -288,14 +294,14 @@ export const Navbar = ({ onStartChat, onOpenEnquiry }) => {
           {/* Direct Quick Contact Buttons */}
           <div className="grid grid-cols-2 gap-2 pt-1">
             <a
-              href={`tel:${BRAND.phone}`}
+              href={`tel:${phoneVal}`}
               className="flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-semibold border border-white/10 transition-colors"
             >
               <Phone className="w-3.5 h-3.5 text-[#D4AF37]" />
-              <span>{BRAND.phoneDisplay}</span>
+              <span className="truncate">{phoneDisplayVal}</span>
             </a>
             <a
-              href={`https://wa.me/${BRAND.whatsapp}?text=Hello%20AR%20Homes,%20I%20am%20interested%20in%20your%20properties.`}
+              href={`https://wa.me/${whatsappVal}?text=Hello%20AR%20Homes,%20I%20am%20interested%20in%20your%20properties.`}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-[#25D366]/20 hover:bg-[#25D366]/30 text-white text-xs font-semibold border border-[#25D366]/30 transition-colors"

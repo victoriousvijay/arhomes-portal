@@ -1,14 +1,19 @@
 import React from 'react';
 import { Phone } from 'lucide-react';
+import { useSiteData } from '../context/SiteDataContext';
 import { BRAND } from '../data/projectsData';
 
 export const StickySideMenu = ({ onOpenCallback }) => {
+  const { settings } = useSiteData();
+  const whatsappVal = settings?.whatsapp || BRAND.whatsapp;
+  const instagramVal = settings?.instagram || 'https://instagram.com';
+
   return (
     <aside aria-label="Quick contact links" className="hidden md:flex fixed right-0 top-1/2 -translate-y-1/2 z-40 flex-col items-center bg-[#01472E] border-l border-t border-b border-[#205843] rounded-l-md shadow-2xl text-white overflow-hidden">
       
       {/* 1. WhatsApp Button */}
       <a
-        href={`https://wa.me/${BRAND.whatsapp}?text=Hello%20AR%20Homes,%20I%20am%20interested%20in%20your%20luxury%20properties.`}
+        href={`https://wa.me/${whatsappVal}?text=Hello%20AR%20Homes,%20I%20am%20interested%20in%20your%20luxury%20properties.`}
         target="_blank"
         rel="noopener noreferrer"
         className="w-11 h-12 flex items-center justify-center hover:bg-[#0B5B3E] transition-colors border-b border-[#205843]/60 group"
@@ -34,7 +39,7 @@ export const StickySideMenu = ({ onOpenCallback }) => {
 
       {/* 3. Instagram Button */}
       <a
-        href="https://instagram.com"
+        href={instagramVal}
         target="_blank"
         rel="noopener noreferrer"
         className="w-11 h-12 flex items-center justify-center hover:bg-[#0B5B3E] transition-colors group"

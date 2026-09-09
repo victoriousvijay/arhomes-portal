@@ -1,8 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { PageHeader } from '../components/PageHeader';
+import { useSiteData } from '../context/SiteDataContext';
 import { BRAND } from '../data/projectsData';
 import { ShieldCheck, Award, CheckCircle2, ArrowRight, PhoneCall, Building2, UserCheck } from 'lucide-react';
+
+const formatImageUrl = (url) => {
+  if (!url) return '';
+  const match = url.match(/(?:drive\.google\.com\/(?:file\/d\/|open\?id=)|docs\.google\.com\/uc\?id=)([a-zA-Z0-9_-]+)/);
+  if (match && match[1]) {
+    return `https://drive.google.com/thumbnail?id=${match[1]}&sz=w1600`;
+  }
+  return url;
+};
 
 const OWNERS = [
   {
@@ -39,6 +49,8 @@ const STATS = [
 ];
 
 export const AboutPage = ({ onOpenEnquiry }) => {
+  const { owners } = useSiteData();
+  const displayOwners = owners && owners.length > 0 ? owners : OWNERS;
   return (
     <div className="min-h-screen bg-[#F8FAFC] text-slate-900 font-sans selection:bg-[#013724] selection:text-white">
       
@@ -69,16 +81,16 @@ export const AboutPage = ({ onOpenEnquiry }) => {
 
         {/* The Three Owners Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
-          {OWNERS.map((owner, idx) => (
+          {displayOwners.map((owner, idx) => (
             <div
-              key={idx}
+              key={owner.id || idx}
               className="bg-white border border-slate-200 rounded-2xl overflow-hidden hover:border-[#D4AF37] hover:shadow-xl transition-all duration-300 flex flex-col justify-between group hover:-translate-y-1 shadow-sm"
             >
               <div>
                 {/* Photo with subtle zoom */}
                 <div className="aspect-[4/3] w-full overflow-hidden bg-slate-100 relative">
                   <img
-                    src={owner.image}
+                    src={formatImageUrl(owner.image)}
                     alt={owner.name}
                     className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
                   />

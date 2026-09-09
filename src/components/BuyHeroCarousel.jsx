@@ -9,6 +9,15 @@ import {
   CheckCircle2
 } from 'lucide-react';
 
+const formatImageUrl = (url) => {
+  if (!url) return '';
+  const match = url.match(/(?:drive\.google\.com\/(?:file\/d\/|open\?id=)|docs\.google\.com\/uc\?id=)([a-zA-Z0-9_-]+)/);
+  if (match && match[1]) {
+    return `https://drive.google.com/thumbnail?id=${match[1]}&sz=w1600`;
+  }
+  return url;
+};
+
 export const BuyHeroCarousel = ({ properties = [], onOpenEnquiry, onSelectResidence }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
@@ -77,7 +86,7 @@ export const BuyHeroCarousel = ({ properties = [], onOpenEnquiry, onSelectReside
               }`}
             >
               <img
-                src={slide.image}
+                src={formatImageUrl(slide.image)}
                 alt={slide.title}
                 className={`w-full h-full object-cover object-center transform transition-transform duration-[7000ms] ease-out ${
                   isActive ? 'scale-105' : 'scale-100'

@@ -1,8 +1,13 @@
 import React from 'react';
 import { Phone, MessageCircle, Sparkles } from 'lucide-react';
+import { useSiteData } from '../context/SiteDataContext';
 import { BRAND } from '../data/projectsData';
 
 export const MobileBottomBar = ({ onOpenCallback }) => {
+  const { settings } = useSiteData();
+  const phoneVal = settings?.phone || BRAND.phone;
+  const whatsappVal = settings?.whatsapp || BRAND.whatsapp;
+
   return (
     <div
       className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#01281b]/95 backdrop-blur-2xl border-t border-[#D4AF37]/35 shadow-[0_-10px_35px_rgba(0,0,0,0.8)] px-3 py-2 pb-[max(0.6rem,env(safe-area-inset-bottom))] transition-transform"
@@ -13,7 +18,7 @@ export const MobileBottomBar = ({ onOpenCallback }) => {
         
         {/* 1. Direct Call Button */}
         <a
-          href={`tel:${BRAND.phone}`}
+          href={`tel:${phoneVal}`}
           className="flex-1 min-w-[70px] flex flex-col items-center justify-center py-1.5 px-2 rounded-xl bg-white/5 border border-white/10 text-slate-200 hover:text-white hover:bg-white/15 transition-all active:scale-95 text-center group"
           title="Call AR Homes Concierge"
         >
@@ -25,7 +30,7 @@ export const MobileBottomBar = ({ onOpenCallback }) => {
 
         {/* 2. Direct WhatsApp Button */}
         <a
-          href={`https://wa.me/${BRAND.whatsapp}?text=Hello%20AR%20Homes,%20I%20am%20interested%20in%20your%20luxury%20properties%20in%20Jaipur.`}
+          href={`https://wa.me/${whatsappVal}?text=Hello%20AR%20Homes,%20I%20am%20interested%20in%20your%20luxury%20properties%20in%20Jaipur.`}
           target="_blank"
           rel="noopener noreferrer"
           className="flex-1 min-w-[70px] flex flex-col items-center justify-center py-1.5 px-2 rounded-xl bg-white/5 border border-white/10 text-slate-200 hover:text-white hover:bg-white/15 transition-all active:scale-95 text-center group"

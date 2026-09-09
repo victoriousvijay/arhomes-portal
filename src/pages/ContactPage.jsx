@@ -1,9 +1,17 @@
 import React, { useState } from 'react';
 import { PageHeader } from '../components/PageHeader';
+import { useSiteData } from '../context/SiteDataContext';
 import { BRAND } from '../data/projectsData';
 import { Phone, Mail, MapPin, MessageSquare, Clock, CheckCircle2, Send, ShieldCheck, Sparkles } from 'lucide-react';
 
 export const ContactPage = () => {
+  const { settings, addLead } = useSiteData();
+  const phoneVal = settings?.phone || BRAND.phone;
+  const phoneDisplayVal = settings?.phone_display || settings?.phone || BRAND.phoneDisplay;
+  const whatsappVal = settings?.whatsapp || BRAND.whatsapp;
+  const emailVal = settings?.email || BRAND.email;
+  const addressVal = settings?.corporate_address || BRAND.corporateAddress;
+
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -16,6 +24,19 @@ export const ContactPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    
+    // Push lead to CRM in real-time
+    addLead({
+      name: formData.name,
+      phone: formData.phone,
+      email: formData.email,
+      property_interest: `Contact Page: ${formData.purpose}`,
+      budget: formData.budget,
+      message: formData.message,
+      source: 'Contact Page Advisory Form',
+      temperature: 'Warm'
+    });
+
     setSubmitted(true);
   };
 
@@ -80,7 +101,7 @@ export const ContactPage = () => {
             {/* Direct Connect Pills */}
             <div className="space-y-3 pt-4">
               <a
-                href={`tel:${BRAND.phone}`}
+                href={`tel:${phoneVal}`}
                 className="flex items-center gap-4 p-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition-colors group"
               >
                 <div className="w-10 h-10 rounded-lg bg-[#013724] text-[#D4AF37] flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
@@ -88,12 +109,12 @@ export const ContactPage = () => {
                 </div>
                 <div>
                   <span className="block text-[10px] uppercase tracking-wider text-gray-400">Direct Phone Helpline</span>
-                  <span className="text-sm font-semibold text-white group-hover:text-[#D4AF37] transition-colors">{BRAND.phoneDisplay}</span>
+                  <span className="text-sm font-semibold text-white group-hover:text-[#D4AF37] transition-colors">{phoneDisplayVal}</span>
                 </div>
               </a>
 
               <a
-                href={`https://wa.me/${BRAND.whatsapp}?text=Hi%20AR%20Homes%2C%20I%20would%20like%20to%20enquire%20about%20your%20properties.`}
+                href={`https://wa.me/${whatsappVal}?text=Hi%20AR%20Homes%2C%20I%20would%20like%20to%20enquire%20about%20your%20properties.`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-4 p-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition-colors group"
@@ -108,7 +129,7 @@ export const ContactPage = () => {
               </a>
 
               <a
-                href={`mailto:${BRAND.email}`}
+                href={`mailto:${emailVal}`}
                 className="flex items-center gap-4 p-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition-colors group"
               >
                 <div className="w-10 h-10 rounded-lg bg-[#013724] text-[#D4AF37] flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
@@ -116,7 +137,7 @@ export const ContactPage = () => {
                 </div>
                 <div>
                   <span className="block text-[10px] uppercase tracking-wider text-gray-400">Email Correspondence</span>
-                  <span className="text-sm font-semibold text-white group-hover:text-[#D4AF37] transition-colors">{BRAND.email}</span>
+                  <span className="text-sm font-semibold text-white group-hover:text-[#D4AF37] transition-colors">{emailVal}</span>
                 </div>
               </a>
             </div>
@@ -196,7 +217,7 @@ export const ContactPage = () => {
                     />
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
                       <label className="block text-xs font-medium text-gray-300 mb-1.5">Requirement Type</label>
                       <select
@@ -205,12 +226,12 @@ export const ContactPage = () => {
                         className="w-full bg-[#050e0a] border border-white/15 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-[#D4AF37] transition-colors"
                       >
                         <option value="buy-residential">Buy: Luxury Independent Floor</option>
-                        <option value="buy-apartment">Buy: High-Rise Apartment</option>
-                        <option value="buy-villa">Buy: Private Villa</option>
-                        <option value="buy-commercial">Buy: Grade-A Commercial</option>
-                        <option value="rent-floor">Rent: Residential Floor</option>
-                        <option value="rent-apartment">Rent: Executive Apartment</option>
-                        <option value="other">Other Advisory Consultation</option>
+                        <option value="buy-villa">Buy: Private Villa & Triplex Mansion</option>
+                        <option value="buy-apartment">Buy: High-Rise Penthouse / Apartment</option>
+                        <option value="buy-commercial">Buy: Grade-A Commercial Tower</option>
+                        <option value="buy-plots">Buy: Freehold Land & Plots</option>
+                        <option value="loan-finance">Loan & Banking Advisory</option>
+                        <option value="other">Other High-Net-Worth Advisory</option>
                       </select>
                     </div>
 
@@ -221,11 +242,10 @@ export const ContactPage = () => {
                         onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
                         className="w-full bg-[#050e0a] border border-white/15 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-[#D4AF37] transition-colors"
                       >
-                        <option value="1-3cr">₹1.00 Cr - ₹3.00 Cr</option>
-                        <option value="3-5cr">₹3.00 Cr - ₹5.00 Cr</option>
-                        <option value="5-10cr">₹5.00 Cr - ₹10.00 Cr</option>
-                        <option value="10cr+">₹10.00 Cr+</option>
-                        <option value="rental">Rental Lease Range</option>
+                        <option value="1.5-2.5cr">₹1.50 Cr - ₹2.50 Cr</option>
+                        <option value="2.5-4cr">₹2.50 Cr - ₹4.00 Cr</option>
+                        <option value="4-7cr">₹4.00 Cr - ₹7.00 Cr</option>
+                        <option value="7cr+">₹7.00 Cr+ (Ultra-Luxury & Estates)</option>
                       </select>
                     </div>
                   </div>

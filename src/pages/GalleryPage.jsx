@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { PageHeader } from '../components/PageHeader';
+import { useSiteData } from '../context/SiteDataContext';
 import { 
   X, 
   ChevronLeft, 
@@ -7,6 +8,15 @@ import {
   MapPin, 
   Maximize2 
 } from 'lucide-react';
+
+const formatImageUrl = (url) => {
+  if (!url) return '';
+  const match = url.match(/(?:drive\.google\.com\/(?:file\/d\/|open\?id=)|docs\.google\.com\/uc\?id=)([a-zA-Z0-9_-]+)/);
+  if (match && match[1]) {
+    return `https://drive.google.com/thumbnail?id=${match[1]}&sz=w1600`;
+  }
+  return url;
+};
 
 const CATEGORIES = [
   { id: 'all', label: 'All Portfolio' },
@@ -106,10 +116,13 @@ const GALLERY_ITEMS = [
 ];
 
 export const GalleryPage = () => {
+  const { gallery } = useSiteData();
   const [activeCategory, setActiveCategory] = useState('all');
   const [lightboxIndex, setLightboxIndex] = useState(null);
 
-  const filteredItems = GALLERY_ITEMS.filter(
+  const displayGallery = gallery && gallery.length > 0 ? gallery : GALLERY_ITEMS;
+
+  const filteredItems = displayGallery.filter(
     (item) => activeCategory === 'all' || item.category === activeCategory
   );
 
@@ -183,7 +196,7 @@ export const GalleryPage = () => {
               {/* Photo */}
               <div className="aspect-[4/3] w-full overflow-hidden bg-slate-100 relative">
                 <img
-                  src={item.image}
+                  src={formatImageUrl(item.image)}
                   alt={item.title}
                   loading="lazy"
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
@@ -245,7 +258,7 @@ export const GalleryPage = () => {
           <div className="max-w-5xl w-full flex flex-col items-center">
             <div className="max-h-[75vh] w-auto overflow-hidden rounded-2xl border border-white/20 shadow-2xl mb-4 bg-black">
               <img
-                src={filteredItems[lightboxIndex].image}
+                src={formatImageUrl(filteredItems[lightboxIndex].image)}
                 alt={filteredItems[lightboxIndex].title}
                 className="w-full h-auto max-h-[75vh] object-contain"
               />

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { SiteDataProvider } from './context/SiteDataContext';
 import { ScrollToTop } from './components/ScrollToTop';
 import { SmoothScroll } from './components/SmoothScroll';
 import { Navbar } from './components/Navbar';
@@ -10,7 +11,7 @@ import { ClickSpark } from './components/ClickSpark';
 import { EnquiryModal } from './components/EnquiryModal';
 import { ResidenceModal } from './components/ResidenceModal';
 
-// Dedicated Pages
+// Dedicated Public Pages
 import { HomePage } from './pages/HomePage';
 import { BuyPage } from './pages/BuyPage';
 import { ServicesPage } from './pages/ServicesPage';
@@ -21,7 +22,19 @@ import { PrivacyPolicyPage } from './pages/PrivacyPolicyPage';
 import { TermsConditionsPage } from './pages/TermsConditionsPage';
 import { FaqsPage } from './pages/FaqsPage';
 
-export function App() {
+// Admin Portal Pages (CMS & CRM)
+import { AdminLayout } from './pages/admin/AdminLayout';
+import { CRMLeads } from './pages/admin/CRMLeads';
+import { CRMAnalytics } from './pages/admin/CRMAnalytics';
+import { CRMRevenue } from './pages/admin/CRMRevenue';
+import { CMSProperties } from './pages/admin/CMSProperties';
+import { CMSPages } from './pages/admin/CMSPages';
+import { CMSSettings } from './pages/admin/CMSSettings';
+
+function AppContent() {
+  const location = useLocation();
+  const isAdmin = location.pathname.startsWith('/admin');
+
   const [enquiryModalOpen, setEnquiryModalOpen] = useState(false);
   const [selectedResidenceForEnquiry, setSelectedResidenceForEnquiry] = useState(null);
   const [activeResidenceModal, setActiveResidenceModal] = useState(null);
@@ -37,24 +50,24 @@ export function App() {
   };
 
   return (
-    <Router>
-      <ScrollToTop />
-      <SmoothScroll />
-      <ClickSpark
-        sparkColor="#D4AF37"
-        sparkSize={10}
-        sparkRadius={18}
-        sparkCount={8}
-        duration={400}
-      >
-        <div className="min-h-screen bg-black text-white flex flex-col font-sans selection:bg-white selection:text-black relative">
+    <ClickSpark
+      sparkColor="#D4AF37"
+      sparkSize={10}
+      sparkRadius={18}
+      sparkCount={8}
+      duration={400}
+    >
+      <div className="min-h-screen bg-black text-white flex flex-col font-sans selection:bg-white selection:text-black relative">
         
-        {/* Persistent Floating Navbar across all pages */}
-        <Navbar onStartChat={handleOpenEnquiry} onOpenEnquiry={handleOpenEnquiry} />
+        {/* Render Public Navbar when not on /admin */}
+        {!isAdmin && (
+          <Navbar onStartChat={handleOpenEnquiry} onOpenEnquiry={handleOpenEnquiry} />
+        )}
 
         {/* Dynamic Route Pages */}
-        <div className="flex-1 pb-16 md:pb-0">
+        <div className={`flex-1 ${!isAdmin ? 'pb-16 md:pb-0' : ''}`}>
           <Routes>
+            {/* Public Routes */}
             <Route
               path="/"
               element={
@@ -123,19 +136,33 @@ export function App() {
                 <FaqsPage onOpenEnquiry={handleOpenEnquiry} />
               }
             />
+
+            {/* Admin Portal Nested Routes (CMS & CRM) */}
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route index element={<CRMLeads />} />
+              <Route path="crm" element={<Navigate to="/admin" replace />} />
+              <Route path="analytics" element={<CRMAnalytics />} />
+              <Route path="revenue" element={<CRMRevenue />} />
+              <Route path="deals" element={<Navigate to="/admin/revenue" replace />} />
+              <Route path="properties" element={<CMSProperties />} />
+              <Route path="cms" element={<Navigate to="/admin/properties" replace />} />
+              <Route path="pages" element={<CMSPages />} />
+              <Route path="settings" element={<CMSSettings />} />
+            </Route>
+
             {/* Catch-all redirect to home */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </div>
 
-        {/* Global Footer */}
-        <Footer onOpenEnquiry={handleOpenEnquiry} />
+        {/* Global Public Footer */}
+        {!isAdmin && <Footer onOpenEnquiry={handleOpenEnquiry} />}
 
         {/* Signature Right-Side Sticky Vertical Quick-Action Bar (Desktop/Tablet) */}
-        <StickySideMenu onOpenCallback={handleOpenEnquiry} />
+        {!isAdmin && <StickySideMenu onOpenCallback={handleOpenEnquiry} />}
 
         {/* Dedicated Mobile-First Sticky Action Bar (Phone Viewers) */}
-        <MobileBottomBar onOpenCallback={handleOpenEnquiry} />
+        {!isAdmin && <MobileBottomBar onOpenCallback={handleOpenEnquiry} />}
 
         {/* Global Modals */}
         {enquiryModalOpen && (
@@ -154,9 +181,21 @@ export function App() {
         )}
 
       </div>
-      </ClickSpark>
+    </ClickSpark>
+  );
+}
+
+export function App() {
+  return (
+    <Router>
+      <SiteDataProvider>
+        <ScrollToTop />
+        <SmoothScroll />
+        <AppContent />
+      </SiteDataProvider>
     </Router>
   );
 }
 
 export default App;
+
