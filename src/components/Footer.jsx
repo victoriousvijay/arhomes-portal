@@ -68,9 +68,8 @@ export const Footer = ({ onOpenEnquiry }) => {
             </h4>
             <ul className="space-y-2.5 text-xs text-slate-300 font-light">
               <li><Link to="/" className="hover:text-[#D4AF37] transition-colors">Home</Link></li>
-              <li><Link to="/buy" className="hover:text-[#D4AF37] transition-colors">Buy Properties</Link></li>
-              <li><Link to="/rent" className="hover:text-[#D4AF37] transition-colors">Rental Listings</Link></li>
-              <li><Link to="/services" className="hover:text-[#D4AF37] transition-colors">Services & Amenities</Link></li>
+              <li><Link to="/buy" className="hover:text-[#D4AF37] transition-colors">Buy Properties & Land</Link></li>
+              <li><Link to="/services" className="hover:text-[#D4AF37] transition-colors">Services & Loan Assistance</Link></li>
               <li><Link to="/about" className="hover:text-[#D4AF37] transition-colors">About Us</Link></li>
               <li><Link to="/gallery" className="hover:text-[#D4AF37] transition-colors">Visual Gallery</Link></li>
               <li><Link to="/faqs" className="hover:text-[#D4AF37] transition-colors">FAQs & Knowledge Base</Link></li>

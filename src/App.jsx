@@ -13,7 +13,6 @@ import { ResidenceModal } from './components/ResidenceModal';
 // Dedicated Pages
 import { HomePage } from './pages/HomePage';
 import { BuyPage } from './pages/BuyPage';
-import { RentPage } from './pages/RentPage';
 import { ServicesPage } from './pages/ServicesPage';
 import { AboutPage } from './pages/AboutPage';
 import { GalleryPage } from './pages/GalleryPage';
@@ -74,14 +73,8 @@ export function App() {
                 />
               }
             />
-            <Route
-              path="/rent"
-              element={
-                <RentPage
-                  onOpenEnquiry={handleOpenEnquiry}
-                />
-              }
-            />
+            {/* Redirect /rent to /buy since AR Homes only deals in properties for sale and development */}
+            <Route path="/rent" element={<Navigate to="/buy" replace />} />
             <Route
               path="/services"
               element={

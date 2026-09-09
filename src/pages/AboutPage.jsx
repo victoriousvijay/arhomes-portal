@@ -2,163 +2,165 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { PageHeader } from '../components/PageHeader';
 import { BRAND } from '../data/projectsData';
-import { ShieldCheck, Heart, Award, Users, ArrowRight } from 'lucide-react';
+import { ShieldCheck, Award, CheckCircle2, ArrowRight, PhoneCall, Building2, UserCheck } from 'lucide-react';
 
-const STATS = [
-  { value: '500+', label: 'Luxury Floors Delivered' },
-  { value: '100%', label: 'RERA Compliance & Timely Delivery' },
-  { value: '3.2M+', label: 'Sq.Ft Developed & Under Construction' },
-  { value: '4.9/5', label: 'Homeowner Delight & Referral Score' }
+const OWNERS = [
+  {
+    name: 'Anand R. Verma',
+    role: 'Co-Founder & Managing Director',
+    expertise: 'Land Acquisitions & Master Planning',
+    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=85',
+    bio: 'Pioneered the AR Homes vision of low-density independent floors in Jaipur. With over 22 years of development leadership, Anand directs land acquisitions, master planning, and strategic partnerships across Civil Lines, C-Scheme, and Vaishali Nagar.',
+    credentials: 'B.E. Civil • 22+ Years Real Estate Experience'
+  },
+  {
+    name: 'Rajesh K. Sharma',
+    role: 'Co-Founder & Director of Architecture',
+    expertise: 'Structural Integrity & Design Execution',
+    image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=800&q=85',
+    bio: 'Dedicated to architectural precision and European finish standards. Rajesh personally supervises structural concrete casting, seismic safety compliance, imported Italian marble joinery, and on-schedule handover across every AR Homes project.',
+    credentials: 'M.Arch Architecture • 19+ Years Engineering Execution'
+  },
+  {
+    name: 'Amit V. Rathore',
+    role: 'Co-Founder & Director of Finance & Legal',
+    expertise: 'Banking Alliances & RERA Compliance',
+    image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=800&q=85',
+    bio: 'Guarantees 100% legal title transparency and buyer security. Amit orchestrates preferred loan alliances with SBI, HDFC, ICICI, and Axis Bank while managing statutory RERA governance and NRI real estate foreign exchange advisory.',
+    credentials: 'FCA & Corporate Finance • 18+ Years Banking & Law'
+  }
 ];
 
-const VALUES = [
-  {
-    icon: Heart,
-    title: 'Ghar Bethe, Ghar Dekho',
-    desc: 'Our founding promise of digital transparency, verified virtual site tours, and honest construction updates ensures every family experiences absolute peace of mind.'
-  },
-  {
-    icon: ShieldCheck,
-    title: 'Quality as Foundation',
-    desc: 'We never treat quality as a premium upgrade. From structural core casting to imported Italian statuario marble flooring, our standards remain uncompromising.'
-  },
-  {
-    icon: Users,
-    title: 'Low-Density Family Living',
-    desc: 'Consciously prioritizing low-rise independent floors (S+4) and boutique sky mansions over congested high-density developments, giving your family maximum privacy and open air.'
-  },
-  {
-    icon: Award,
-    title: 'Generational Value',
-    desc: 'Each residence is engineered with timeless neoclassical symmetry and modern European detailing to ensure lasting capital appreciation and pride of ownership.'
-  }
+const STATS = [
+  { value: '500+', label: 'Luxury Residences Delivered' },
+  { value: '100%', label: 'RERA Compliance & Clear Freehold Titles' },
+  { value: '3.2M+', label: 'Sq.Ft Developed & Under Construction' },
+  { value: '0%', label: 'Brokerage • Deal Directly with Founders' }
 ];
 
 export const AboutPage = ({ onOpenEnquiry }) => {
   return (
     <div className="min-h-screen bg-[#F8FAFC] text-slate-900 font-sans selection:bg-[#013724] selection:text-white">
-      {/* Header Banner in Light Trustworthy Theme */}
+      
+      {/* Light Minimal Header */}
       <PageHeader
         theme="light"
-        badge="Our Story & Heritage"
-        title="Crafting Spaces Where"
-        highlight="Families Flourish"
-        subtitle="AR Homes was founded on the belief that a luxury residence should be warm, enduring, and meticulously built for the people who call it home."
+        badge="Leadership & Heritage"
+        title="Built with Integrity by"
+        highlight="Visionary Founders"
+        subtitle="AR Homes is steered by three hands-on entrepreneurs bringing together land development, architectural engineering, and financial governance in Jaipur."
         breadcrumbs={[{ label: 'About Us' }]}
       />
 
-      {/* Philosophy Section */}
-      <div className="max-w-[1440px] mx-auto px-6 sm:px-12 py-16 sm:py-24 border-b border-slate-200">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          <div>
-            <span className="text-xs uppercase tracking-[0.25em] text-[#013724] font-bold block mb-3">
-              {BRAND.philosophy}
-            </span>
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-normal text-slate-900 leading-tight mb-6">
-              Where True Luxury Meets <br />
-              <span className="text-[#013724] italic font-medium">Family Warmth</span>
-            </h2>
-            <p className="text-sm sm:text-base text-slate-600 font-normal leading-relaxed mb-6">
-              {BRAND.philosophyText}
-            </p>
-            <p className="text-sm text-slate-500 font-normal leading-relaxed mb-8">
-              Whether it is the gentle morning sunlight filtering across three open facades in Civil Lines, or the expansive panoramic sunset from a terrace residence in Vaishali Nagar and C-Scheme, Jaipur — AR Homes builds residences where everyday life feels elevated and peaceful.
-            </p>
-
-            <div className="flex flex-wrap gap-4">
-              <Link
-                to="/buy"
-                className="px-6 py-3.5 bg-[#013724] text-white rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-[#D4AF37] hover:text-[#013724] transition-all shadow-md inline-flex items-center gap-2"
-              >
-                <span>Explore Residences</span>
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-              <button
-                type="button"
-                onClick={() => onOpenEnquiry && onOpenEnquiry(null)}
-                className="px-6 py-3.5 border border-slate-300 text-slate-800 bg-white rounded-xl text-xs font-semibold uppercase tracking-wider hover:bg-slate-100 transition-colors cursor-pointer shadow-sm"
-              >
-                Schedule Private Tour
-              </button>
-            </div>
-          </div>
-
-          <div className="relative">
-            <div className="aspect-[4/3] rounded-3xl overflow-hidden border border-slate-200 shadow-xl relative">
-              <img
-                src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=85"
-                alt="AR Homes Architecture"
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-            </div>
-
-            {/* Floating Quote Badge in Trustworthy Light Styling */}
-            <div className="absolute -bottom-8 -left-4 sm:left-8 bg-white/95 backdrop-blur-xl border border-slate-200 p-6 rounded-2xl shadow-xl max-w-sm">
-              <p className="font-serif text-sm italic text-slate-800 mb-2 leading-relaxed">
-                "Quality is not an accident. It is always the result of sincere intention, intelligent direction, and skillful execution."
-              </p>
-              <span className="text-[10px] uppercase tracking-widest text-[#013724] font-bold block">
-                AR Homes Leadership
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Stats Counter Row */}
-      <div className="bg-white border-b border-slate-200 py-16 shadow-sm">
-        <div className="max-w-[1440px] mx-auto px-6 sm:px-12 grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
-          {STATS.map((st, sIdx) => (
-            <div key={sIdx} className="space-y-2">
-              <span className="font-serif text-3xl sm:text-5xl font-bold text-[#013724] block">
-                {st.value}
-              </span>
-              <span className="text-xs text-slate-600 uppercase tracking-wider font-semibold block max-w-[200px] mx-auto">
-                {st.label}
-              </span>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Core Pillars / Values */}
-      <div className="max-w-[1440px] mx-auto px-6 sm:px-12 py-20 sm:py-28">
-        <div className="text-center max-w-3xl mx-auto mb-16">
+      <div className="max-w-[1440px] mx-auto px-6 sm:px-12 py-14 sm:py-20">
+        
+        {/* Philosophy Intro */}
+        <div className="max-w-3xl mx-auto text-center mb-16">
           <span className="text-xs uppercase tracking-[0.25em] text-[#013724] font-bold block mb-2">
-            Our Core Principles
+            The Founding Promise
           </span>
-          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-normal text-slate-900">
-            Built with Integrity, <span className="text-[#013724] italic font-medium">Loved by Families</span>
+          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-normal text-slate-900 tracking-tight">
+            Direct Accountability from <span className="text-[#013724] italic font-medium">The Owners</span>
           </h2>
+          <p className="text-sm sm:text-base text-slate-600 font-normal mt-4 leading-relaxed">
+            At AR Homes, we do not operate behind layers of impersonal sales agents. Every plot acquired, foundation poured, and deed registered is guided by our three founders.
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {VALUES.map((val, vIdx) => {
-            const IconComp = val.icon;
-            return (
-              <div
-                key={vIdx}
-                className="p-8 rounded-2xl bg-white border border-slate-200 hover:border-[#D4AF37] transition-all duration-300 flex flex-col justify-between shadow-sm hover:shadow-xl group hover:-translate-y-1"
-              >
-                <div>
-                  <div className="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-[#013724] mb-6 group-hover:scale-110 transition-transform">
-                    <IconComp className="w-6 h-6 text-emerald-800" />
+        {/* The Three Owners Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
+          {OWNERS.map((owner, idx) => (
+            <div
+              key={idx}
+              className="bg-white border border-slate-200 rounded-2xl overflow-hidden hover:border-[#D4AF37] hover:shadow-xl transition-all duration-300 flex flex-col justify-between group hover:-translate-y-1 shadow-sm"
+            >
+              <div>
+                {/* Photo with subtle zoom */}
+                <div className="aspect-[4/3] w-full overflow-hidden bg-slate-100 relative">
+                  <img
+                    src={owner.image}
+                    alt={owner.name}
+                    className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                  
+                  <div className="absolute bottom-3 left-3 right-3 text-white">
+                    <span className="text-[10px] uppercase font-bold tracking-wider text-[#F3E5AB] block drop-shadow-md">
+                      {owner.expertise}
+                    </span>
                   </div>
-                  <h3 className="font-serif text-xl font-bold text-slate-900 mb-3 group-hover:text-[#013724] transition-colors">
-                    {val.title}
+                </div>
+
+                {/* Content */}
+                <div className="p-6 sm:p-7">
+                  <h3 className="font-serif text-xl font-bold text-slate-900 group-hover:text-[#013724] transition-colors mb-1">
+                    {owner.name}
                   </h3>
-                  <p className="text-xs text-slate-600 font-normal leading-relaxed">
-                    {val.desc}
+                  <span className="text-xs font-semibold text-[#013724] block mb-3.5">
+                    {owner.role}
+                  </span>
+                  <p className="text-xs text-slate-600 font-normal leading-relaxed mb-4">
+                    {owner.bio}
                   </p>
                 </div>
               </div>
-            );
-          })}
+
+              {/* Footer Credentials */}
+              <div className="px-6 sm:px-7 pb-6 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500 font-medium">
+                <span className="truncate">{owner.credentials}</span>
+                <UserCheck className="w-4 h-4 text-emerald-600 shrink-0 ml-2" />
+              </div>
+            </div>
+          ))}
         </div>
+
+        {/* Minimal Stats Row */}
+        <div className="bg-white border border-slate-200 rounded-2xl p-8 sm:p-12 mb-20 shadow-sm">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+            {STATS.map((st, sIdx) => (
+              <div key={sIdx} className="space-y-1.5">
+                <span className="font-serif text-3xl sm:text-4xl font-bold text-[#013724] block">
+                  {st.value}
+                </span>
+                <span className="text-xs text-slate-600 uppercase tracking-wider font-semibold block max-w-[220px] mx-auto">
+                  {st.label}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Minimal Call to Action */}
+        <div className="p-8 sm:p-10 rounded-3xl bg-[#013724] border border-[#205843] text-white flex flex-col md:flex-row items-center justify-between gap-8 shadow-xl">
+          <div className="space-y-2 text-center md:text-left">
+            <h4 className="font-serif text-2xl sm:text-3xl font-normal text-white">
+              Connect Directly with AR Homes Leadership
+            </h4>
+            <p className="text-xs sm:text-sm text-slate-300 font-light max-w-xl leading-relaxed">
+              Whether you are an investor, homeowner, or NRI looking for verified real estate in Jaipur, our founders welcome direct consultations.
+            </p>
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0 w-full md:w-auto">
+            <Link
+              to="/buy"
+              className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-[#D4AF37] hover:bg-[#F3E5AB] text-[#013724] font-bold text-xs uppercase tracking-wider transition-all cursor-pointer shadow-lg text-center"
+            >
+              Explore Properties
+            </Link>
+            <button
+              type="button"
+              onClick={() => onOpenEnquiry && onOpenEnquiry({ title: 'Direct Meeting Request with Founders' })}
+              className="w-full sm:w-auto px-5 py-3.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold text-xs uppercase tracking-wider border border-white/20 transition-all cursor-pointer"
+            >
+              Schedule Founder Meeting
+            </button>
+          </div>
+        </div>
+
       </div>
 
-      {/* Subtle light to dark transition border for footer harmony */}
+      {/* Subtle bottom gradient to footer */}
       <div className="h-12 bg-gradient-to-b from-[#F8FAFC] to-[#012217]" />
     </div>
   );
