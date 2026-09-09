@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useSiteData } from '../../context/SiteDataContext';
 import { isSupabaseConfigured } from '../../lib/supabaseClient';
+import { AdminLogin } from './AdminLogin';
 import { 
   Users, 
   Building2, 
@@ -16,7 +17,8 @@ import {
   X,
   Phone,
   Mail,
-  Home
+  Home,
+  LogOut
 } from 'lucide-react';
 
 export const AdminLayout = () => {
@@ -26,6 +28,20 @@ export const AdminLayout = () => {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   const activeTab = location.pathname;
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    return localStorage.getItem('arhomes_admin_authenticated') === 'true' ||
+           sessionStorage.getItem('arhomes_admin_authenticated') === 'true';
+  });
+
+  const handleLogout = () => {
+    localStorage.removeItem('arhomes_admin_authenticated');
+    sessionStorage.removeItem('arhomes_admin_authenticated');
+    setIsAuthenticated(false);
+  };
+
+  if (!isAuthenticated) {
+    return <AdminLogin onLoginSuccess={() => setIsAuthenticated(true)} />;
+  }
 
   const NAV_ITEMS = [
     {
@@ -103,6 +119,16 @@ export const AdminLayout = () => {
             <span>Live Website</span>
             <ExternalLink className="w-3.5 h-3.5 text-[#D4AF37]" />
           </Link>
+
+          {/* Logout Button */}
+          <button
+            onClick={handleLogout}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 text-xs font-semibold border border-rose-500/25 transition-all cursor-pointer"
+            title="Log Out of Admin Portal"
+          >
+            <LogOut className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Log Out</span>
+          </button>
 
           {/* Mobile menu toggle */}
           <button
@@ -193,6 +219,19 @@ export const AdminLayout = () => {
                 </button>
               );
             })}
+
+            <button
+              onClick={() => {
+                handleLogout();
+                setMobileNavOpen(false);
+              }}
+              className="w-full flex items-center justify-between px-4 py-3 rounded-xl text-xs font-semibold bg-rose-500/10 text-rose-300 border border-rose-500/20 cursor-pointer"
+            >
+              <div className="flex items-center gap-3">
+                <LogOut className="w-4 h-4 text-rose-400" />
+                <span>Log Out</span>
+              </div>
+            </button>
           </div>
         )}
 
