@@ -13,6 +13,7 @@ import {
   PhoneCall, 
   BadgeCheck 
 } from 'lucide-react';
+import { LineSidebar } from '../components/LineSidebar';
 
 const formatImageUrl = (url) => {
   if (!url) return '';
@@ -115,6 +116,7 @@ export const BuyPage = ({ onOpenEnquiry, onSelectResidence }) => {
   
   const [selectedCategory, setSelectedCategory] = useState(rawType);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
 
   useEffect(() => {
     if (rawType) {
@@ -126,6 +128,23 @@ export const BuyPage = ({ onOpenEnquiry, onSelectResidence }) => {
     setSelectedCategory(id);
     setSearchParams(id === 'all' ? {} : { type: id });
   };
+
+  const buySidebarItems = CATEGORIES.map((cat) => {
+    const count = catalog.filter((item) => {
+      if (cat.id === 'all') return true;
+      if (cat.id === 'new-properties') return item.isNew;
+      if (cat.id === 'residential') return item.category !== 'commercial' && item.category !== 'plots-land';
+      return item.category === cat.id || item.subCategory === cat.id;
+    }).length;
+
+    return {
+      id: cat.id,
+      label: cat.label,
+      count
+    };
+  });
+
+  const activeCategoryIndex = Math.max(0, CATEGORIES.findIndex(c => c.id === selectedCategory));
 
   const filteredProperties = catalog.filter((item) => {
     const matchesCategory =
@@ -196,38 +215,17 @@ export const BuyPage = ({ onOpenEnquiry, onSelectResidence }) => {
           </div>
         </div>
 
-        {/* Filter Controls & Search (Light Theme) */}
-        <div className="mt-8 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4">
-          
-          {/* Category Filter Pills */}
-          <div className="flex flex-wrap gap-2">
-            {CATEGORIES.map((cat) => {
-              const isActive = selectedCategory === cat.id;
-              return (
-                <button
-                  key={cat.id}
-                  onClick={() => handleTabClick(cat.id)}
-                  className={`px-4 py-2.5 rounded-xl text-xs font-semibold tracking-wide transition-all cursor-pointer shadow-sm ${
-                    isActive
-                      ? 'bg-[#013724] text-white shadow-[#013724]/20 scale-105 border border-[#013724]'
-                      : 'bg-white text-slate-700 hover:text-slate-900 hover:bg-slate-100 border border-slate-200'
-                  }`}
-                >
-                  {cat.label}
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Search Input Box */}
-          <div className="relative w-full lg:w-80 shrink-0">
+        {/* Mobile / Tablet Responsive Filter Bar & Search */}
+        <div className="lg:hidden mt-8 mb-8 space-y-3">
+          {/* Search Box */}
+          <div className="relative w-full">
             <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
               type="text"
               placeholder="Search by neighborhood, floor or type..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-white border border-slate-300 hover:border-slate-400 rounded-xl pl-10 pr-9 py-2.5 text-xs sm:text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#013724] focus:ring-2 focus:ring-[#013724]/10 transition-colors shadow-sm"
+              className="w-full bg-white border border-slate-300 rounded-xl pl-10 pr-9 py-2.5 text-xs sm:text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#013724] shadow-sm"
             />
             {searchQuery && (
               <button
@@ -239,32 +237,126 @@ export const BuyPage = ({ onOpenEnquiry, onSelectResidence }) => {
               </button>
             )}
           </div>
-        </div>
 
-        {/* Live Filter Count (Clutter label removed per user request) */}
-        <div className="flex items-center justify-between py-5 text-xs text-slate-500">
-          <span>
-            Showing <strong className="text-slate-900 font-semibold">{filteredProperties.length}</strong> available properties
-          </span>
-        </div>
+          {/* Category Drawer Trigger */}
+          <div className="bg-white border border-slate-200 rounded-2xl p-3.5 shadow-sm">
+            <div className="flex items-center justify-between">
+              <div>
+                <span className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold block">Category Filter</span>
+                <span className="text-xs font-bold text-[#013724]">
+                  {CATEGORIES.find(c => c.id === selectedCategory)?.label || 'All Properties'} ({filteredProperties.length})
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsMobileFilterOpen(!isMobileFilterOpen)}
+                className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-colors flex items-center gap-1.5 cursor-pointer"
+              >
+                <span>{isMobileFilterOpen ? 'Close Categories' : 'Change Category'}</span>
+                <span className="text-xs">{isMobileFilterOpen ? '▲' : '▼'}</span>
+              </button>
+            </div>
 
-        {/* Properties Grid in High-Trust Light Theme */}
-        {filteredProperties.length === 0 ? (
-          <div className="bg-white border border-slate-200 rounded-2xl p-12 text-center my-8 shadow-sm">
-            <Building2 className="w-12 h-12 text-slate-400 mx-auto mb-3 opacity-60" />
-            <h3 className="text-lg font-bold text-slate-800 mb-1">No matching properties found</h3>
-            <p className="text-xs text-slate-500 mb-4 max-w-sm mx-auto">
-              We couldn't find any property matching your current filter criteria. Try resetting your search or exploring our upcoming launches.
-            </p>
-            <button
-              onClick={() => { setSelectedCategory('all'); setSearchQuery(''); }}
-              className="px-5 py-2.5 bg-[#013724] text-white text-xs font-semibold rounded-xl hover:bg-[#D4AF37] hover:text-[#013724] transition-colors cursor-pointer"
-            >
-              Reset Filters
-            </button>
+            {isMobileFilterOpen && (
+              <div className="mt-3 pt-3 border-t border-slate-100 animate-in fade-in slide-in-from-top-2">
+                <LineSidebar
+                  items={buySidebarItems}
+                  activeIndex={activeCategoryIndex}
+                  onItemClick={(index, label, item) => {
+                    handleTabClick(item.id);
+                    setIsMobileFilterOpen(false);
+                  }}
+                  accentColor="#013724"
+                  textColor="#64748b"
+                  markerColor="#cbd5e1"
+                  showIndex={true}
+                  showMarker={true}
+                  fontSize={0.92}
+                  itemGap={10}
+                  markerLength={28}
+                  maxShift={12}
+                />
+              </div>
+            )}
           </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        </div>
+
+        {/* Desktop Side-by-Side: Sticky LineSidebar + Properties Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 xl:gap-12 items-start mt-8">
+          
+          {/* Left Column: Interactive LineSidebar & Search Filter */}
+          <aside className="hidden lg:block lg:col-span-4 xl:col-span-3 sticky top-28 bg-white/80 backdrop-blur-md border border-slate-200/90 rounded-3xl p-6 sm:p-7 shadow-sm space-y-6">
+            <div>
+              <span className="block text-[10px] uppercase tracking-wider text-slate-500 font-bold mb-2">
+                Quick Search
+              </span>
+              <div className="relative w-full">
+                <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <input
+                  type="text"
+                  placeholder="Locality, type, floor..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full bg-slate-50 border border-slate-200 hover:border-slate-300 rounded-xl pl-10 pr-8 py-2.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#013724] focus:bg-white transition-colors"
+                />
+                {searchQuery && (
+                  <button
+                    type="button"
+                    onClick={() => setSearchQuery('')}
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-slate-400 hover:text-slate-700 cursor-pointer"
+                  >
+                    ✕
+                  </button>
+                )}
+              </div>
+            </div>
+
+            <div className="pt-2 border-t border-slate-100">
+              <span className="block text-[10px] uppercase tracking-widest text-[#013724] font-bold mb-3">
+                Portfolio Categories
+              </span>
+              <LineSidebar
+                items={buySidebarItems}
+                activeIndex={activeCategoryIndex}
+                onItemClick={(index, label, item) => handleTabClick(item.id)}
+                accentColor="#013724"
+                textColor="#64748b"
+                markerColor="#cbd5e1"
+                showIndex={true}
+                showMarker={true}
+                fontSize={0.96}
+                itemGap={15}
+                markerLength={44}
+                maxShift={20}
+              />
+            </div>
+          </aside>
+
+          {/* Right Column: Properties Grid */}
+          <div className="lg:col-span-8 xl:col-span-9">
+            <div className="flex items-center justify-between mb-6 pb-2 border-b border-slate-200/60">
+              <span className="text-xs font-semibold text-slate-600">
+                Showing <strong className="text-slate-900 font-semibold">{filteredProperties.length}</strong> available {filteredProperties.length === 1 ? 'property' : 'properties'} in <strong className="text-[#013724]">{CATEGORIES.find(c => c.id === selectedCategory)?.label}</strong>
+              </span>
+            </div>
+
+            {/* Properties Grid in High-Trust Light Theme */}
+            {filteredProperties.length === 0 ? (
+              <div className="bg-white border border-slate-200 rounded-2xl p-12 text-center my-8 shadow-sm">
+                <Building2 className="w-12 h-12 text-slate-400 mx-auto mb-3 opacity-60" />
+                <h3 className="text-lg font-bold text-slate-800 mb-1">No matching properties found</h3>
+                <p className="text-xs text-slate-500 mb-4 max-w-sm mx-auto">
+                  We couldn't find any property matching your current filter criteria. Try resetting your search or exploring our upcoming launches.
+                </p>
+                <button
+                  onClick={() => { setSelectedCategory('all'); setSearchQuery(''); }}
+                  className="px-5 py-2.5 bg-[#013724] text-white text-xs font-semibold rounded-xl hover:bg-[#D4AF37] hover:text-[#013724] transition-colors cursor-pointer"
+                >
+                  Reset Filters
+                </button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-7">
             {filteredProperties.map((prop) => (
               <div
                 key={prop.id}
@@ -364,6 +456,8 @@ export const BuyPage = ({ onOpenEnquiry, onSelectResidence }) => {
             ))}
           </div>
         )}
+          </div>
+        </div>
 
         {/* 3. REAL-TIME MORTGAGE & CIBIL CALCULATOR */}
         <div className="mt-16">
