@@ -85,7 +85,7 @@ export const Footer = ({ onOpenEnquiry }) => {
           </ScrollReveal>
 
           {/* Newsletter / Enquiry CTA */}
-          <ScrollReveal animation="up" delay={200} duration={850}>
+          <ScrollReveal animation="up" delay={200} duration={850} className="lg:pr-10">
             <h4 className="font-serif text-sm font-normal text-[#D4AF37] uppercase tracking-widest mb-4">
               Stay Connected
             </h4>
