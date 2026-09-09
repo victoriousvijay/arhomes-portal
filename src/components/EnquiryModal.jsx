@@ -20,16 +20,27 @@ export const EnquiryModal = ({ initialProject, onClose }) => {
     message: ''
   });
 
+  const [customResponses, setCustomResponses] = useState({});
+
   const enquiryFields = settings?.enquiry_fields || {
     budget: true,
     propertyType: true,
     visitDate: true,
-    message: true
+    message: true,
+    custom_fields: []
   };
+
+  const customFields = enquiryFields.custom_fields || [];
 
   const handleSubmit = (e) => {
     e.preventDefault();
     
+    // Format all custom fields answers
+    const customSummary = Object.entries(customResponses)
+      .filter(([_, v]) => Boolean(v))
+      .map(([k, v]) => `${k}: ${v}`)
+      .join(' | ');
+
     // Auto-capture enquiry directly into CRM
     addLead({
       name: formData.name,
@@ -38,6 +49,7 @@ export const EnquiryModal = ({ initialProject, onClose }) => {
       property_interest: formData.project,
       budget: formData.budget,
       message: `${formData.visitDate ? `[Requested Visit Date: ${formData.visitDate}] ` : ''}${formData.message || ''}`,
+      notes: customSummary ? `Client Preferences: ${customSummary}` : '',
       source: 'Website Enquiry Modal',
       temperature: 'Hot' // High-intent direct enquiry
     });
@@ -46,7 +58,7 @@ export const EnquiryModal = ({ initialProject, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 animate-fade-in">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 animate-fade-in font-sans">
       <div className="relative w-full max-w-lg bg-[#013724] border border-[#D4AF37]/40 rounded-2xl shadow-2xl p-5 sm:p-8 my-auto text-white max-h-[92vh] overflow-y-auto">
         
         {/* Close */}
@@ -85,12 +97,12 @@ export const EnquiryModal = ({ initialProject, onClose }) => {
               Request Information
             </h3>
             <p className="text-xs text-slate-300 font-light mb-6">
-              Connect directly with our leadership and relationship managers for floor plans, site walkthroughs, and official price sheets.
+              Connect directly with our relationship managers for floor plans, private walkthroughs, and official price sheets.
             </p>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4 text-xs">
               <div>
-                <label className="text-[10px] uppercase tracking-wider text-slate-300 block mb-1">
+                <label className="text-[10px] uppercase tracking-wider text-slate-300 block mb-1 font-semibold">
                   Full Name *
                 </label>
                 <input
@@ -105,7 +117,7 @@ export const EnquiryModal = ({ initialProject, onClose }) => {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="text-[10px] uppercase tracking-wider text-slate-300 block mb-1">
+                  <label className="text-[10px] uppercase tracking-wider text-slate-300 block mb-1 font-semibold">
                     Phone / WhatsApp *
                   </label>
                   <input
@@ -118,7 +130,7 @@ export const EnquiryModal = ({ initialProject, onClose }) => {
                   />
                 </div>
                 <div>
-                  <label className="text-[10px] uppercase tracking-wider text-slate-300 block mb-1">
+                  <label className="text-[10px] uppercase tracking-wider text-slate-300 block mb-1 font-semibold">
                     Email Address *
                   </label>
                   <input
@@ -135,7 +147,7 @@ export const EnquiryModal = ({ initialProject, onClose }) => {
               {/* Dynamic Property Selection */}
               {enquiryFields.propertyType !== false && (
                 <div>
-                  <label className="text-[10px] uppercase tracking-wider text-slate-300 block mb-1">
+                  <label className="text-[10px] uppercase tracking-wider text-slate-300 block mb-1 font-semibold">
                     Property or Land Development
                   </label>
                   <select
@@ -158,7 +170,7 @@ export const EnquiryModal = ({ initialProject, onClose }) => {
               {/* Optional Budget Field controlled by CMS Settings */}
               {enquiryFields.budget !== false && (
                 <div>
-                  <label className="text-[10px] uppercase tracking-wider text-slate-300 block mb-1">
+                  <label className="text-[10px] uppercase tracking-wider text-slate-300 block mb-1 font-semibold">
                     Preferred Investment Budget
                   </label>
                   <select
@@ -177,7 +189,7 @@ export const EnquiryModal = ({ initialProject, onClose }) => {
               {/* Optional Preferred Visit Date */}
               {enquiryFields.visitDate !== false && (
                 <div>
-                  <label className="text-[10px] uppercase tracking-wider text-slate-300 block mb-1">
+                  <label className="text-[10px] uppercase tracking-wider text-slate-300 block mb-1 font-semibold">
                     Preferred Site Visit Date (Optional)
                   </label>
                   <input
@@ -189,10 +201,59 @@ export const EnquiryModal = ({ initialProject, onClose }) => {
                 </div>
               )}
 
-              {/* Optional Message Field controlled by CMS Settings */}
+              {/* DYNAMIC CUSTOM FIELDS ADDED VIA CMS */}
+              {customFields.map((cf) => (
+                <div key={cf.id}>
+                  <label className="text-[10px] uppercase tracking-wider text-slate-300 block mb-1 font-semibold">
+                    {cf.label} {cf.required && <span className="text-[#D4AF37]">*</span>}
+                  </label>
+
+                  {cf.type === 'select' ? (
+                    <select
+                      required={cf.required}
+                      value={customResponses[cf.label] || ''}
+                      onChange={(e) => setCustomResponses({ ...customResponses, [cf.label]: e.target.value })}
+                      className="w-full bg-[#002719] border border-[#205843] rounded-lg px-3.5 py-2.5 text-sm sm:text-xs text-white focus:outline-none focus:border-[#D4AF37]"
+                    >
+                      <option value="">{cf.placeholder || 'Select an option...'}</option>
+                      {(cf.options || []).map((opt, oIdx) => (
+                        <option key={oIdx} value={opt} className="bg-[#002719]">{opt}</option>
+                      ))}
+                    </select>
+                  ) : cf.type === 'date' ? (
+                    <input
+                      type="date"
+                      required={cf.required}
+                      value={customResponses[cf.label] || ''}
+                      onChange={(e) => setCustomResponses({ ...customResponses, [cf.label]: e.target.value })}
+                      className="w-full bg-[#002719] border border-[#205843] rounded-lg px-3.5 py-2.5 text-sm sm:text-xs text-white focus:outline-none focus:border-[#D4AF37]"
+                    />
+                  ) : cf.type === 'number' ? (
+                    <input
+                      type="number"
+                      required={cf.required}
+                      placeholder={cf.placeholder || 'Enter number'}
+                      value={customResponses[cf.label] || ''}
+                      onChange={(e) => setCustomResponses({ ...customResponses, [cf.label]: e.target.value })}
+                      className="w-full bg-[#002719] border border-[#205843] rounded-lg px-3.5 py-2.5 text-sm sm:text-xs text-white focus:outline-none focus:border-[#D4AF37]"
+                    />
+                  ) : (
+                    <input
+                      type="text"
+                      required={cf.required}
+                      placeholder={cf.placeholder || 'Enter details...'}
+                      value={customResponses[cf.label] || ''}
+                      onChange={(e) => setCustomResponses({ ...customResponses, [cf.label]: e.target.value })}
+                      className="w-full bg-[#002719] border border-[#205843] rounded-lg px-3.5 py-2.5 text-sm sm:text-xs text-white placeholder-slate-400 focus:outline-none focus:border-[#D4AF37]"
+                    />
+                  )}
+                </div>
+              ))}
+
+              {/* Optional Message Field */}
               {enquiryFields.message !== false && (
                 <div>
-                  <label className="text-[10px] uppercase tracking-wider text-slate-300 block mb-1">
+                  <label className="text-[10px] uppercase tracking-wider text-slate-300 block mb-1 font-semibold">
                     Message / Special Requests
                   </label>
                   <textarea

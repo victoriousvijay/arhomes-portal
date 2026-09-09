@@ -10,21 +10,34 @@ import {
   Save, 
   CheckCircle2, 
   Sliders, 
-  Globe, 
   Sparkles,
-  ExternalLink,
-  ShieldAlert,
-  HelpCircle
+  Plus,
+  Trash2,
+  ListPlus,
+  HelpCircle,
+  Eye,
+  Check,
+  X
 } from 'lucide-react';
 
 export const CMSSettings = () => {
-  const { settings, updateSettings } = useSiteData();
+  const { settings, updateSettings, addCustomEnquiryField, removeCustomEnquiryField } = useSiteData();
   const [formData, setFormData] = useState({ ...settings });
   const [savedSuccess, setSavedSuccess] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
+  // New Custom Field Creator State
+  const [isAddFieldOpen, setIsAddFieldOpen] = useState(false);
+  const [newField, setNewField] = useState({
+    label: '',
+    type: 'text', // 'text', 'select', 'number', 'date'
+    optionsStr: '',
+    required: false,
+    placeholder: ''
+  });
+
   const handleSave = async (e) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
     setIsSaving(true);
     await updateSettings(formData);
     setIsSaving(false);
@@ -33,29 +46,85 @@ export const CMSSettings = () => {
   };
 
   const handleEnquiryFieldToggle = (fieldName) => {
-    setFormData(prev => ({
-      ...prev,
+    const updated = {
+      ...formData,
       enquiry_fields: {
-        ...(prev.enquiry_fields || {}),
-        [fieldName]: !(prev.enquiry_fields?.[fieldName])
+        ...(formData.enquiry_fields || {}),
+        [fieldName]: !(formData.enquiry_fields?.[fieldName])
       }
-    }));
+    };
+    setFormData(updated);
+    updateSettings(updated);
   };
 
+  // Add Custom Field Handler
+  const handleCreateField = async (e) => {
+    e.preventDefault();
+    if (!newField.label.trim()) return;
+
+    let options = [];
+    if (newField.type === 'select' && newField.optionsStr) {
+      options = newField.optionsStr.split(',').map(s => s.trim()).filter(Boolean);
+    }
+
+    const created = await addCustomEnquiryField({
+      label: newField.label.trim(),
+      type: newField.type,
+      options: options.length > 0 ? options : ['Option 1', 'Option 2'],
+      required: newField.required,
+      placeholder: newField.placeholder || ''
+    });
+
+    // Update local form state
+    const currentFields = formData.enquiry_fields || {};
+    const currentCustom = currentFields.custom_fields || [];
+    setFormData({
+      ...formData,
+      enquiry_fields: {
+        ...currentFields,
+        custom_fields: [...currentCustom, created]
+      }
+    });
+
+    setNewField({
+      label: '',
+      type: 'text',
+      optionsStr: '',
+      required: false,
+      placeholder: ''
+    });
+    setIsAddFieldOpen(false);
+  };
+
+  const handleDeleteCustomField = async (fieldId) => {
+    await removeCustomEnquiryField(fieldId);
+    const currentFields = formData.enquiry_fields || {};
+    const currentCustom = currentFields.custom_fields || [];
+    setFormData({
+      ...formData,
+      enquiry_fields: {
+        ...currentFields,
+        custom_fields: currentCustom.filter(f => f.id !== fieldId)
+      }
+    });
+  };
+
+  const customFieldsList = formData.enquiry_fields?.custom_fields || [];
+
   return (
-    <div className="space-y-8 max-w-5xl mx-auto pb-16">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-6">
+    <div className="space-y-8 max-w-5xl mx-auto pb-20 font-sans">
+      {/* Top Header - Friendly & Minimal */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-5">
         <div>
           <div className="flex items-center gap-2 text-xs uppercase tracking-widest text-[#D4AF37] font-semibold">
             <Settings className="w-4 h-4" />
-            <span>Global Master Control</span>
+            <span>Easy Control Panel</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white mt-1">
-            Global Site Settings & Sync
+            Website Settings & Form Builder
           </h1>
           <p className="text-xs sm:text-sm text-gray-400 mt-1">
-            Single control center: update contact info or social links here to instantly reflect across the entire website.
+            Change phone numbers, email, or customize enquiry questions. Everything syncs instantly with the live website.
           </p>
         </div>
 
@@ -69,28 +138,27 @@ export const CMSSettings = () => {
 
       <form onSubmit={handleSave} className="space-y-8">
         {/* Section 1: Global Contact Details */}
-        <div className="p-6 sm:p-8 rounded-2xl bg-[#091a13]/90 border border-white/10 shadow-2xl space-y-6">
-          <div className="flex items-center justify-between border-b border-white/10 pb-4">
+        <div className="p-6 sm:p-7 rounded-2xl bg-[#0a1f16]/90 border border-white/10 shadow-xl space-y-5">
+          <div className="flex items-center justify-between border-b border-white/10 pb-3.5">
             <div>
               <h2 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
-                <Phone className="w-5 h-5 text-[#D4AF37]" />
-                <span>Unified Contact Information</span>
+                <Phone className="w-4 h-4 text-[#D4AF37]" />
+                <span>Contact Details (Syncs Everywhere)</span>
               </h2>
               <p className="text-xs text-gray-400 mt-0.5">
-                Modifying these values instantly propagates to the Header, Footer, Contact Page, WhatsApp triggers, and Mobile Bar.
+                Update here once, and it changes on the Header, Footer, Contact Page, WhatsApp chat, and Mobile bar.
               </p>
             </div>
             <span className="px-2.5 py-1 rounded-full bg-[#013724] text-[#D4AF37] text-[10px] font-bold uppercase border border-[#D4AF37]/30">
-              Live Sync
+              Live Everywhere
             </span>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 text-xs">
             {/* Direct Phone Number */}
-            <div>
-              <label className="block text-gray-300 font-bold mb-1.5 flex items-center justify-between">
-                <span>Primary Calling Phone Number *</span>
-                <span className="text-[10px] text-gray-500 font-normal">e.g. +91 98290 12345</span>
+            <div className="space-y-1.5">
+              <label className="block text-gray-200 font-semibold">
+                Calling Phone Number (with Country Code) *
               </label>
               <div className="relative">
                 <Phone className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -100,19 +168,16 @@ export const CMSSettings = () => {
                   value={formData.phone || ''}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                   placeholder="+91 98290 12345"
-                  className="w-full pl-9 pr-3 py-2.5 bg-black/40 border border-white/10 rounded-xl text-white font-mono focus:outline-none focus:border-[#D4AF37]"
+                  className="w-full pl-9 pr-3 py-2.5 bg-black/50 border border-white/10 rounded-xl text-white font-mono focus:outline-none focus:border-[#D4AF37]"
                 />
               </div>
-              <p className="text-[10px] text-gray-400 mt-1">
-                Used for all tel: dialer links and header hotline display.
-              </p>
+              <p className="text-[10px] text-gray-400">When visitors click "Call", this number dials.</p>
             </div>
 
             {/* WhatsApp Business Number */}
-            <div>
-              <label className="block text-gray-300 font-bold mb-1.5 flex items-center justify-between">
-                <span>WhatsApp Business Number *</span>
-                <span className="text-[10px] text-gray-500 font-normal">Digits only with country code</span>
+            <div className="space-y-1.5">
+              <label className="block text-gray-200 font-semibold">
+                WhatsApp Chat Number (Digits Only) *
               </label>
               <div className="relative">
                 <MessageCircle className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-emerald-400" />
@@ -122,18 +187,16 @@ export const CMSSettings = () => {
                   value={formData.whatsapp || ''}
                   onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
                   placeholder="919829012345"
-                  className="w-full pl-9 pr-3 py-2.5 bg-black/40 border border-white/10 rounded-xl text-white font-mono focus:outline-none focus:border-[#D4AF37]"
+                  className="w-full pl-9 pr-3 py-2.5 bg-black/50 border border-white/10 rounded-xl text-white font-mono focus:outline-none focus:border-[#D4AF37]"
                 />
               </div>
-              <p className="text-[10px] text-gray-400 mt-1">
-                Powers all instant WhatsApp chats & concierge inquiry links.
-              </p>
+              <p className="text-[10px] text-gray-400">Powers all WhatsApp chat buttons on the website.</p>
             </div>
 
-            {/* Official Concierge Email */}
-            <div>
-              <label className="block text-gray-300 font-bold mb-1.5">
-                Official Concierge Email Address *
+            {/* Official Email */}
+            <div className="space-y-1.5">
+              <label className="block text-gray-200 font-semibold">
+                Company Email Address *
               </label>
               <div className="relative">
                 <Mail className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -143,18 +206,16 @@ export const CMSSettings = () => {
                   value={formData.email || ''}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   placeholder="concierge@arhomes.in"
-                  className="w-full pl-9 pr-3 py-2.5 bg-black/40 border border-white/10 rounded-xl text-white focus:outline-none focus:border-[#D4AF37]"
+                  className="w-full pl-9 pr-3 py-2.5 bg-black/50 border border-white/10 rounded-xl text-white focus:outline-none focus:border-[#D4AF37]"
                 />
               </div>
-              <p className="text-[10px] text-gray-400 mt-1">
-                Reflected in contact page, footer, and mailto triggers.
-              </p>
+              <p className="text-[10px] text-gray-400">Shown in footer and contact page.</p>
             </div>
 
-            {/* Corporate Head Office Address */}
-            <div>
-              <label className="block text-gray-300 font-bold mb-1.5">
-                Corporate Head Office Address *
+            {/* Office Address */}
+            <div className="space-y-1.5">
+              <label className="block text-gray-200 font-semibold">
+                Jaipur Office Address *
               </label>
               <div className="relative">
                 <MapPin className="w-4 h-4 absolute left-3 top-3 text-gray-400" />
@@ -163,154 +224,311 @@ export const CMSSettings = () => {
                   required
                   value={formData.corporate_address || ''}
                   onChange={(e) => setFormData({ ...formData, corporate_address: e.target.value })}
-                  placeholder="AR Homes Corporate Office, Civil Lines, Jaipur, Rajasthan 302006"
-                  className="w-full pl-9 pr-3 py-2 bg-black/40 border border-white/10 rounded-xl text-white focus:outline-none focus:border-[#D4AF37]"
+                  placeholder="AR Homes, Royal Enclave, Civil Lines, Jaipur, Rajasthan - 302006"
+                  className="w-full pl-9 pr-3 py-2 bg-black/50 border border-white/10 rounded-xl text-white focus:outline-none focus:border-[#D4AF37]"
                 />
               </div>
             </div>
           </div>
         </div>
 
-        {/* Section 2: Social Media Handles */}
-        <div className="p-6 sm:p-8 rounded-2xl bg-[#091a13]/90 border border-white/10 shadow-2xl space-y-6">
-          <div className="border-b border-white/10 pb-4">
+        {/* Section 2: Social Media Links */}
+        <div className="p-6 sm:p-7 rounded-2xl bg-[#0a1f16]/90 border border-white/10 shadow-xl space-y-4">
+          <div className="border-b border-white/10 pb-3">
             <h2 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
-              <Share2 className="w-5 h-5 text-[#D4AF37]" />
-              <span>Social Media & Public Channels</span>
+              <Share2 className="w-4 h-4 text-[#D4AF37]" />
+              <span>Social Media Profiles</span>
             </h2>
             <p className="text-xs text-gray-400 mt-0.5">
-              Sync company social profile URLs in the header, footer, and mobile drawer.
+              Update links for your company pages.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 text-xs">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
             <div>
-              <label className="block text-gray-300 font-bold mb-1.5">Instagram Profile Link</label>
+              <label className="block text-gray-300 font-semibold mb-1">Instagram Profile</label>
               <input
                 type="url"
                 value={formData.instagram || ''}
                 onChange={(e) => setFormData({ ...formData, instagram: e.target.value })}
-                placeholder="https://instagram.com/arhomesjaipur"
-                className="w-full px-3 py-2.5 bg-black/40 border border-white/10 rounded-xl text-white focus:outline-none focus:border-[#D4AF37]"
+                placeholder="https://instagram.com/arhomes"
+                className="w-full px-3 py-2 bg-black/50 border border-white/10 rounded-xl text-white focus:outline-none focus:border-[#D4AF37]"
               />
             </div>
-
             <div>
-              <label className="block text-gray-300 font-bold mb-1.5">Facebook Page Link</label>
+              <label className="block text-gray-300 font-semibold mb-1">Facebook Page</label>
               <input
                 type="url"
                 value={formData.facebook || ''}
                 onChange={(e) => setFormData({ ...formData, facebook: e.target.value })}
-                placeholder="https://facebook.com/arhomesjaipur"
-                className="w-full px-3 py-2.5 bg-black/40 border border-white/10 rounded-xl text-white focus:outline-none focus:border-[#D4AF37]"
+                placeholder="https://facebook.com/arhomes"
+                className="w-full px-3 py-2 bg-black/50 border border-white/10 rounded-xl text-white focus:outline-none focus:border-[#D4AF37]"
               />
             </div>
-
             <div>
-              <label className="block text-gray-300 font-bold mb-1.5">LinkedIn Profile Link</label>
+              <label className="block text-gray-300 font-semibold mb-1">LinkedIn Page</label>
               <input
                 type="url"
                 value={formData.linkedin || ''}
                 onChange={(e) => setFormData({ ...formData, linkedin: e.target.value })}
                 placeholder="https://linkedin.com/company/arhomes"
-                className="w-full px-3 py-2.5 bg-black/40 border border-white/10 rounded-xl text-white focus:outline-none focus:border-[#D4AF37]"
+                className="w-full px-3 py-2 bg-black/50 border border-white/10 rounded-xl text-white focus:outline-none focus:border-[#D4AF37]"
               />
             </div>
           </div>
         </div>
 
-        {/* Section 3: Enquiry Form Builder & Controls */}
-        <div className="p-6 sm:p-8 rounded-2xl bg-[#091a13]/90 border border-white/10 shadow-2xl space-y-6">
-          <div className="border-b border-white/10 pb-4">
-            <h2 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
-              <Sliders className="w-5 h-5 text-[#D4AF37]" />
-              <span>Enquiry Form Field Configuration</span>
-            </h2>
-            <p className="text-xs text-gray-400 mt-0.5">
-              Control which optional qualification fields appear on the public property enquiry modal.
-            </p>
+        {/* Section 3: ENQUIRY FORM BUILDER (Add, Remove, Toggle Fields) */}
+        <div className="p-6 sm:p-7 rounded-2xl bg-[#0a1f16]/90 border border-white/10 shadow-xl space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-4">
+            <div>
+              <h2 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+                <Sliders className="w-4 h-4 text-[#D4AF37]" />
+                <span>Enquiry Form Builder & Custom Fields</span>
+              </h2>
+              <p className="text-xs text-gray-400 mt-0.5">
+                Toggle standard questions or add brand new questions to your website enquiry popup.
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setIsAddFieldOpen(!isAddFieldOpen)}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#b39129] text-[#013724] font-bold text-xs shadow hover:brightness-110 transition-all cursor-pointer self-start sm:self-auto"
+            >
+              <Plus className="w-4 h-4" />
+              <span>Add Custom Field / Question</span>
+            </button>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-            <div className="p-4 rounded-xl bg-black/40 border border-white/5 flex items-center justify-between">
-              <div>
-                <span className="font-bold text-white block">Budget Range Selection</span>
-                <span className="text-[11px] text-gray-400">Ask buyer their preferred investment scale</span>
+          {/* ADD FIELD DRAWER / CARD */}
+          {isAddFieldOpen && (
+            <div className="p-5 rounded-xl bg-black/60 border border-[#D4AF37]/50 space-y-4 animate-in fade-in">
+              <div className="flex items-center justify-between border-b border-white/10 pb-2.5">
+                <h3 className="text-xs font-bold text-[#D4AF37] uppercase tracking-wider flex items-center gap-1.5">
+                  <ListPlus className="w-4 h-4" />
+                  <span>Create New Question / Input Field</span>
+                </h3>
+                <button
+                  type="button"
+                  onClick={() => setIsAddFieldOpen(false)}
+                  className="p-1 rounded bg-white/10 text-gray-400 hover:text-white"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
               </div>
-              <button
-                type="button"
-                onClick={() => handleEnquiryFieldToggle('budget')}
-                className={`w-11 h-6 rounded-full transition-colors relative cursor-pointer ${
-                  formData.enquiry_fields?.budget ? 'bg-emerald-500' : 'bg-white/10'
-                }`}
-              >
-                <span
-                  className={`w-4 h-4 rounded-full bg-white absolute top-1 transition-transform ${
-                    formData.enquiry_fields?.budget ? 'left-6' : 'left-1'
-                  }`}
-                />
-              </button>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                <div>
+                  <label className="block text-gray-300 font-semibold mb-1">
+                    Question / Field Name *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. Preferred Calling Time, or Do you need home loan?"
+                    value={newField.label}
+                    onChange={(e) => setNewField({ ...newField, label: e.target.value })}
+                    className="w-full px-3 py-2 bg-black/50 border border-white/15 rounded-xl text-white focus:outline-none focus:border-[#D4AF37]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-gray-300 font-semibold mb-1">
+                    Input Type *
+                  </label>
+                  <select
+                    value={newField.type}
+                    onChange={(e) => setNewField({ ...newField, type: e.target.value })}
+                    className="w-full px-3 py-2 bg-black/50 border border-white/15 rounded-xl text-white focus:outline-none focus:border-[#D4AF37]"
+                  >
+                    <option value="text">Text (Short Answer)</option>
+                    <option value="select">Dropdown (Client picks from list)</option>
+                    <option value="number">Number (e.g. Budget or Units)</option>
+                    <option value="date">Date Picker</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* If select dropdown, ask for options */}
+              {newField.type === 'select' && (
+                <div className="text-xs">
+                  <label className="block text-gray-300 font-semibold mb-1">
+                    Dropdown Choices (comma-separated) *
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Morning (10 AM - 1 PM), Evening (4 PM - 7 PM), Weekend Only"
+                    value={newField.optionsStr}
+                    onChange={(e) => setNewField({ ...newField, optionsStr: e.target.value })}
+                    className="w-full px-3 py-2 bg-black/50 border border-white/15 rounded-xl text-white focus:outline-none focus:border-[#D4AF37]"
+                  />
+                  <p className="text-[10px] text-gray-400 mt-1">Separate choices with a comma.</p>
+                </div>
+              )}
+
+              <div className="flex items-center justify-between pt-2 border-t border-white/10">
+                <label className="flex items-center gap-2 cursor-pointer text-xs text-gray-300">
+                  <input
+                    type="checkbox"
+                    checked={newField.required}
+                    onChange={(e) => setNewField({ ...newField, required: e.target.checked })}
+                    className="rounded text-[#D4AF37]"
+                  />
+                  <span>Mark as Mandatory / Required field</span>
+                </label>
+
+                <button
+                  type="button"
+                  onClick={handleCreateField}
+                  className="px-4 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs cursor-pointer shadow"
+                >
+                  ✓ Save & Add to Enquiry Form
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Standard Core Fields Toggles */}
+          <div className="space-y-3">
+            <div className="text-[11px] uppercase tracking-wider text-[#D4AF37] font-bold">
+              Standard Built-In Questions (Toggle on/off)
             </div>
 
-            <div className="p-4 rounded-xl bg-black/40 border border-white/5 flex items-center justify-between">
-              <div>
-                <span className="font-bold text-white block">Property / Land Type Selector</span>
-                <span className="text-[11px] text-gray-400">Allow selecting Villas, Floors, Land, Commercial</span>
-              </div>
-              <button
-                type="button"
-                onClick={() => handleEnquiryFieldToggle('propertyType')}
-                className={`w-11 h-6 rounded-full transition-colors relative cursor-pointer ${
-                  formData.enquiry_fields?.propertyType ? 'bg-emerald-500' : 'bg-white/10'
-                }`}
-              >
-                <span
-                  className={`w-4 h-4 rounded-full bg-white absolute top-1 transition-transform ${
-                    formData.enquiry_fields?.propertyType ? 'left-6' : 'left-1'
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+              <div className="p-3.5 rounded-xl bg-black/40 border border-white/5 flex items-center justify-between">
+                <div>
+                  <span className="font-semibold text-white block">Budget Range Selector</span>
+                  <span className="text-[10px] text-gray-400">Ask client for investment scale</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => handleEnquiryFieldToggle('budget')}
+                  className={`w-10 h-5 rounded-full transition-colors relative cursor-pointer ${
+                    formData.enquiry_fields?.budget ? 'bg-emerald-500' : 'bg-white/10'
                   }`}
-                />
-              </button>
+                >
+                  <span
+                    className={`w-3.5 h-3.5 rounded-full bg-white absolute top-0.5 transition-transform ${
+                      formData.enquiry_fields?.budget ? 'left-5' : 'left-1'
+                    }`}
+                  />
+                </button>
+              </div>
+
+              <div className="p-3.5 rounded-xl bg-black/40 border border-white/5 flex items-center justify-between">
+                <div>
+                  <span className="font-semibold text-white block">Property / Project Selector</span>
+                  <span className="text-[10px] text-gray-400">Allows choosing specific listing</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => handleEnquiryFieldToggle('propertyType')}
+                  className={`w-10 h-5 rounded-full transition-colors relative cursor-pointer ${
+                    formData.enquiry_fields?.propertyType ? 'bg-emerald-500' : 'bg-white/10'
+                  }`}
+                >
+                  <span
+                    className={`w-3.5 h-3.5 rounded-full bg-white absolute top-0.5 transition-transform ${
+                      formData.enquiry_fields?.propertyType ? 'left-5' : 'left-1'
+                    }`}
+                  />
+                </button>
+              </div>
+
+              <div className="p-3.5 rounded-xl bg-black/40 border border-white/5 flex items-center justify-between">
+                <div>
+                  <span className="font-semibold text-white block">Site Visit Date Request</span>
+                  <span className="text-[10px] text-gray-400">Prompt for convenient visit date</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => handleEnquiryFieldToggle('visitDate')}
+                  className={`w-10 h-5 rounded-full transition-colors relative cursor-pointer ${
+                    formData.enquiry_fields?.visitDate ? 'bg-emerald-500' : 'bg-white/10'
+                  }`}
+                >
+                  <span
+                    className={`w-3.5 h-3.5 rounded-full bg-white absolute top-0.5 transition-transform ${
+                      formData.enquiry_fields?.visitDate ? 'left-5' : 'left-1'
+                    }`}
+                  />
+                </button>
+              </div>
+
+              <div className="p-3.5 rounded-xl bg-black/40 border border-white/5 flex items-center justify-between">
+                <div>
+                  <span className="font-semibold text-white block">Message / Special Notes</span>
+                  <span className="text-[10px] text-gray-400">Free text queries from buyer</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => handleEnquiryFieldToggle('message')}
+                  className={`w-10 h-5 rounded-full transition-colors relative cursor-pointer ${
+                    formData.enquiry_fields?.message ? 'bg-emerald-500' : 'bg-white/10'
+                  }`}
+                >
+                  <span
+                    className={`w-3.5 h-3.5 rounded-full bg-white absolute top-0.5 transition-transform ${
+                      formData.enquiry_fields?.message ? 'left-5' : 'left-1'
+                    }`}
+                  />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Active Custom Questions List */}
+          <div className="space-y-3 pt-2">
+            <div className="text-[11px] uppercase tracking-wider text-[#D4AF37] font-bold flex items-center justify-between">
+              <span>Your Custom Questions ({customFieldsList.length})</span>
+              <span className="text-[10px] text-gray-400 font-normal">Appears in public Enquiry popup</span>
             </div>
 
-            <div className="p-4 rounded-xl bg-black/40 border border-white/5 flex items-center justify-between">
-              <div>
-                <span className="font-bold text-white block">Site Visit Date Preference</span>
-                <span className="text-[11px] text-gray-400">Prompt for convenient weekend or weekday inspection date</span>
+            {customFieldsList.length === 0 ? (
+              <div className="p-4 rounded-xl bg-black/30 border border-dashed border-white/10 text-center text-xs text-gray-400">
+                No custom questions added yet. Click "+ Add Custom Field / Question" to add your own.
               </div>
-              <button
-                type="button"
-                onClick={() => handleEnquiryFieldToggle('visitDate')}
-                className={`w-11 h-6 rounded-full transition-colors relative cursor-pointer ${
-                  formData.enquiry_fields?.visitDate ? 'bg-emerald-500' : 'bg-white/10'
-                }`}
-              >
-                <span
-                  className={`w-4 h-4 rounded-full bg-white absolute top-1 transition-transform ${
-                    formData.enquiry_fields?.visitDate ? 'left-6' : 'left-1'
-                  }`}
-                />
-              </button>
-            </div>
+            ) : (
+              <div className="space-y-2">
+                {customFieldsList.map((cf) => (
+                  <div
+                    key={cf.id}
+                    className="p-3.5 rounded-xl bg-black/50 border border-white/10 flex items-center justify-between gap-3 text-xs"
+                  >
+                    <div className="flex items-center gap-3 min-w-0">
+                      <span className="px-2 py-0.5 rounded text-[10px] uppercase font-bold bg-[#013724] text-[#D4AF37] border border-[#D4AF37]/30">
+                        {cf.type}
+                      </span>
+                      <div className="min-w-0">
+                        <span className="font-bold text-white block truncate">{cf.label}</span>
+                        {cf.options && cf.options.length > 0 && (
+                          <span className="text-[10px] text-gray-400 truncate block">
+                            Options: {cf.options.join(', ')}
+                          </span>
+                        )}
+                      </div>
+                    </div>
 
-            <div className="p-4 rounded-xl bg-black/40 border border-white/5 flex items-center justify-between">
-              <div>
-                <span className="font-bold text-white block">Custom Buyer Message / Notes</span>
-                <span className="text-[11px] text-gray-400">Include free-form query or special loan requirement box</span>
+                    <div className="flex items-center gap-2 shrink-0">
+                      {cf.required && (
+                        <span className="text-[10px] text-amber-400 font-semibold px-2 py-0.5 rounded bg-amber-400/10 border border-amber-400/20">
+                          Mandatory
+                        </span>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteCustomField(cf.id)}
+                        className="p-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 transition-colors cursor-pointer"
+                        title="Delete this question"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                ))}
               </div>
-              <button
-                type="button"
-                onClick={() => handleEnquiryFieldToggle('message')}
-                className={`w-11 h-6 rounded-full transition-colors relative cursor-pointer ${
-                  formData.enquiry_fields?.message ? 'bg-emerald-500' : 'bg-white/10'
-                }`}
-              >
-                <span
-                  className={`w-4 h-4 rounded-full bg-white absolute top-1 transition-transform ${
-                    formData.enquiry_fields?.message ? 'left-6' : 'left-1'
-                  }`}
-                />
-              </button>
-            </div>
+            )}
           </div>
         </div>
 
@@ -318,7 +536,7 @@ export const CMSSettings = () => {
         <div className="sticky bottom-4 z-20 p-4 rounded-2xl bg-[#040d08]/95 backdrop-blur-xl border border-[#D4AF37]/40 shadow-2xl flex items-center justify-between">
           <div className="flex items-center gap-2 text-xs text-gray-300">
             <Sparkles className="w-4 h-4 text-[#D4AF37]" />
-            <span>Click save to immediately update all phone, email, and social fields site-wide.</span>
+            <span>Click save to immediately update all contact and form fields site-wide.</span>
           </div>
 
           <button
@@ -327,7 +545,7 @@ export const CMSSettings = () => {
             className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#aa8c2c] text-[#013724] font-black text-xs shadow-lg hover:brightness-110 transition-all flex items-center gap-2 cursor-pointer"
           >
             <Save className="w-4 h-4" />
-            <span>{isSaving ? 'Syncing...' : 'Save Global Settings'}</span>
+            <span>{isSaving ? 'Syncing...' : 'Save All Settings'}</span>
           </button>
         </div>
       </form>

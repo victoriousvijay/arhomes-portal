@@ -16,7 +16,9 @@ import {
   Clock, 
   Calendar,
   X,
-  FileSpreadsheet
+  FileSpreadsheet,
+  Eye,
+  Mail
 } from 'lucide-react';
 
 const STATUS_OPTIONS = [
@@ -43,6 +45,7 @@ export const CRMLeads = () => {
   
   // Modal states
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [detailLead, setDetailLead] = useState(null);
   const [newLeadData, setNewLeadData] = useState({
     name: '',
     phone: '',
@@ -311,9 +314,19 @@ export const CRMLeads = () => {
                         </div>
                       </td>
 
-                      {/* Instant Actions (WhatsApp, Phone, Delete) */}
+                      {/* Instant Actions (View Details, WhatsApp, Phone, Delete) */}
                       <td className="px-5 py-4 text-right">
                         <div className="flex items-center justify-end gap-2">
+                          {/* View Full Details */}
+                          <button
+                            type="button"
+                            onClick={() => setDetailLead(lead)}
+                            className="p-2 rounded-xl bg-white/10 hover:bg-[#013724] text-gray-300 hover:text-[#D4AF37] transition-all cursor-pointer border border-white/15"
+                            title="View Full Inquirer Details & Answers"
+                          >
+                            <Eye className="w-3.5 h-3.5" />
+                          </button>
+
                           {/* One-Click WhatsApp */}
                           <a
                             href={formatWhatsAppLink(lead.phone, lead.name, lead.property_interest)}
@@ -357,7 +370,149 @@ export const CRMLeads = () => {
         </div>
       </div>
 
-      {/* Manual Add Lead Modal */}
+      {/* Lead Details & Custom Responses Modal */}
+      {detailLead && (
+        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-[#05110a] border border-white/20 rounded-3xl p-6 sm:p-7 max-w-lg w-full text-white shadow-2xl space-y-5 my-8 animate-in fade-in zoom-in-95">
+            {/* Header */}
+            <div className="flex items-center justify-between border-b border-white/10 pb-4">
+              <div>
+                <div className="text-[10px] uppercase tracking-wider text-[#D4AF37] font-bold">
+                  Client Inquiry Profile
+                </div>
+                <h3 className="text-xl font-bold text-white mt-0.5">{detailLead.name}</h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setDetailLead(null)}
+                className="p-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Quick Contact & Action Buttons */}
+            <div className="flex items-center gap-2 p-3 rounded-2xl bg-black/50 border border-white/10">
+              <a
+                href={formatWhatsAppLink(detailLead.phone, detailLead.name, detailLead.property_interest)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 py-2 px-3 rounded-xl bg-[#25D366]/20 hover:bg-[#25D366] text-[#25D366] hover:text-white text-xs font-semibold flex items-center justify-center gap-1.5 transition-all"
+              >
+                <MessageCircle className="w-4 h-4" />
+                <span>WhatsApp</span>
+              </a>
+
+              <a
+                href={`tel:${detailLead.phone}`}
+                className="flex-1 py-2 px-3 rounded-xl bg-[#013724] hover:bg-[#D4AF37] text-[#D4AF37] hover:text-[#013724] text-xs font-semibold flex items-center justify-center gap-1.5 transition-all"
+              >
+                <Phone className="w-4 h-4" />
+                <span>Call Client</span>
+              </a>
+
+              {detailLead.email && (
+                <a
+                  href={`mailto:${detailLead.email}`}
+                  className="py-2 px-3 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-semibold flex items-center justify-center gap-1.5 transition-all"
+                  title="Send Email"
+                >
+                  <Mail className="w-4 h-4 text-emerald-400" />
+                </a>
+              )}
+            </div>
+
+            {/* Inquirer Key Specs */}
+            <div className="grid grid-cols-2 gap-3 text-xs">
+              <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-0.5">
+                <span className="text-[10px] text-gray-400 uppercase font-semibold">Phone Number</span>
+                <div className="font-mono text-white font-bold">{detailLead.phone}</div>
+              </div>
+
+              <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-0.5">
+                <span className="text-[10px] text-gray-400 uppercase font-semibold">Email</span>
+                <div className="text-gray-200 truncate">{detailLead.email || 'Not Provided'}</div>
+              </div>
+
+              <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-0.5">
+                <span className="text-[10px] text-gray-400 uppercase font-semibold">Property Interest</span>
+                <div className="text-white font-medium truncate">{detailLead.property_interest || 'General Luxury'}</div>
+              </div>
+
+              <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-0.5">
+                <span className="text-[10px] text-gray-400 uppercase font-semibold">Target Budget</span>
+                <div className="text-[#D4AF37] font-bold">{detailLead.budget || 'Unspecified'}</div>
+              </div>
+            </div>
+
+            {/* Custom Question Responses / Client Preferences */}
+            {(detailLead.notes || detailLead.message) && (
+              <div className="p-3.5 rounded-2xl bg-[#013724]/40 border border-[#D4AF37]/30 space-y-2 text-xs">
+                <div className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-wider flex items-center gap-1.5">
+                  <span>Client Form Responses & Preferences:</span>
+                </div>
+                <div className="text-gray-200 text-xs whitespace-pre-wrap leading-relaxed font-light">
+                  {detailLead.notes || detailLead.message}
+                </div>
+              </div>
+            )}
+
+            {/* Status & Temperature Updaters */}
+            <div className="grid grid-cols-2 gap-3 text-xs pt-1">
+              <div>
+                <label className="block text-gray-400 text-[10px] uppercase font-semibold mb-1">
+                  Lead Temperature
+                </label>
+                <select
+                  value={detailLead.temperature || 'Warm'}
+                  onChange={(e) => {
+                    const newTemp = e.target.value;
+                    updateLead(detailLead.id, { temperature: newTemp });
+                    setDetailLead({ ...detailLead, temperature: newTemp });
+                  }}
+                  className="w-full bg-[#0a1811] border border-white/15 rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-[#D4AF37]"
+                >
+                  <option value="Hot">🔥 Hot (Ready Buyer)</option>
+                  <option value="Warm">🟡 Warm (Interested)</option>
+                  <option value="Cold">❄️ Cold (Browsing)</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-gray-400 text-[10px] uppercase font-semibold mb-1">
+                  Pipeline Stage
+                </label>
+                <select
+                  value={detailLead.status || 'New Lead'}
+                  onChange={(e) => {
+                    const newStatus = e.target.value;
+                    updateLead(detailLead.id, { status: newStatus });
+                    setDetailLead({ ...detailLead, status: newStatus });
+                  }}
+                  className="w-full bg-[#0a1811] border border-white/15 rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-[#D4AF37]"
+                >
+                  {STATUS_OPTIONS.map((st) => (
+                    <option key={st} value={st}>{st}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="flex items-center justify-between pt-3 border-t border-white/10 text-xs text-gray-400">
+              <span className="text-[10px]">Source: {detailLead.source || 'Website'}</span>
+              <button
+                type="button"
+                onClick={() => setDetailLead(null)}
+                className="px-4 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold cursor-pointer"
+              >
+                Done
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {isAddModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-[#040c08] border border-white/20 rounded-3xl p-6 sm:p-8 max-w-lg w-full text-white shadow-2xl space-y-5 animate-in fade-in">

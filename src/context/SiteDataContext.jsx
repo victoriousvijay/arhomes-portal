@@ -17,7 +17,25 @@ const DEFAULT_SETTINGS = {
     budget: true,
     propertyType: true,
     visitDate: true,
-    message: true
+    message: true,
+    custom_fields: [
+      {
+        id: 'cf-locality',
+        label: 'Preferred Locality in Jaipur',
+        type: 'select',
+        options: ['Civil Lines', 'C-Scheme', 'Vaishali Nagar', 'Tonk Road Corridor', 'Ajmer Road', 'Other'],
+        required: false,
+        placeholder: 'Choose preferred sector'
+      },
+      {
+        id: 'cf-loan',
+        label: 'Need Bank Loan Advisory?',
+        type: 'select',
+        options: ['Yes, Need Home Loan Guidance', 'Partially Funded (30-50%)', 'No, Self-Financed / Cash'],
+        required: false,
+        placeholder: 'Select loan requirement'
+      }
+    ]
   }
 };
 
@@ -329,17 +347,35 @@ export const SiteDataProvider = ({ children }) => {
       }
       try {
         // 1. Settings
+        // 1. Settings
         const { data: sData } = await supabase.from('site_settings').select('*').eq('id', 'global').maybeSingle();
         if (sData && isMounted) {
-          setSettings(prev => ({ ...prev, ...sData }));
-          localStorage.setItem('arhomes_settings', JSON.stringify({ ...settings, ...sData }));
+          const mergedEnquiry = {
+            ...DEFAULT_SETTINGS.enquiry_fields,
+            ...(sData.enquiry_fields || {})
+          };
+          if (!mergedEnquiry.custom_fields || mergedEnquiry.custom_fields.length === 0) {
+            mergedEnquiry.custom_fields = DEFAULT_SETTINGS.enquiry_fields.custom_fields;
+          }
+          const merged = { ...DEFAULT_SETTINGS, ...sData, enquiry_fields: mergedEnquiry };
+          setSettings(merged);
+          localStorage.setItem('arhomes_settings', JSON.stringify(merged));
         }
 
         // 2. Properties
         const { data: pData } = await supabase.from('properties').select('*').order('display_order', { ascending: true });
         if (pData && pData.length > 0 && isMounted) {
-          setProperties(pData);
-          localStorage.setItem('arhomes_properties', JSON.stringify(pData));
+          const mappedProps = pData.map(p => ({
+            ...p,
+            builtForm: p.builtForm || p.built_form || 'Luxury Residence',
+            priceUsd: p.priceUsd || p.price_usd || '',
+            subCategory: p.subCategory || p.sub_category || p.category,
+            isNew: p.isNew !== undefined ? p.isNew : (p.is_new !== undefined ? p.is_new : false),
+            is_featured_home: p.is_featured_home !== undefined ? p.is_featured_home : true,
+            is_hero_carousel: p.is_hero_carousel !== undefined ? p.is_hero_carousel : true
+          }));
+          setProperties(mappedProps);
+          localStorage.setItem('arhomes_properties', JSON.stringify(mappedProps));
         }
 
         // 3. Owners
@@ -390,7 +426,15 @@ export const SiteDataProvider = ({ children }) => {
       try {
         await supabase.from('site_settings').upsert({
           id: 'global',
-          ...merged,
+          phone: merged.phone,
+          phone_display: merged.phone_display,
+          whatsapp: merged.whatsapp,
+          email: merged.email,
+          corporate_address: merged.corporate_address,
+          facebook: merged.facebook,
+          instagram: merged.instagram,
+          linkedin: merged.linkedin,
+          enquiry_fields: merged.enquiry_fields,
           updated_at: new Date().toISOString()
         });
       } catch (e) {
@@ -398,6 +442,44 @@ export const SiteDataProvider = ({ children }) => {
       }
     }
     return merged;
+  };
+
+  // Custom Enquiry Fields Management
+  const addCustomEnquiryField = async (newField) => {
+    const currentFields = settings.enquiry_fields || {};
+    const customList = currentFields.custom_fields || [];
+    const fieldItem = {
+      id: `cf-${Date.now()}`,
+      label: newField.label || 'Custom Field',
+      type: newField.type || 'text',
+      options: newField.options || [],
+      required: Boolean(newField.required),
+      placeholder: newField.placeholder || ''
+    };
+    const updatedCustom = [...customList, fieldItem];
+    const updatedSettings = {
+      ...settings,
+      enquiry_fields: {
+        ...currentFields,
+        custom_fields: updatedCustom
+      }
+    };
+    await updateSettings(updatedSettings);
+    return fieldItem;
+  };
+
+  const removeCustomEnquiryField = async (fieldId) => {
+    const currentFields = settings.enquiry_fields || {};
+    const customList = currentFields.custom_fields || [];
+    const updatedCustom = customList.filter(f => f.id !== fieldId);
+    const updatedSettings = {
+      ...settings,
+      enquiry_fields: {
+        ...currentFields,
+        custom_fields: updatedCustom
+      }
+    };
+    await updateSettings(updatedSettings);
   };
 
   // Property CRUD
@@ -414,7 +496,30 @@ export const SiteDataProvider = ({ children }) => {
 
     if (supabase) {
       try {
-        await supabase.from('properties').upsert(prop);
+        const payload = {
+          id: prop.id,
+          title: prop.title,
+          category: prop.category,
+          sub_category: prop.subCategory || prop.sub_category || prop.category,
+          "subCategory": prop.subCategory || prop.sub_category || prop.category,
+          location: prop.location,
+          price: prop.price,
+          price_usd: prop.priceUsd || prop.price_usd || '',
+          "priceUsd": prop.priceUsd || prop.price_usd || '',
+          built_form: prop.builtForm || prop.built_form || '',
+          "builtForm": prop.builtForm || prop.built_form || '',
+          rera: prop.rera || '',
+          status: prop.status || 'Ready to Move',
+          overview: prop.overview || '',
+          features: prop.features || [],
+          image: prop.image,
+          is_new: prop.isNew !== undefined ? prop.isNew : prop.is_new,
+          "isNew": prop.isNew !== undefined ? prop.isNew : prop.is_new,
+          is_featured_home: prop.is_featured_home !== undefined ? prop.is_featured_home : true,
+          is_hero_carousel: prop.is_hero_carousel !== undefined ? prop.is_hero_carousel : false,
+          display_order: prop.display_order || 1
+        };
+        await supabase.from('properties').upsert(payload);
       } catch (e) {
         console.error('Supabase property save error:', e);
       }
@@ -742,7 +847,9 @@ export const SiteDataProvider = ({ children }) => {
         exportLeadsCSV,
         saveDeal,
         deleteDeal,
-        uploadImage
+        uploadImage,
+        addCustomEnquiryField,
+        removeCustomEnquiryField
       }}
     >
       {children}
