@@ -47,10 +47,13 @@ export const CMSPages = () => {
     gallery, 
     saveGalleryItem, 
     deleteGalleryItem, 
+    services,
+    saveService,
+    deleteService,
     uploadImage 
   } = useSiteData();
 
-  const [activeTab, setActiveTab] = useState('owners'); // 'owners' | 'gallery' | 'buyHero'
+  const [activeTab, setActiveTab] = useState('owners'); // 'owners' | 'gallery' | 'buyHero' | 'services'
 
   // Owner Modal State
   const [isOwnerModalOpen, setIsOwnerModalOpen] = useState(false);
@@ -78,9 +81,87 @@ export const CMSPages = () => {
     display_order: 1
   });
 
+  // Service Modal State
+  const [isServiceModalOpen, setIsServiceModalOpen] = useState(false);
+  const [editingService, setEditingService] = useState(null);
+  const [serviceForm, setServiceForm] = useState({
+    id: '',
+    title: '',
+    category: 'Finance & Lending',
+    desc: '',
+    highlights: ['', '', ''],
+    image: '',
+    display_order: 1
+  });
+
   const [isUploading, setIsUploading] = useState(false);
   const ownerFileInputRef = useRef(null);
   const galleryFileInputRef = useRef(null);
+  const serviceFileInputRef = useRef(null);
+
+  // SERVICE HANDLERS
+  const openEditService = (service) => {
+    setEditingService(service);
+    setServiceForm({
+      ...service,
+      highlights: service.highlights && service.highlights.length ? [...service.highlights] : ['', '', '']
+    });
+    setIsServiceModalOpen(true);
+  };
+
+  const openNewService = () => {
+    setEditingService(null);
+    setServiceForm({
+      id: `service-${Date.now()}`,
+      title: '',
+      category: 'Finance & Lending',
+      desc: '',
+      highlights: ['', '', ''],
+      image: '',
+      display_order: (services?.length || 0) + 1
+    });
+    setIsServiceModalOpen(true);
+  };
+
+  const handleServiceUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setIsUploading(true);
+    try {
+      const publicUrl = await uploadImage(file);
+      setServiceForm(prev => ({ ...prev, image: publicUrl }));
+    } catch (err) {
+      console.error('Service image upload error:', err);
+      alert('Failed to upload image. You can also paste an image URL directly.');
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const saveServiceSubmit = async (e) => {
+    e.preventDefault();
+    const finalForm = {
+      ...serviceForm,
+      image: formatGoogleDriveUrl(serviceForm.image),
+      highlights: (serviceForm.highlights || []).filter(h => h && h.trim().length > 0)
+    };
+    await saveService(finalForm);
+    setIsServiceModalOpen(false);
+  };
+
+  const reorderService = async (service, direction) => {
+    const index = (services || []).findIndex(s => s.id === service.id);
+    if (index < 0) return;
+    const targetIndex = direction === 'up' ? index - 1 : index + 1;
+    if (targetIndex < 0 || targetIndex >= services.length) return;
+
+    const currentOrder = service.display_order || index + 1;
+    const targetService = services[targetIndex];
+    const targetOrder = targetService.display_order || targetIndex + 1;
+
+    await saveService({ ...service, display_order: targetOrder });
+    await saveService({ ...targetService, display_order: currentOrder });
+  };
 
   // OWNER HANDLERS
   const openEditOwner = (owner) => {
@@ -250,6 +331,21 @@ export const CMSPages = () => {
             <span>Buy Hero Carousel</span>
             <span className="px-1.5 py-0.2 rounded-full bg-white/10 text-[10px] text-white">
               {heroProperties.length} Slides
+            </span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('services')}
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+              activeTab === 'services'
+                ? 'bg-[#013724] text-[#D4AF37] border border-[#D4AF37]/40 shadow-lg'
+                : 'bg-white/5 text-gray-400 hover:text-white border border-transparent'
+            }`}
+          >
+            <Layers className="w-4 h-4" />
+            <span>Services & Advisory Desks</span>
+            <span className="px-1.5 py-0.2 rounded-full bg-white/10 text-[10px] text-white">
+              {(services || []).length} Desks
             </span>
           </button>
         </div>
@@ -448,6 +544,129 @@ export const CMSPages = () => {
                 </div>
               ))}
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* TAB 4: SERVICES & ADVISORY DESKS */}
+      {activeTab === 'services' && (
+        <div className="space-y-6">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div>
+              <h2 className="text-lg font-bold text-white">Services & Financial Advisory Desks</h2>
+              <p className="text-xs text-gray-400">
+                Manage service cards shown on the Services & Loan Assistance page. Upload images, update descriptions, and feature bullet points.
+              </p>
+            </div>
+            <button
+              onClick={openNewService}
+              className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#aa8c2c] text-[#013724] font-bold text-xs flex items-center gap-2 hover:brightness-110 shadow-lg cursor-pointer shrink-0"
+            >
+              <Plus className="w-4 h-4" />
+              <span>Add Advisory Service</span>
+            </button>
+          </div>
+
+          {/* Service Cards Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {(services || []).map((svc, idx) => (
+              <div
+                key={svc.id || idx}
+                className="bg-[#0b1e16] border border-white/10 rounded-2xl overflow-hidden flex flex-col justify-between hover:border-[#D4AF37]/50 transition-all shadow-xl group"
+              >
+                <div>
+                  {/* Thumbnail Image Header */}
+                  <div className="relative h-44 w-full bg-black/50 overflow-hidden">
+                    {svc.image ? (
+                      <img
+                        src={formatGoogleDriveUrl(svc.image)}
+                        alt={svc.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-gray-500">
+                        <ImageIcon className="w-8 h-8" />
+                      </div>
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                    
+                    <span className="absolute top-3 left-3 text-[10px] uppercase font-bold tracking-wider px-2.5 py-1 rounded-full bg-black/75 backdrop-blur-md text-[#D4AF37] border border-white/20">
+                      {svc.category || 'Advisory Desk'}
+                    </span>
+
+                    <span className="absolute top-3 right-3 text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/10 backdrop-blur-md text-white border border-white/20">
+                      #{svc.display_order || idx + 1}
+                    </span>
+                  </div>
+
+                  {/* Card Details */}
+                  <div className="p-5 space-y-3">
+                    <h3 className="font-bold text-white text-base line-clamp-1 group-hover:text-[#D4AF37] transition-colors">
+                      {svc.title}
+                    </h3>
+                    <p className="text-xs text-gray-400 line-clamp-2 leading-relaxed">
+                      {svc.desc}
+                    </p>
+
+                    {svc.highlights && svc.highlights.length > 0 && (
+                      <div className="space-y-1.5 border-t border-white/10 pt-3">
+                        {svc.highlights.map((h, hIdx) => (
+                          <div key={hIdx} className="flex items-center gap-2 text-[11px] text-gray-300">
+                            <Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                            <span className="truncate">{h}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Bottom Actions */}
+                <div className="p-5 pt-0 flex items-center justify-between border-t border-white/5 mt-3 pt-3">
+                  <div className="flex items-center gap-1">
+                    <button
+                      type="button"
+                      disabled={idx === 0}
+                      onClick={() => reorderService(svc, 'up')}
+                      className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white disabled:opacity-30 cursor-pointer"
+                      title="Move Up"
+                    >
+                      ▲
+                    </button>
+                    <button
+                      type="button"
+                      disabled={idx === (services || []).length - 1}
+                      onClick={() => reorderService(svc, 'down')}
+                      className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white disabled:opacity-30 cursor-pointer"
+                      title="Move Down"
+                    >
+                      ▼
+                    </button>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => openEditService(svc)}
+                      className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-[#D4AF37]/20 text-white hover:text-[#D4AF37] text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer"
+                    >
+                      <Edit3 className="w-3.5 h-3.5" />
+                      <span>Edit</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        if (confirm(`Delete service desk "${svc.title}"?`)) {
+                          deleteService(svc.id);
+                        }
+                      }}
+                      className="p-1.5 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 transition-all cursor-pointer"
+                      title="Delete Service"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       )}
@@ -696,6 +915,151 @@ export const CMSPages = () => {
                   className="px-5 py-2 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#aa8c2c] text-[#013724] font-bold"
                 >
                   Save Photo
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL: EDIT/ADD SERVICE */}
+      {isServiceModalOpen && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-[#081810] border border-white/20 rounded-2xl w-full max-w-xl p-6 shadow-2xl space-y-4 animate-in fade-in zoom-in-95 max-h-[92vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-white/10 pb-3">
+              <h3 className="text-base font-bold text-white flex items-center gap-2">
+                <Layers className="w-4 h-4 text-[#D4AF37]" />
+                <span>{editingService ? 'Edit Advisory Service' : 'Add New Advisory Service'}</span>
+              </h3>
+              <button 
+                onClick={() => setIsServiceModalOpen(false)}
+                className="p-1 rounded-lg bg-white/5 text-gray-400 hover:text-white cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <form onSubmit={saveServiceSubmit} className="space-y-4 text-xs">
+              <div>
+                <label className="block text-gray-300 font-semibold mb-1">Service Title *</label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. Home Loans & Instant Pre-Approvals"
+                  value={serviceForm.title}
+                  onChange={(e) => setServiceForm({ ...serviceForm, title: e.target.value })}
+                  className="w-full px-3 py-2 bg-black/40 border border-white/10 rounded-xl text-white focus:outline-none focus:border-[#D4AF37]"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-gray-300 font-semibold mb-1">Category / Tag *</label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. Finance & Lending"
+                    value={serviceForm.category}
+                    onChange={(e) => setServiceForm({ ...serviceForm, category: e.target.value })}
+                    className="w-full px-3 py-2 bg-black/40 border border-white/10 rounded-xl text-white focus:outline-none focus:border-[#D4AF37]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-gray-300 font-semibold mb-1">Display Order #</label>
+                  <input
+                    type="number"
+                    value={serviceForm.display_order}
+                    onChange={(e) => setServiceForm({ ...serviceForm, display_order: Number(e.target.value) })}
+                    className="w-full px-3 py-2 bg-black/40 border border-white/10 rounded-xl text-white focus:outline-none focus:border-[#D4AF37]"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-gray-300 font-semibold mb-1">Description *</label>
+                <textarea
+                  rows={3}
+                  required
+                  placeholder="Describe the loan assistance or advisory service..."
+                  value={serviceForm.desc}
+                  onChange={(e) => setServiceForm({ ...serviceForm, desc: e.target.value })}
+                  className="w-full px-3 py-2 bg-black/40 border border-white/10 rounded-xl text-white focus:outline-none focus:border-[#D4AF37] resize-none"
+                />
+              </div>
+
+              {/* 3 Highlights */}
+              <div className="space-y-2">
+                <label className="block text-gray-300 font-semibold">Key Bullet Highlights (Up to 3)</label>
+                {[0, 1, 2].map((hIdx) => (
+                  <input
+                    key={hIdx}
+                    type="text"
+                    placeholder={`Highlight #${hIdx + 1} (e.g. Preferential 8.35% Base Rates)`}
+                    value={(serviceForm.highlights && serviceForm.highlights[hIdx]) || ''}
+                    onChange={(e) => {
+                      const copy = serviceForm.highlights ? [...serviceForm.highlights] : ['', '', ''];
+                      copy[hIdx] = e.target.value;
+                      setServiceForm({ ...serviceForm, highlights: copy });
+                    }}
+                    className="w-full px-3 py-2 bg-black/40 border border-white/10 rounded-xl text-white focus:outline-none focus:border-[#D4AF37]"
+                  />
+                ))}
+              </div>
+
+              {/* Image Input (Local File or Google Drive) */}
+              <div className="p-3.5 rounded-xl bg-black/50 border border-white/10 space-y-2">
+                <label className="text-gray-200 font-bold block">Service Card Photo (Local Upload or URL) *</label>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    placeholder="Paste image URL or Google Drive link"
+                    value={serviceForm.image}
+                    onChange={(e) => setServiceForm({ ...serviceForm, image: e.target.value })}
+                    className="flex-1 px-3 py-2 bg-black/40 border border-white/10 rounded-xl text-white focus:outline-none focus:border-[#D4AF37]"
+                  />
+                  <input
+                    type="file"
+                    ref={serviceFileInputRef}
+                    accept="image/*"
+                    onChange={handleServiceUpload}
+                    className="hidden"
+                  />
+                  <button
+                    type="button"
+                    disabled={isUploading}
+                    onClick={() => serviceFileInputRef.current?.click()}
+                    className="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold flex items-center gap-1.5 cursor-pointer shrink-0"
+                  >
+                    <Upload className="w-3.5 h-3.5 text-[#D4AF37]" />
+                    <span>{isUploading ? 'Uploading...' : 'Browse'}</span>
+                  </button>
+                </div>
+                {serviceForm.image && (
+                  <div className="flex items-center gap-2 pt-1">
+                    <img 
+                      src={formatGoogleDriveUrl(serviceForm.image)} 
+                      alt="Preview" 
+                      className="w-16 h-12 object-cover rounded-lg border border-white/10" 
+                    />
+                    <span className="text-[10px] text-gray-400">Photo preview loaded</span>
+                  </div>
+                )}
+              </div>
+
+              <div className="flex items-center justify-end gap-3 pt-3 border-t border-white/10">
+                <button
+                  type="button"
+                  onClick={() => setIsServiceModalOpen(false)}
+                  className="px-4 py-2 rounded-xl bg-white/10 text-gray-300 font-semibold cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#aa8c2c] text-[#013724] font-bold cursor-pointer"
+                >
+                  Save Service
                 </button>
               </div>
             </form>

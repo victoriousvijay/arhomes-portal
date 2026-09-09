@@ -42,14 +42,14 @@ export const MobileBottomBar = ({ onOpenCallback }) => {
           <span className="text-[10px] font-medium tracking-wide uppercase">WhatsApp</span>
         </a>
 
-        {/* 3. Primary CTA: Request Callback */}
+        {/* 3. Primary CTA: Enquire Now */}
         <button
           type="button"
-          onClick={() => onOpenCallback && onOpenCallback({ title: 'Mobile Callback Request' })}
+          onClick={() => onOpenCallback && onOpenCallback({ title: 'Mobile Priority Enquiry' })}
           className="flex-[2.4] py-2.5 px-3 rounded-xl bg-gradient-to-r from-[#D4AF37] via-[#E5C86C] to-[#D4AF37] text-[#013724] font-bold text-xs uppercase tracking-wider shadow-lg hover:brightness-105 active:scale-95 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
         >
           <Sparkles className="w-3.5 h-3.5 shrink-0 fill-current" />
-          <span className="whitespace-nowrap">Request Callback</span>
+          <span className="whitespace-nowrap">Enquire Now</span>
         </button>
 
       </div>

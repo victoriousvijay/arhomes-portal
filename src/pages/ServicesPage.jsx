@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { LoanCalculator } from '../components/LoanCalculator';
 import { useSiteData } from '../context/SiteDataContext';
@@ -12,109 +12,289 @@ import {
   Compass, 
   CheckCircle2, 
   ArrowRight, 
-  PhoneCall
+  PhoneCall,
+  ShieldCheck,
+  Building2
 } from 'lucide-react';
 
-const SERVICES_CATALOG = [
-  {
-    icon: Landmark,
-    title: 'Home Loans & Instant Pre-Approvals',
-    desc: 'Exclusive builder-subsidized tie-ups with SBI, HDFC, ICICI, and Axis Bank. Fast-track sanction with transparent legal due diligence and zero processing friction.',
-    highlights: ['Preferential 8.35% Base Rates', 'Same-Week In-Principle Sanction', 'Tax Savings Optimization'],
-    category: 'Finance & Lending',
-    image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=800&q=80'
-  },
-  {
-    icon: Briefcase,
-    title: 'Business Loans & Commercial Finance',
-    desc: 'Capital financing for enterprise expansion, corporate office floor acquisition, and commercial property investment backed by flexible tenure and structured repayment.',
-    highlights: ['Commercial Asset Financing', 'Working Capital Lines', 'MSME & Corporate Loan Desk'],
-    category: 'Commercial Funding',
-    image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80'
-  },
-  {
-    icon: Wallet,
-    title: 'Personal Loans & Liquid Credit Assistance',
-    desc: 'Unsecured high-value personal credit lines designed for bespoke interior staging, Italian marble upgrades, furnishings, and emergency financial liquidity.',
-    highlights: ['Collateral-Free Disbursement', '12 to 60 Months Flexible Tenure', 'Minimal Doorstep Paperwork'],
-    category: 'Personal Finance',
-    image: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=800&q=80'
-  },
-  {
-    icon: TrendingUp,
-    title: 'CIBIL Score Improvisation Desk',
-    desc: 'Professional credit health audits to help buyers elevate their credit rating above 750+. We rectify reporting discrepancies, restructure debt ratios, and secure lower interest rates.',
-    highlights: ['Credit Report Dispute Redressal', 'Debt-to-Income Optimization', 'Rate-Reduction Consulting'],
-    category: 'Credit Advisory',
-    image: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=800&q=80'
-  },
-  {
-    icon: FileCheck,
-    title: 'All-Loans Assistance & Banking Desk',
-    desc: 'Comprehensive, end-to-end loan coordination. From document collection and property valuation to title search and bank disbursement, our dedicated banking officers handle everything.',
-    highlights: ['100% Dedicated Relationship Manager', 'Doorstep Verification & Pickup', 'Zero Hidden Advisory Charges'],
-    category: 'Banking Concierge',
-    image: 'https://images.unsplash.com/photo-1450133064473-71024230f91b?auto=format&fit=crop&w=800&q=80'
-  },
-  {
-    icon: Compass,
-    title: 'Property & Land Acquisition Advisory',
-    desc: 'Verified acquisition consulting for buyers seeking prime Jaipur real estate. We curate high-return independent floors, luxury villas, apartments, commercial suites, and freehold plots.',
-    highlights: ['Villas & Triplex Mansions', 'Apartments & Commercial Towers', 'Freehold Plots & Estate Land'],
-    category: 'Property Portfolio',
-    image: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=800&q=80'
+const ICON_MAP = {
+  Landmark,
+  Briefcase,
+  Wallet,
+  TrendingUp,
+  FileCheck,
+  Compass,
+  ShieldCheck,
+  Building2
+};
+
+const formatGoogleDriveUrl = (url) => {
+  if (!url) return '';
+  const trimmed = url.trim();
+  const driveRegex = /(?:drive\.google\.com\/(?:file\/d\/|open\?id=)|docs\.google\.com\/uc\?id=)([a-zA-Z0-9_-]+)/;
+  const match = trimmed.match(driveRegex);
+  if (match && match[1]) {
+    return `https://drive.google.com/thumbnail?id=${match[1]}&sz=w1600`;
   }
-];
+  return trimmed;
+};
+
+// Custom typewriter hook
+const useTypewriter = (text, speed = 32, startDelay = 500) => {
+  const [displayed, setDisplayed] = useState('');
+  const [done, setDone] = useState(false);
+
+  useEffect(() => {
+    let timeoutId;
+    let intervalId;
+
+    timeoutId = setTimeout(() => {
+      let currentIndex = 0;
+      intervalId = setInterval(() => {
+        if (currentIndex < text.length) {
+          setDisplayed(text.slice(0, currentIndex + 1));
+          currentIndex++;
+        } else {
+          setDone(true);
+          clearInterval(intervalId);
+        }
+      }, speed);
+    }, startDelay);
+
+    return () => {
+      clearTimeout(timeoutId);
+      clearInterval(intervalId);
+    };
+  }, [text, speed, startDelay]);
+
+  return { displayed, done };
+};
 
 export const ServicesPage = ({ onOpenEnquiry }) => {
-  const { settings } = useSiteData();
+  const { settings, services } = useSiteData();
   const phoneVal = settings?.phone || BRAND.phone;
   const phoneDisplayVal = settings?.phone_display || settings?.phone || BRAND.phoneDisplay;
+
+  // Video mouse-scrubbing state
+  const videoRef = useRef(null);
+  const prevXRef = useRef(null);
+  const targetTimeRef = useRef(0);
+  const isSeekingRef = useRef(false);
+
+  // Typewriter heading & subtitle text
+  const typewriterText = "How AR Homes Assists You. Whether securing competitive capital for your enterprise, improving your credit score, or acquiring prime residential land, our advisory desk guides you every step of the way.";
+  const { displayed, done } = useTypewriter(typewriterText, 32, 500);
+
+  // Action pill buttons animation state
+  const [pillsVisible, setPillsVisible] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setPillsVisible(true), 400);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const handleCopyContact = () => {
+    navigator.clipboard.writeText(phoneVal || '+918450984509');
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2200);
+  };
+
+  // Video mouse-scrubbing effect
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const handleLoadedMetadata = () => {
+      targetTimeRef.current = (video.duration * 0.12) || 0;
+      video.currentTime = targetTimeRef.current;
+    };
+
+    const handleMouseMove = (e) => {
+      if (!video || !video.duration) return;
+      const currentX = e.clientX;
+      if (prevXRef.current === null) {
+        prevXRef.current = currentX;
+        return;
+      }
+      const delta = currentX - prevXRef.current;
+      prevXRef.current = currentX;
+
+      const SENSITIVITY = 0.8;
+      const timeOffset = (delta / window.innerWidth) * SENSITIVITY * video.duration;
+      let nextTime = targetTimeRef.current + timeOffset;
+      nextTime = Math.max(0, Math.min(video.duration, nextTime));
+      targetTimeRef.current = nextTime;
+
+      if (!isSeekingRef.current) {
+        isSeekingRef.current = true;
+        video.currentTime = nextTime;
+      }
+    };
+
+    const handleSeeked = () => {
+      if (!video) return;
+      if (Math.abs(video.currentTime - targetTimeRef.current) > 0.05) {
+        video.currentTime = targetTimeRef.current;
+      } else {
+        isSeekingRef.current = false;
+      }
+    };
+
+    video.addEventListener('loadedmetadata', handleLoadedMetadata);
+    video.addEventListener('seeked', handleSeeked);
+    window.addEventListener('mousemove', handleMouseMove);
+
+    return () => {
+      video.removeEventListener('loadedmetadata', handleLoadedMetadata);
+      video.removeEventListener('seeked', handleSeeked);
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, []);
+
+  // Display services from CMS context
+  const displayServices = services && services.length > 0 ? services : [];
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] text-slate-900 font-sans selection:bg-[#013724] selection:text-white">
       
-      <div className="max-w-[1440px] mx-auto px-6 sm:px-12 py-8 sm:py-12">
+      {/* 1. FULL-SCREEN MOUSE-SCRUB VIDEO HERO SECTION */}
+      <section className="relative min-h-screen w-full flex flex-col justify-end pb-12 md:justify-center md:pb-0 px-5 sm:px-8 md:px-12 overflow-hidden select-none">
         
-        {/* Breadcrumb Navigation */}
-        <nav className="flex items-center gap-2 text-xs text-slate-500 font-medium mb-6">
-          <Link to="/" className="hover:text-[#013724] transition-colors">Home</Link>
-          <span className="text-slate-300">/</span>
-          <span className="text-slate-800 font-semibold">Services & Loan Assistance</span>
-        </nav>
+        {/* Background Video (Mouse-Scrub controlled) */}
+        <video
+          ref={videoRef}
+          src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260530_042513_df96a13b-6155-4f6e-8b93-c9dee66fba08.mp4"
+          muted
+          playsInline
+          preload="auto"
+          className="fixed inset-0 w-full h-full object-cover object-[70%_center] pointer-events-none z-0"
+        />
 
-        {/* 1. First at Top: How AR Homes Assists You */}
-        <div className="text-center max-w-3xl mx-auto pt-2 pb-12 sm:pb-16">
-          <span className="text-xs uppercase tracking-[0.25em] text-[#013724] font-bold block mb-2.5">
-            ONE-STOP CLIENT ADVISORY
-          </span>
-          <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-normal text-slate-900 tracking-tight">
-            How AR Homes <span className="text-[#013724] italic font-medium">Assists You</span>
-          </h1>
-          <p className="text-sm sm:text-base text-slate-600 font-normal mt-3 leading-relaxed">
-            Whether securing competitive capital for your enterprise, improving your credit score, or acquiring prime residential land, our advisory desk guides you every step of the way.
-          </p>
+        {/* Soft Vignette Overlay for Crisp Typography Legibility */}
+        <div className="fixed inset-0 bg-gradient-to-t from-[#F8FAFC] via-[#F8FAFC]/40 to-transparent pointer-events-none z-[1]" />
+
+        {/* Breadcrumb Navigation at Top-Left */}
+        <div className="absolute top-24 left-6 sm:left-12 z-10">
+          <nav className="flex items-center gap-2 text-xs text-slate-700 font-medium px-3.5 py-1.5 rounded-full bg-white/75 backdrop-blur-md border border-black/5 shadow-sm">
+            <Link to="/" className="hover:text-[#013724] transition-colors">Home</Link>
+            <span className="text-slate-300">/</span>
+            <span className="text-slate-900 font-semibold">Services & Advisory</span>
+          </nav>
         </div>
 
-        {/* 2. After this: Integrated Real-Time Mortgage & CIBIL Calculator */}
-        <div className="mb-20">
-          <div className="text-center max-w-2xl mx-auto mb-8">
-            <span className="text-xs uppercase tracking-widest text-[#013724] font-bold bg-emerald-50 border border-emerald-200 px-3.5 py-1 rounded-full">
-              Financial Estimator
-            </span>
-            <h2 className="font-serif text-2xl sm:text-3xl font-bold text-slate-900 mt-3">
-              Calculate Loan EMIs with Real-Time CIBIL Score & Interest
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-600 mt-2">
-              Evaluate monthly outflows, tenure options, and interest savings across multiple credit tiers.
-            </p>
+        {/* Content Container (Shifted to Right on Desktop: md:ml-auto md:mr-10 lg:mr-20) */}
+        <div className="max-w-xl md:ml-auto md:mr-10 lg:mr-20 relative z-10 text-left pt-20 md:pt-0">
+          
+          {/* 1. Blurred Intro Label */}
+          <div 
+            className="pointer-events-none select-none mb-5 sm:mb-6"
+            style={{
+              fontSize: 'clamp(18px, 4vw, 26px)',
+              lineHeight: 1.3,
+              fontWeight: 400,
+              color: '#000',
+              filter: 'blur(4px)'
+            }}
+          >
+            <span>ONE-STOP CLIENT ADVISORY</span>
+            <br />
+            <span>Jaipur's Premier Property & Loan Desk</span>
           </div>
 
-          <LoanCalculator onOpenEnquiry={onOpenEnquiry} defaultAmount={25000000} />
+          {/* 2. Typewriter Text */}
+          <p
+            className="text-black mb-5 sm:mb-6 font-normal min-h-[54px] tracking-tight"
+            style={{
+              fontSize: 'clamp(18px, 4vw, 26px)',
+              lineHeight: 1.35
+            }}
+          >
+            <span>{displayed}</span>
+            {!done && (
+              <span className="inline-block w-[2px] h-[1.1em] bg-black align-middle ml-[2px] animate-blink" />
+            )}
+          </p>
+
+          {/* 3. Action Pill Buttons */}
+          <div
+            className={`flex flex-wrap gap-y-1 transition-all duration-500 ease-out ${
+              pillsVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+            }`}
+          >
+            <button
+              type="button"
+              onClick={() => onOpenEnquiry && onOpenEnquiry({ title: 'Advisory: Home Loans & Instant Pre-Approvals' })}
+              className="inline-flex items-center justify-center bg-white text-black border border-black/10 rounded-full text-[13px] sm:text-[15px] px-4 sm:px-5 py-[0.3em] mx-[0.2em] mb-[0.4em] whitespace-nowrap hover:bg-black hover:text-white transition-colors duration-200 cursor-pointer shadow-sm"
+            >
+              Home Loans & Pre-Approvals
+            </button>
+
+            <button
+              type="button"
+              onClick={() => onOpenEnquiry && onOpenEnquiry({ title: 'Advisory: Business Loans & Commercial Finance' })}
+              className="inline-flex items-center justify-center bg-white text-black border border-black/10 rounded-full text-[13px] sm:text-[15px] px-4 sm:px-5 py-[0.3em] mx-[0.2em] mb-[0.4em] whitespace-nowrap hover:bg-black hover:text-white transition-colors duration-200 cursor-pointer shadow-sm"
+            >
+              Business & Commercial Loans
+            </button>
+
+            <button
+              type="button"
+              onClick={() => onOpenEnquiry && onOpenEnquiry({ title: 'Advisory: Personal Loans & Liquid Credit' })}
+              className="inline-flex items-center justify-center bg-white text-black border border-black/10 rounded-full text-[13px] sm:text-[15px] px-4 sm:px-5 py-[0.3em] mx-[0.2em] mb-[0.4em] whitespace-nowrap hover:bg-black hover:text-white transition-colors duration-200 cursor-pointer shadow-sm"
+            >
+              Personal Loans & Liquid Credit
+            </button>
+
+            <button
+              type="button"
+              onClick={() => onOpenEnquiry && onOpenEnquiry({ title: 'Advisory: CIBIL Score Improvisation Desk' })}
+              className="inline-flex items-center justify-center bg-white text-black border border-black/10 rounded-full text-[13px] sm:text-[15px] px-4 sm:px-5 py-[0.3em] mx-[0.2em] mb-[0.4em] whitespace-nowrap hover:bg-black hover:text-white transition-colors duration-200 cursor-pointer shadow-sm"
+            >
+              CIBIL Score Improvisation (750+)
+            </button>
+
+            <button
+              type="button"
+              onClick={() => onOpenEnquiry && onOpenEnquiry({ title: 'Advisory: Property & Land Acquisition' })}
+              className="inline-flex items-center justify-center bg-white text-black border border-black/10 rounded-full text-[13px] sm:text-[15px] px-4 sm:px-5 py-[0.3em] mx-[0.2em] mb-[0.4em] whitespace-nowrap hover:bg-black hover:text-white transition-colors duration-200 cursor-pointer shadow-sm"
+            >
+              Property & Land Acquisition
+            </button>
+
+            {/* 1 Outline Pill Button with Copy Icon */}
+            <button
+              type="button"
+              onClick={handleCopyContact}
+              className="inline-flex items-center justify-center text-slate-900 bg-white/80 backdrop-blur-md border border-black/25 rounded-full text-[13px] sm:text-[15px] px-4 sm:px-5 py-[0.3em] mx-[0.2em] mb-[0.4em] whitespace-nowrap gap-2 sm:gap-3 hover:bg-black hover:text-white transition-colors duration-200 cursor-pointer shadow-sm"
+              title="Click to copy contact"
+            >
+              <span>
+                Advisory Desk: <span className="underline underline-offset-1 font-semibold">{phoneDisplayVal || '+91 84509 84509'}</span>
+              </span>
+              {copied ? (
+                <span className="text-xs font-bold text-emerald-600">Copied!</span>
+              ) : (
+                <svg className="w-3.5 h-3.5 fill-none stroke-current" viewBox="0 0 24 24" strokeWidth="2">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                </svg>
+              )}
+            </button>
+          </div>
+
         </div>
 
-        {/* 3. Then after this: Compact Service Cards with Relevant Images */}
-        <div className="mb-20">
+      </section>
+
+      {/* 2. REAL-TIME MORTGAGE & CIBIL CALCULATOR (NO REDUNDANT HEADER) */}
+      <div className="relative z-10 bg-[#F8FAFC] max-w-[1440px] mx-auto px-6 sm:px-12 pt-12 pb-20">
+        
+        {/* Directly flows into the Calculator */}
+        <LoanCalculator onOpenEnquiry={onOpenEnquiry} defaultAmount={25000000} />
+
+        {/* 3. DYNAMIC SERVICES CARDS GRID (SYNCED WITH CMS) */}
+        <div className="mt-20 mb-20">
           <div className="text-center max-w-2xl mx-auto mb-10">
             <span className="text-xs uppercase tracking-widest text-[#013724] font-bold bg-emerald-50 border border-emerald-200 px-3.5 py-1 rounded-full">
               Our Advisory Desks
@@ -128,17 +308,17 @@ export const ServicesPage = ({ onOpenEnquiry }) => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {SERVICES_CATALOG.map((svc, idx) => {
-              const Icon = svc.icon;
+            {displayServices.map((svc, idx) => {
+              const IconComponent = (svc.icon_name && ICON_MAP[svc.icon_name]) || Compass;
               return (
                 <div
-                  key={idx}
+                  key={svc.id || idx}
                   className="bg-white border border-slate-200 rounded-2xl overflow-hidden hover:border-[#D4AF37] hover:shadow-xl transition-all duration-300 group flex flex-col justify-between shadow-sm hover:-translate-y-1"
                 >
                   {/* Card Image Header with Badges */}
                   <div className="relative h-44 w-full overflow-hidden bg-slate-100">
                     <img
-                      src={svc.image}
+                      src={formatGoogleDriveUrl(svc.image)}
                       alt={svc.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
@@ -151,7 +331,7 @@ export const ServicesPage = ({ onOpenEnquiry }) => {
 
                     {/* Bottom Floating Icon */}
                     <div className="absolute bottom-3 right-3 w-8 h-8 rounded-xl bg-white/95 backdrop-blur-md flex items-center justify-center text-[#013724] shadow-md">
-                      <Icon className="w-4 h-4" />
+                      <IconComponent className="w-4 h-4" />
                     </div>
                   </div>
 
@@ -168,14 +348,16 @@ export const ServicesPage = ({ onOpenEnquiry }) => {
                     </div>
 
                     <div>
-                      <div className="space-y-1.5 border-t border-slate-100 pt-3 mb-4">
-                        {svc.highlights.map((h, hIdx) => (
-                          <div key={hIdx} className="flex items-center gap-2 text-[11px] text-slate-700 font-medium">
-                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                            <span className="truncate">{h}</span>
-                          </div>
-                        ))}
-                      </div>
+                      {svc.highlights && svc.highlights.length > 0 && (
+                        <div className="space-y-1.5 border-t border-slate-100 pt-3 mb-4">
+                          {svc.highlights.map((h, hIdx) => (
+                            <div key={hIdx} className="flex items-center gap-2 text-[11px] text-slate-700 font-medium">
+                              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                              <span className="truncate">{h}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
 
                       <button
                         type="button"

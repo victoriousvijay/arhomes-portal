@@ -72,6 +72,69 @@ const DEFAULT_OWNERS = [
   }
 ];
 
+const DEFAULT_SERVICES = [
+  {
+    id: 'home-loans',
+    icon_name: 'Landmark',
+    title: 'Home Loans & Instant Pre-Approvals',
+    desc: 'Exclusive builder-subsidized tie-ups with SBI, HDFC, ICICI, and Axis Bank. Fast-track sanction with transparent legal due diligence and zero processing friction.',
+    highlights: ['Preferential 8.35% Base Rates', 'Same-Week In-Principle Sanction', 'Tax Savings Optimization'],
+    category: 'Finance & Lending',
+    image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=800&q=80',
+    display_order: 1
+  },
+  {
+    id: 'business-loans',
+    icon_name: 'Briefcase',
+    title: 'Business Loans & Commercial Finance',
+    desc: 'Capital financing for enterprise expansion, corporate office floor acquisition, and commercial property investment backed by flexible tenure and structured repayment.',
+    highlights: ['Commercial Asset Financing', 'Working Capital Lines', 'MSME & Corporate Loan Desk'],
+    category: 'Commercial Funding',
+    image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80',
+    display_order: 2
+  },
+  {
+    id: 'personal-loans',
+    icon_name: 'Wallet',
+    title: 'Personal Loans & Liquid Credit Assistance',
+    desc: 'Unsecured high-value personal credit lines designed for bespoke interior staging, Italian marble upgrades, furnishings, and emergency financial liquidity.',
+    highlights: ['Collateral-Free Disbursement', '12 to 60 Months Flexible Tenure', 'Minimal Doorstep Paperwork'],
+    category: 'Personal Finance',
+    image: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=800&q=80',
+    display_order: 3
+  },
+  {
+    id: 'cibil-desk',
+    icon_name: 'TrendingUp',
+    title: 'CIBIL Score Improvisation Desk',
+    desc: 'Professional credit health audits to help buyers elevate their credit rating above 750+. We rectify reporting discrepancies, restructure debt ratios, and secure lower interest rates.',
+    highlights: ['Credit Report Dispute Redressal', 'Debt-to-Income Optimization', 'Rate-Reduction Consulting'],
+    category: 'Credit Advisory',
+    image: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=800&q=80',
+    display_order: 4
+  },
+  {
+    id: 'banking-desk',
+    icon_name: 'FileCheck',
+    title: 'All-Loans Assistance & Banking Desk',
+    desc: 'Comprehensive, end-to-end loan coordination. From document collection and property valuation to title search and bank disbursement, our dedicated banking officers handle everything.',
+    highlights: ['100% Dedicated Relationship Manager', 'Doorstep Verification & Pickup', 'Zero Hidden Advisory Charges'],
+    category: 'Banking Concierge',
+    image: 'https://images.unsplash.com/photo-1450133064473-71024230f91b?auto=format&fit=crop&w=800&q=80',
+    display_order: 5
+  },
+  {
+    id: 'land-acquisition',
+    icon_name: 'Compass',
+    title: 'Property & Land Acquisition Advisory',
+    desc: 'Verified acquisition consulting for buyers seeking prime Jaipur real estate. We curate high-return independent floors, luxury villas, apartments, commercial suites, and freehold plots.',
+    highlights: ['Villas & Triplex Mansions', 'Apartments & Commercial Towers', 'Freehold Plots & Estate Land'],
+    category: 'Property Portfolio',
+    image: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=800&q=80',
+    display_order: 6
+  }
+];
+
 const DEFAULT_PROPERTIES = [
   ...RESIDENCES.map((res, idx) => ({
     ...res,
@@ -325,6 +388,11 @@ export const SiteDataProvider = ({ children }) => {
     return saved ? JSON.parse(saved) : DEFAULT_GALLERY;
   });
 
+  const [services, setServices] = useState(() => {
+    const saved = localStorage.getItem('arhomes_services');
+    return saved ? JSON.parse(saved) : DEFAULT_SERVICES;
+  });
+
   const [leads, setLeads] = useState(() => {
     const saved = localStorage.getItem('arhomes_leads');
     return saved ? JSON.parse(saved) : DEFAULT_LEADS;
@@ -404,6 +472,17 @@ export const SiteDataProvider = ({ children }) => {
         if (dData && dData.length > 0 && isMounted) {
           setDeals(dData);
           localStorage.setItem('arhomes_deals', JSON.stringify(dData));
+        }
+
+        // 7. Services
+        try {
+          const { data: srvData } = await supabase.from('services').select('*').order('display_order', { ascending: true });
+          if (srvData && srvData.length > 0 && isMounted) {
+            setServices(srvData);
+            localStorage.setItem('arhomes_services', JSON.stringify(srvData));
+          }
+        } catch (srvErr) {
+          // Table may not exist yet in Supabase, uses localStorage
         }
       } catch (err) {
         console.warn('Supabase fetch error, using local fallback:', err);
@@ -607,6 +686,43 @@ export const SiteDataProvider = ({ children }) => {
         await supabase.from('gallery').delete().eq('id', itemId);
       } catch (e) {
         console.error('Supabase gallery delete error:', e);
+      }
+    }
+  };
+
+  // Services CRUD
+  const saveService = async (serviceItem) => {
+    let updated;
+    const exists = services.some(s => s.id === serviceItem.id);
+    if (exists) {
+      updated = services.map(s => (s.id === serviceItem.id ? serviceItem : s));
+    } else {
+      const newItem = { ...serviceItem, id: serviceItem.id || `service-${Date.now()}` };
+      updated = [...services, newItem];
+    }
+    updated.sort((a, b) => (Number(a.display_order) || 0) - (Number(b.display_order) || 0));
+    setServices(updated);
+    localStorage.setItem('arhomes_services', JSON.stringify(updated));
+
+    if (supabase) {
+      try {
+        await supabase.from('services').upsert(serviceItem);
+      } catch (e) {
+        console.warn('Supabase service save error:', e);
+      }
+    }
+  };
+
+  const deleteService = async (serviceId) => {
+    const updated = services.filter(s => s.id !== serviceId);
+    setServices(updated);
+    localStorage.setItem('arhomes_services', JSON.stringify(updated));
+
+    if (supabase) {
+      try {
+        await supabase.from('services').delete().eq('id', serviceId);
+      } catch (e) {
+        console.warn('Supabase service delete error:', e);
       }
     }
   };
@@ -830,6 +946,7 @@ export const SiteDataProvider = ({ children }) => {
         properties,
         owners,
         gallery,
+        services,
         leads,
         deals,
         loading,
@@ -840,6 +957,8 @@ export const SiteDataProvider = ({ children }) => {
         deleteOwner,
         saveGalleryItem,
         deleteGalleryItem,
+        saveService,
+        deleteService,
         addLead,
         updateLead,
         deleteLead,

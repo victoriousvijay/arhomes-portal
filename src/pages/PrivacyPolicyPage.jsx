@@ -40,7 +40,7 @@ export const PrivacyPolicyPage = () => {
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
             {[
-              'Direct callback and scheduling of show residence visits in Jaipur.',
+              'Direct consultation and scheduling of show residence visits in Jaipur.',
               'Transmission of verified architectural floor plans and brochure PDFs.',
               'RAJ-RERA milestone tracking and construction progress updates.',
               'Loan pre-approval eligibility coordination with banking partners.'

@@ -153,7 +153,7 @@ export const ContactPage = () => {
                   <Sparkles className="w-3 h-3" /> Priority Response
                 </div>
                 <h3 className="font-serif text-2xl sm:text-3xl font-normal text-white">
-                  Request a Callback or Private Presentation
+                  Request Consultation or Private Presentation
                 </h3>
                 <p className="text-xs sm:text-sm text-gray-300 font-light mt-2">
                   Leave your requirements below and a senior relationship manager will contact you within 60 minutes.

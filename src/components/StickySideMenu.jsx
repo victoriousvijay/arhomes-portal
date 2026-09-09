@@ -25,17 +25,15 @@ export const StickySideMenu = ({ onOpenCallback }) => {
         </svg>
       </a>
 
-      {/* 2. Request a Callback Vertical Pill */}
-      <button
-        onClick={() => onOpenCallback(null)}
-        className="py-6 px-3 flex flex-col items-center gap-2 hover:bg-[#0B5B3E] transition-colors border-b border-[#205843]/60 group"
-        title="Request a Callback"
+      {/* 2. Direct Call / Advisory Desk Action */}
+      <a
+        href={`tel:${settings?.phone || BRAND.phone}`}
+        className="w-11 h-12 flex items-center justify-center hover:bg-[#0B5B3E] transition-colors border-b border-[#205843]/60 group"
+        title={`Call Advisory Desk: ${settings?.phone_display || BRAND.phoneDisplay}`}
+        aria-label="Call Advisory Desk"
       >
-        <Phone className="w-4 h-4 text-[#D4AF37] group-hover:rotate-12 transition-transform" />
-        <span className="writing-mode-vertical text-[10px] uppercase font-bold tracking-[0.25em] text-white/90 group-hover:text-[#D4AF37] transition-colors whitespace-nowrap">
-          REQUEST A CALLBACK
-        </span>
-      </button>
+        <Phone className="w-5 h-5 text-[#D4AF37] group-hover:rotate-12 transition-transform" />
+      </a>
 
       {/* 3. Instagram Button */}
       <a
