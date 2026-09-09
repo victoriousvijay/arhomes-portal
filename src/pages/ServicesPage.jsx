@@ -44,9 +44,10 @@ const SERVICES_LIST = [
 
 export const ServicesPage = ({ onOpenEnquiry }) => {
   return (
-    <div className="min-h-screen bg-black text-white">
-      {/* Header Banner */}
+    <div className="min-h-screen bg-[#F8FAFC] text-slate-900 font-sans selection:bg-[#013724] selection:text-white">
+      {/* Header Banner in Light Trustworthy Theme */}
       <PageHeader
+        theme="light"
         badge="Bespoke Resident Services"
         title="Excellence in Every"
         highlight="Detail & Service"
@@ -57,13 +58,13 @@ export const ServicesPage = ({ onOpenEnquiry }) => {
       {/* Main Services Grid */}
       <div className="max-w-[1440px] mx-auto px-6 sm:px-12 py-16 sm:py-20">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <span className="text-xs uppercase tracking-[0.25em] text-[#D4AF37] font-semibold block mb-2">
+          <span className="text-xs uppercase tracking-[0.25em] text-[#013724] font-bold block mb-2">
             End-To-End Living Experience
           </span>
-          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-normal text-white">
-            Comprehensive Property <span className="text-[#D4AF37] italic">Ecosystem</span>
+          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-normal text-slate-900">
+            Comprehensive Property <span className="text-[#013724] italic font-medium">Ecosystem</span>
           </h2>
-          <p className="text-sm text-gray-300 font-light mt-4 leading-relaxed">
+          <p className="text-sm text-slate-600 font-normal mt-4 leading-relaxed">
             We do not simply build residences — we engineer a lifetime of effortless, refined living backed by dedicated specialists.
           </p>
         </div>
@@ -74,26 +75,26 @@ export const ServicesPage = ({ onOpenEnquiry }) => {
             return (
               <div
                 key={idx}
-                className="p-8 rounded-2xl bg-[#0b1612] border border-white/10 hover:border-[#D4AF37]/50 transition-all duration-300 flex flex-col justify-between group hover:-translate-y-1 shadow-xl"
+                className="p-8 rounded-2xl bg-white border border-slate-200 hover:border-[#D4AF37] transition-all duration-300 flex flex-col justify-between group hover:-translate-y-1 shadow-sm hover:shadow-xl"
               >
                 <div>
-                  <div className="w-12 h-12 rounded-xl bg-[#013724] border border-[#205843] flex items-center justify-center text-[#D4AF37] mb-6 group-hover:scale-110 transition-transform">
-                    <IconComponent className="w-6 h-6" />
+                  <div className="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-[#013724] mb-6 group-hover:scale-110 transition-transform">
+                    <IconComponent className="w-6 h-6 text-emerald-800" />
                   </div>
 
-                  <h3 className="font-serif text-xl font-bold text-white mb-3 group-hover:text-[#D4AF37] transition-colors">
+                  <h3 className="font-serif text-xl font-bold text-slate-900 mb-3 group-hover:text-[#013724] transition-colors">
                     {svc.title}
                   </h3>
 
-                  <p className="text-xs text-gray-300 font-light leading-relaxed mb-6">
+                  <p className="text-xs text-slate-600 font-normal leading-relaxed mb-6">
                     {svc.desc}
                   </p>
                 </div>
 
-                <div className="pt-5 border-t border-white/10 space-y-2">
+                <div className="pt-5 border-t border-slate-100 space-y-2">
                   {svc.benefits.map((b, bIdx) => (
-                    <div key={bIdx} className="flex items-center gap-2 text-xs text-gray-300">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-[#D4AF37] shrink-0" />
+                    <div key={bIdx} className="flex items-center gap-2 text-xs text-slate-700 bg-slate-50 border border-slate-100 rounded-lg px-2.5 py-1.5 font-medium">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
                       <span>{b}</span>
                     </div>
                   ))}
@@ -104,12 +105,12 @@ export const ServicesPage = ({ onOpenEnquiry }) => {
         </div>
       </div>
 
-      {/* World-Class Amenities Section */}
-      <LuxuryAmenities />
+      {/* World-Class Amenities Section (Light Theme) */}
+      <LuxuryAmenities theme="light" />
 
       {/* Consultation Call to Action */}
       <div className="max-w-[1440px] mx-auto px-6 sm:px-12 py-20">
-        <div className="p-8 sm:p-14 rounded-3xl bg-gradient-to-r from-[#013724] via-[#012217] to-[#013724] border border-[#205843] flex flex-col lg:flex-row items-center justify-between gap-8 text-center lg:text-left">
+        <div className="p-8 sm:p-14 rounded-3xl bg-[#013724] border border-[#205843] text-white flex flex-col lg:flex-row items-center justify-between gap-8 text-center lg:text-left shadow-xl">
           <div>
             <span className="text-xs uppercase tracking-[0.25em] text-[#D4AF37] font-semibold block mb-2">
               Personalized Consultation
@@ -117,7 +118,7 @@ export const ServicesPage = ({ onOpenEnquiry }) => {
             <h3 className="font-serif text-3xl sm:text-4xl font-normal text-white mb-3">
               Need Custom Architecture or Interior Planning?
             </h3>
-            <p className="text-xs sm:text-sm text-gray-300 font-light max-w-xl">
+            <p className="text-xs sm:text-sm text-slate-300 font-light max-w-xl leading-relaxed">
               Schedule a private session with our principal design team to review structural blueprints, customization options, and tailored material catalogs.
             </p>
           </div>
@@ -131,6 +132,9 @@ export const ServicesPage = ({ onOpenEnquiry }) => {
           </button>
         </div>
       </div>
+
+      {/* Subtle light to dark transition border for footer harmony */}
+      <div className="h-12 bg-gradient-to-b from-[#F8FAFC] to-[#012217]" />
     </div>
   );
 };

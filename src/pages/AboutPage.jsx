@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { PageHeader } from '../components/PageHeader';
 import { BRAND } from '../data/projectsData';
-import { ShieldCheck, Heart, Award, Users, CheckCircle, ArrowRight, Building, Sparkles } from 'lucide-react';
+import { ShieldCheck, Heart, Award, Users, ArrowRight } from 'lucide-react';
 
 const STATS = [
   { value: '500+', label: 'Luxury Floors Delivered' },
@@ -36,9 +36,10 @@ const VALUES = [
 
 export const AboutPage = ({ onOpenEnquiry }) => {
   return (
-    <div className="min-h-screen bg-black text-white">
-      {/* Header Banner */}
+    <div className="min-h-screen bg-[#F8FAFC] text-slate-900 font-sans selection:bg-[#013724] selection:text-white">
+      {/* Header Banner in Light Trustworthy Theme */}
       <PageHeader
+        theme="light"
         badge="Our Story & Heritage"
         title="Crafting Spaces Where"
         highlight="Families Flourish"
@@ -47,27 +48,27 @@ export const AboutPage = ({ onOpenEnquiry }) => {
       />
 
       {/* Philosophy Section */}
-      <div className="max-w-[1440px] mx-auto px-6 sm:px-12 py-16 sm:py-24 border-b border-white/10">
+      <div className="max-w-[1440px] mx-auto px-6 sm:px-12 py-16 sm:py-24 border-b border-slate-200">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           <div>
-            <span className="text-xs uppercase tracking-[0.25em] text-[#D4AF37] font-semibold block mb-3">
+            <span className="text-xs uppercase tracking-[0.25em] text-[#013724] font-bold block mb-3">
               {BRAND.philosophy}
             </span>
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-normal text-white leading-tight mb-6">
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-normal text-slate-900 leading-tight mb-6">
               Where True Luxury Meets <br />
-              <span className="text-[#D4AF37] italic">Family Warmth</span>
+              <span className="text-[#013724] italic font-medium">Family Warmth</span>
             </h2>
-            <p className="text-sm sm:text-base text-gray-300 font-light leading-relaxed mb-6">
+            <p className="text-sm sm:text-base text-slate-600 font-normal leading-relaxed mb-6">
               {BRAND.philosophyText}
             </p>
-            <p className="text-sm text-gray-400 font-light leading-relaxed mb-8">
+            <p className="text-sm text-slate-500 font-normal leading-relaxed mb-8">
               Whether it is the gentle morning sunlight filtering across three open facades in Civil Lines, or the expansive panoramic sunset from a terrace residence in Vaishali Nagar and C-Scheme, Jaipur — AR Homes builds residences where everyday life feels elevated and peaceful.
             </p>
 
             <div className="flex flex-wrap gap-4">
               <Link
                 to="/buy"
-                className="px-6 py-3 bg-[#D4AF37] text-[#013724] rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-white transition-all shadow-lg inline-flex items-center gap-2"
+                className="px-6 py-3.5 bg-[#013724] text-white rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-[#D4AF37] hover:text-[#013724] transition-all shadow-md inline-flex items-center gap-2"
               >
                 <span>Explore Residences</span>
                 <ArrowRight className="w-4 h-4" />
@@ -75,7 +76,7 @@ export const AboutPage = ({ onOpenEnquiry }) => {
               <button
                 type="button"
                 onClick={() => onOpenEnquiry && onOpenEnquiry(null)}
-                className="px-6 py-3 border border-white/20 text-white rounded-xl text-xs font-semibold uppercase tracking-wider hover:bg-white/10 transition-colors cursor-pointer"
+                className="px-6 py-3.5 border border-slate-300 text-slate-800 bg-white rounded-xl text-xs font-semibold uppercase tracking-wider hover:bg-slate-100 transition-colors cursor-pointer shadow-sm"
               >
                 Schedule Private Tour
               </button>
@@ -83,21 +84,21 @@ export const AboutPage = ({ onOpenEnquiry }) => {
           </div>
 
           <div className="relative">
-            <div className="aspect-[4/3] rounded-3xl overflow-hidden border border-white/15 shadow-2xl relative">
+            <div className="aspect-[4/3] rounded-3xl overflow-hidden border border-slate-200 shadow-xl relative">
               <img
                 src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=85"
                 alt="AR Homes Architecture"
                 className="w-full h-full object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
             </div>
 
-            {/* Floating Quote Badge */}
-            <div className="absolute -bottom-8 -left-4 sm:left-8 bg-[#013724]/95 backdrop-blur-xl border border-[#205843] p-6 rounded-2xl shadow-2xl max-w-sm">
-              <p className="font-serif text-sm italic text-white mb-2">
+            {/* Floating Quote Badge in Trustworthy Light Styling */}
+            <div className="absolute -bottom-8 -left-4 sm:left-8 bg-white/95 backdrop-blur-xl border border-slate-200 p-6 rounded-2xl shadow-xl max-w-sm">
+              <p className="font-serif text-sm italic text-slate-800 mb-2 leading-relaxed">
                 "Quality is not an accident. It is always the result of sincere intention, intelligent direction, and skillful execution."
               </p>
-              <span className="text-[10px] uppercase tracking-widest text-[#D4AF37] font-semibold block">
+              <span className="text-[10px] uppercase tracking-widest text-[#013724] font-bold block">
                 AR Homes Leadership
               </span>
             </div>
@@ -106,14 +107,14 @@ export const AboutPage = ({ onOpenEnquiry }) => {
       </div>
 
       {/* Stats Counter Row */}
-      <div className="bg-[#012217] border-b border-[#205843]/60 py-16">
+      <div className="bg-white border-b border-slate-200 py-16 shadow-sm">
         <div className="max-w-[1440px] mx-auto px-6 sm:px-12 grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
           {STATS.map((st, sIdx) => (
             <div key={sIdx} className="space-y-2">
-              <span className="font-serif text-3xl sm:text-5xl font-bold text-[#D4AF37] block">
+              <span className="font-serif text-3xl sm:text-5xl font-bold text-[#013724] block">
                 {st.value}
               </span>
-              <span className="text-xs text-slate-300 uppercase tracking-wider font-light block max-w-[200px] mx-auto">
+              <span className="text-xs text-slate-600 uppercase tracking-wider font-semibold block max-w-[200px] mx-auto">
                 {st.label}
               </span>
             </div>
@@ -124,11 +125,11 @@ export const AboutPage = ({ onOpenEnquiry }) => {
       {/* Core Pillars / Values */}
       <div className="max-w-[1440px] mx-auto px-6 sm:px-12 py-20 sm:py-28">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <span className="text-xs uppercase tracking-[0.25em] text-[#D4AF37] font-semibold block mb-2">
+          <span className="text-xs uppercase tracking-[0.25em] text-[#013724] font-bold block mb-2">
             Our Core Principles
           </span>
-          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-normal text-white">
-            Built with Integrity, <span className="text-[#D4AF37] italic">Loved by Families</span>
+          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-normal text-slate-900">
+            Built with Integrity, <span className="text-[#013724] italic font-medium">Loved by Families</span>
           </h2>
         </div>
 
@@ -138,16 +139,16 @@ export const AboutPage = ({ onOpenEnquiry }) => {
             return (
               <div
                 key={vIdx}
-                className="p-8 rounded-2xl bg-[#0b1612] border border-white/10 hover:border-[#D4AF37]/50 transition-all duration-300 flex flex-col justify-between shadow-xl group hover:-translate-y-1"
+                className="p-8 rounded-2xl bg-white border border-slate-200 hover:border-[#D4AF37] transition-all duration-300 flex flex-col justify-between shadow-sm hover:shadow-xl group hover:-translate-y-1"
               >
                 <div>
-                  <div className="w-12 h-12 rounded-xl bg-[#013724] border border-[#205843] flex items-center justify-center text-[#D4AF37] mb-6 group-hover:scale-110 transition-transform">
-                    <IconComp className="w-6 h-6" />
+                  <div className="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-[#013724] mb-6 group-hover:scale-110 transition-transform">
+                    <IconComp className="w-6 h-6 text-emerald-800" />
                   </div>
-                  <h3 className="font-serif text-xl font-bold text-white mb-3 group-hover:text-[#D4AF37] transition-colors">
+                  <h3 className="font-serif text-xl font-bold text-slate-900 mb-3 group-hover:text-[#013724] transition-colors">
                     {val.title}
                   </h3>
-                  <p className="text-xs text-gray-300 font-light leading-relaxed">
+                  <p className="text-xs text-slate-600 font-normal leading-relaxed">
                     {val.desc}
                   </p>
                 </div>
@@ -156,6 +157,9 @@ export const AboutPage = ({ onOpenEnquiry }) => {
           })}
         </div>
       </div>
+
+      {/* Subtle light to dark transition border for footer harmony */}
+      <div className="h-12 bg-gradient-to-b from-[#F8FAFC] to-[#012217]" />
     </div>
   );
 };
