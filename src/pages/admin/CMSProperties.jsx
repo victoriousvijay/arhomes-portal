@@ -194,39 +194,39 @@ export const CMSProperties = () => {
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-12">
       {/* Top Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-5">
         <div>
-          <div className="flex items-center gap-2 text-xs uppercase tracking-widest text-[#D4AF37] font-semibold">
-            <Building2 className="w-4 h-4" />
+          <div className="flex items-center gap-2 text-xs uppercase tracking-widest text-[#013724] font-bold">
+            <Building2 className="w-4 h-4 text-[#D4AF37]" />
             <span>Property & Land Inventory</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white mt-1">
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 mt-1">
             Properties Catalog
           </h1>
-          <p className="text-xs sm:text-sm text-gray-400 mt-1">
-            Manage your real estate listings, photos, pricing, and showcase them on the Home Page or Buy Carousel.
+          <p className="text-xs sm:text-sm text-slate-500 mt-1">
+            Manage real estate listings, photos, pricing, and placement on Home Page or Buy Carousel.
           </p>
         </div>
 
         <button
           onClick={openNewModal}
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#aa8c2c] text-[#013724] font-bold text-xs shadow-lg shadow-[#D4AF37]/20 hover:brightness-110 transition-all cursor-pointer self-start sm:self-auto"
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#013724] hover:bg-[#024d33] text-white font-bold text-xs shadow-md transition-all cursor-pointer self-start sm:self-auto"
         >
-          <Plus className="w-4 h-4" />
+          <Plus className="w-4 h-4 text-[#D4AF37]" />
           <span>+ Add Property</span>
         </button>
       </div>
 
       {/* Filter & Search Bar */}
-      <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 p-3 bg-white/5 border border-white/10 rounded-2xl">
+      <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 p-3.5 bg-white border border-slate-200 rounded-2xl shadow-sm">
         <div className="relative flex-1">
-          <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
+          <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
           <input
             type="text"
             placeholder="Search by property name, location, or RERA ID..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 bg-black/40 border border-white/10 rounded-xl text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#D4AF37]"
+            className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#013724] focus:bg-white"
           />
         </div>
 
@@ -235,8 +235,8 @@ export const CMSProperties = () => {
             onClick={() => setSelectedCategory('All')}
             className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap cursor-pointer transition-all ${
               selectedCategory === 'All'
-                ? 'bg-[#013724] text-[#D4AF37] border border-[#D4AF37]/40'
-                : 'bg-black/30 text-gray-400 hover:text-white'
+                ? 'bg-[#013724] text-white shadow-sm'
+                : 'bg-slate-100 text-slate-600 hover:text-slate-900 hover:bg-slate-200'
             }`}
           >
             All ({properties.length})
@@ -247,8 +247,8 @@ export const CMSProperties = () => {
               onClick={() => setSelectedCategory(cat.id)}
               className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap cursor-pointer transition-all ${
                 selectedCategory === cat.id
-                  ? 'bg-[#013724] text-[#D4AF37] border border-[#D4AF37]/40'
-                  : 'bg-black/30 text-gray-400 hover:text-white'
+                  ? 'bg-[#013724] text-white shadow-sm'
+                  : 'bg-slate-100 text-slate-600 hover:text-slate-900 hover:bg-slate-200'
               }`}
             >
               {cat.label}
@@ -260,20 +260,20 @@ export const CMSProperties = () => {
       {/* Properties Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredProperties.length === 0 ? (
-          <div className="col-span-full py-16 text-center text-gray-400 bg-white/5 rounded-2xl border border-white/10">
-            <Building2 className="w-10 h-10 mx-auto text-gray-600 mb-2" />
-            <p className="text-sm font-semibold">No property listings found</p>
-            <p className="text-xs text-gray-500 mt-1">Try resetting search filters or click "+ Add Property"</p>
+          <div className="col-span-full py-16 text-center text-slate-500 bg-white rounded-2xl border border-slate-200 shadow-sm">
+            <Building2 className="w-10 h-10 mx-auto text-slate-400 mb-2" />
+            <p className="text-sm font-semibold text-slate-800">No property listings found</p>
+            <p className="text-xs text-slate-500 mt-1">Try resetting search filters or click "+ Add Property"</p>
           </div>
         ) : (
           filteredProperties.map((prop) => {
             return (
               <div 
                 key={prop.id}
-                className="rounded-2xl border border-white/10 bg-[#091a13]/90 overflow-hidden shadow-xl flex flex-col group hover:border-[#D4AF37]/40 transition-all"
+                className="rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-sm hover:shadow-md flex flex-col group transition-all"
               >
                 {/* Image */}
-                <div className="relative h-48 w-full overflow-hidden bg-black/40">
+                <div className="relative h-48 w-full overflow-hidden bg-slate-100">
                   <img
                     src={formatGoogleDriveUrl(prop.image)}
                     alt={prop.title}
@@ -282,15 +282,15 @@ export const CMSProperties = () => {
                       e.target.src = 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80';
                     }}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#06120c] via-transparent to-black/40" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/20" />
 
                   {/* Top Badges */}
                   <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
-                    <span className="px-2 py-0.5 rounded-full bg-black/70 backdrop-blur-md border border-white/20 text-[10px] text-[#D4AF37] font-bold uppercase">
+                    <span className="px-2.5 py-0.5 rounded-full bg-white/95 backdrop-blur-md text-[10px] text-[#013724] font-bold uppercase shadow-sm">
                       {prop.category || 'Residential'}
                     </span>
                     {prop.status && (
-                      <span className="px-2 py-0.5 rounded-full bg-emerald-500/80 backdrop-blur-md text-[10px] text-white font-semibold">
+                      <span className="px-2.5 py-0.5 rounded-full bg-emerald-600/90 backdrop-blur-md text-[10px] text-white font-semibold shadow-sm">
                         {prop.status}
                       </span>
                     )}
@@ -305,41 +305,41 @@ export const CMSProperties = () => {
                 </div>
 
                 {/* Content */}
-                <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between space-y-4">
+                <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
                   <div>
-                    <h3 className="text-base font-bold text-white line-clamp-1 group-hover:text-[#D4AF37] transition-colors">
+                    <h3 className="text-base font-bold text-slate-900 line-clamp-1 group-hover:text-[#013724] transition-colors">
                       {prop.title}
                     </h3>
-                    <p className="text-xs text-gray-400 mt-1 line-clamp-1">
+                    <p className="text-xs text-slate-500 mt-1 line-clamp-1">
                       📍 {prop.location}
                     </p>
                     {prop.builtForm && (
-                      <p className="text-[11px] text-gray-300 font-medium mt-1">
+                      <p className="text-[11px] text-slate-600 font-medium mt-1">
                         🏛️ {prop.builtForm}
                       </p>
                     )}
                     {prop.rera && (
-                      <div className="text-[10px] font-mono text-emerald-400 mt-1">
+                      <div className="text-[10px] font-mono text-[#013724] font-semibold mt-1">
                         RERA: {prop.rera}
                       </div>
                     )}
                   </div>
 
                   {/* Page Visibility Controls */}
-                  <div className="pt-3 border-t border-white/10 space-y-2">
-                    <div className="text-[10px] uppercase tracking-wider text-[#D4AF37] font-bold">
+                  <div className="pt-3 border-t border-slate-100 space-y-2">
+                    <div className="text-[10px] uppercase tracking-wider text-slate-500 font-bold">
                       Website Placement:
                     </div>
 
-                    <div className="flex items-center justify-between p-2 rounded-xl bg-black/40 border border-white/5 text-xs">
+                    <div className="flex items-center justify-between p-2 rounded-xl bg-slate-50 border border-slate-200 text-xs">
                       <div className="flex items-center gap-2">
-                        <Home className="w-3.5 h-3.5 text-gray-400" />
-                        <span className="text-gray-300 text-[11px]">Home Page Listing</span>
+                        <Home className="w-3.5 h-3.5 text-slate-500" />
+                        <span className="text-slate-700 text-[11px] font-medium">Home Page Listing</span>
                       </div>
                       <button
                         onClick={() => toggleFeaturedHome(prop)}
                         className={`w-9 h-5 rounded-full transition-colors relative cursor-pointer ${
-                          prop.is_featured_home ? 'bg-emerald-500' : 'bg-white/10'
+                          prop.is_featured_home ? 'bg-[#013724]' : 'bg-slate-300'
                         }`}
                         title="Toggle visibility on home page"
                       >
@@ -351,15 +351,15 @@ export const CMSProperties = () => {
                       </button>
                     </div>
 
-                    <div className="flex items-center justify-between p-2 rounded-xl bg-black/40 border border-white/5 text-xs">
+                    <div className="flex items-center justify-between p-2 rounded-xl bg-slate-50 border border-slate-200 text-xs">
                       <div className="flex items-center gap-2">
-                        <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                        <span className="text-gray-300 text-[11px]">Buy Hero Banner</span>
+                        <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+                        <span className="text-slate-700 text-[11px] font-medium">Buy Hero Banner</span>
                       </div>
                       <button
                         onClick={() => toggleHeroCarousel(prop)}
                         className={`w-9 h-5 rounded-full transition-colors relative cursor-pointer ${
-                          prop.is_hero_carousel ? 'bg-[#D4AF37]' : 'bg-white/10'
+                          prop.is_hero_carousel ? 'bg-[#D4AF37]' : 'bg-slate-300'
                         }`}
                         title="Toggle inclusion in Buy page top carousel"
                       >
@@ -373,12 +373,12 @@ export const CMSProperties = () => {
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="pt-3 border-t border-white/10 flex items-center justify-between">
+                  <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
                     <button
                       onClick={() => openEditModal(prop)}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-semibold transition-all cursor-pointer"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold transition-all cursor-pointer"
                     >
-                      <Edit3 className="w-3.5 h-3.5 text-[#D4AF37]" />
+                      <Edit3 className="w-3.5 h-3.5 text-[#013724]" />
                       <span>Edit Property</span>
                     </button>
 
@@ -388,7 +388,7 @@ export const CMSProperties = () => {
                           deleteProperty(prop.id);
                         }
                       }}
-                      className="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-500/25 text-rose-300 transition-all cursor-pointer"
+                      className="p-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-600 transition-all cursor-pointer"
                       title="Delete Property"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
@@ -401,322 +401,328 @@ export const CMSProperties = () => {
         )}
       </div>
 
-      {/* Simplified, Non-Tech Friendly Modal */}
+      {/* MODAL WITH INTERNAL SCROLL IN LIGHT THEME */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md overflow-y-auto p-4 sm:p-6">
-          <div className="min-h-full flex items-center justify-center py-6 sm:py-10">
-            <div className="bg-[#071710] border border-white/20 rounded-3xl w-full max-w-xl p-6 sm:p-7 shadow-2xl space-y-5 my-auto animate-in fade-in zoom-in-95">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 animate-in fade-in duration-200">
+          <div className="bg-white border border-slate-200 rounded-3xl w-full max-w-xl max-h-[88vh] flex flex-col shadow-2xl overflow-hidden my-auto animate-in zoom-in-95 duration-200">
             
-            {/* Modal Header */}
-            <div className="flex items-center justify-between border-b border-white/10 pb-4">
+            {/* Pinned Modal Header */}
+            <div className="shrink-0 px-6 py-4 border-b border-slate-200 flex items-center justify-between bg-white">
               <div>
-                <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                  <Building2 className="w-5 h-5 text-[#D4AF37]" />
+                <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                  <Building2 className="w-5 h-5 text-[#013724]" />
                   <span>{editingPropId ? 'Edit Property Details' : 'Add New Property Listing'}</span>
                 </h3>
-                <p className="text-xs text-gray-400 mt-0.5">
+                <p className="text-xs text-slate-500 mt-0.5">
                   Fill in the details below to publish or update this listing on your website.
                 </p>
               </div>
               <button 
                 type="button"
                 onClick={() => setIsModalOpen(false)}
-                className="p-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white cursor-pointer"
+                className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900 cursor-pointer transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4 text-xs">
+            {/* Form Container */}
+            <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0 overflow-hidden">
               
-              {/* Step 1: Category Selector (Visual Buttons) */}
-              <div>
-                <label className="block text-gray-300 font-semibold mb-1.5">
-                  Property Category *
-                </label>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                  {CATEGORIES.map((cat) => {
-                    const isSelected = formData.category === cat.id;
-                    return (
+              {/* INTERNAL SCROLLABLE FORM BODY */}
+              <div className="flex-1 overflow-y-auto px-6 py-5 space-y-4 text-xs">
+                
+                {/* Step 1: Category Selector (Visual Buttons) */}
+                <div>
+                  <label className="block text-slate-700 font-semibold mb-1.5">
+                    Property Category *
+                  </label>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                    {CATEGORIES.map((cat) => {
+                      const isSelected = formData.category === cat.id;
+                      return (
+                        <button
+                          key={cat.id}
+                          type="button"
+                          onClick={() => setFormData({ ...formData, category: cat.id })}
+                          className={`p-2.5 rounded-xl text-left font-semibold text-xs border transition-all cursor-pointer ${
+                            isSelected
+                              ? 'bg-[#013724] border-[#013724] text-white shadow-sm'
+                              : 'bg-slate-50 border-slate-200 text-slate-700 hover:border-slate-300 hover:bg-slate-100'
+                          }`}
+                        >
+                          <div className="text-[11px] leading-tight">{cat.label}</div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Step 2: Title & Price */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-slate-700 font-semibold mb-1">
+                      Property Name / Title *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. Royal Heritage Villa"
+                      value={formData.title}
+                      onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                      className="w-full px-3 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:border-[#013724]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-slate-700 font-semibold mb-1">
+                      Price (₹) *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. ₹3.50 Cr or ₹85 Lakhs"
+                      value={formData.price}
+                      onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                      className="w-full px-3 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:border-[#013724]"
+                    />
+                  </div>
+                </div>
+
+                {/* Step 3: Location */}
+                <div>
+                  <label className="block text-slate-700 font-semibold mb-1">
+                    Location / Address in Jaipur *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. Civil Lines / C-Scheme / Mansarovar, Jaipur"
+                    value={formData.location}
+                    onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                    className="w-full px-3 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:border-[#013724]"
+                  />
+                </div>
+
+                {/* Step 4: Photo Selection */}
+                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-slate-800 font-bold flex items-center gap-1.5">
+                      <Upload className="w-3.5 h-3.5 text-[#013724]" />
+                      <span>Property Photo *</span>
+                    </span>
+
+                    <div className="flex gap-1 p-0.5 bg-slate-200 rounded-lg">
                       <button
-                        key={cat.id}
                         type="button"
-                        onClick={() => setFormData({ ...formData, category: cat.id })}
-                        className={`p-2.5 rounded-xl text-left font-semibold text-xs border transition-all cursor-pointer ${
-                          isSelected
-                            ? 'bg-[#013724] border-[#D4AF37] text-[#D4AF37] shadow-md shadow-[#013724]'
-                            : 'bg-black/40 border-white/10 text-gray-300 hover:border-white/30'
+                        onClick={() => setImageInputMode('upload')}
+                        className={`px-2.5 py-1 rounded text-[10px] font-semibold cursor-pointer transition-colors ${
+                          imageInputMode === 'upload' ? 'bg-[#013724] text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'
                         }`}
                       >
-                        <div className="text-[11px] leading-tight">{cat.label}</div>
+                        Upload File
                       </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Step 2: Title & Price */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-gray-300 font-semibold mb-1">
-                    Property Name / Title *
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="e.g. Royal Heritage Villa"
-                    value={formData.title}
-                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                    className="w-full px-3 py-2.5 bg-black/40 border border-white/15 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-[#D4AF37]"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-gray-300 font-semibold mb-1">
-                    Price (₹) *
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="e.g. ₹3.50 Cr or ₹85 Lakhs"
-                    value={formData.price}
-                    onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                    className="w-full px-3 py-2.5 bg-black/40 border border-white/15 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-[#D4AF37]"
-                  />
-                </div>
-              </div>
-
-              {/* Step 3: Location */}
-              <div>
-                <label className="block text-gray-300 font-semibold mb-1">
-                  Location / Address in Jaipur *
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g. Civil Lines / C-Scheme / Mansarovar, Jaipur"
-                  value={formData.location}
-                  onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                  className="w-full px-3 py-2.5 bg-black/40 border border-white/15 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-[#D4AF37]"
-                />
-              </div>
-
-              {/* Step 4: Photo Selection */}
-              <div className="p-3.5 rounded-2xl bg-black/50 border border-white/10 space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-200 font-bold flex items-center gap-1.5">
-                    <Upload className="w-3.5 h-3.5 text-[#D4AF37]" />
-                    <span>Property Photo *</span>
-                  </span>
-
-                  <div className="flex gap-1 p-0.5 bg-white/10 rounded-lg">
-                    <button
-                      type="button"
-                      onClick={() => setImageInputMode('upload')}
-                      className={`px-2.5 py-1 rounded text-[10px] font-semibold cursor-pointer ${
-                        imageInputMode === 'upload' ? 'bg-[#013724] text-[#D4AF37]' : 'text-gray-400 hover:text-white'
-                      }`}
-                    >
-                      Upload File
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setImageInputMode('url')}
-                      className={`px-2.5 py-1 rounded text-[10px] font-semibold cursor-pointer ${
-                        imageInputMode === 'url' ? 'bg-[#013724] text-[#D4AF37]' : 'text-gray-400 hover:text-white'
-                      }`}
-                    >
-                      Drive / Web Link
-                    </button>
-                  </div>
-                </div>
-
-                {imageInputMode === 'upload' ? (
-                  <div>
-                    <input
-                      type="file"
-                      ref={fileInputRef}
-                      accept="image/*"
-                      onChange={handleFileUpload}
-                      className="hidden"
-                    />
-                    <button
-                      type="button"
-                      disabled={isUploading}
-                      onClick={() => fileInputRef.current?.click()}
-                      className="w-full py-4 px-3 border border-dashed border-white/20 hover:border-[#D4AF37] rounded-xl flex flex-col items-center justify-center gap-1.5 bg-white/5 hover:bg-white/10 transition-all cursor-pointer"
-                    >
-                      <Upload className="w-5 h-5 text-[#D4AF37]" />
-                      <span className="text-xs font-semibold text-gray-200">
-                        {isUploading ? 'Uploading image...' : 'Click to select photo from computer'}
-                      </span>
-                      <span className="text-[10px] text-gray-500">JPG, PNG, or WEBP photo</span>
-                    </button>
-                  </div>
-                ) : (
-                  <div>
-                    <input
-                      type="url"
-                      placeholder="Paste Google Drive link or image URL..."
-                      value={formData.image}
-                      onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                      className="w-full px-3 py-2 bg-black/40 border border-white/15 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-[#D4AF37]"
-                    />
-                    <p className="text-[10px] text-gray-400 mt-1">
-                      💡 Google Drive links are automatically converted into direct photos.
-                    </p>
-                  </div>
-                )}
-
-                {/* Instant Photo Preview */}
-                {formData.image && (
-                  <div className="flex items-center gap-3 p-2 rounded-xl bg-black/60 border border-white/10">
-                    <img
-                      src={formatGoogleDriveUrl(formData.image)}
-                      alt="Preview"
-                      className="w-16 h-12 object-cover rounded-lg border border-white/15"
-                    />
-                    <div className="flex-1 min-w-0">
-                      <div className="text-[11px] text-emerald-400 font-semibold flex items-center gap-1">
-                        <Check className="w-3.5 h-3.5" />
-                        <span>Photo Ready</span>
-                      </div>
-                      <div className="text-[10px] text-gray-400 truncate">{formData.image}</div>
+                      <button
+                        type="button"
+                        onClick={() => setImageInputMode('url')}
+                        className={`px-2.5 py-1 rounded text-[10px] font-semibold cursor-pointer transition-colors ${
+                          imageInputMode === 'url' ? 'bg-[#013724] text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'
+                        }`}
+                      >
+                        Drive / Web Link
+                      </button>
                     </div>
                   </div>
-                )}
-              </div>
 
-              {/* Step 5: Website Placement Controls */}
-              <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 space-y-2">
-                <div className="text-gray-300 font-bold mb-2">Display Settings:</div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <label className="flex items-center gap-2.5 cursor-pointer select-none p-2 rounded-xl bg-black/30 border border-white/5">
-                    <input
-                      type="checkbox"
-                      checked={formData.is_featured_home}
-                      onChange={(e) => setFormData({ ...formData, is_featured_home: e.target.checked })}
-                      className="rounded text-[#D4AF37] focus:ring-0 w-4 h-4 cursor-pointer"
-                    />
-                    <span className="text-gray-300 text-xs">Show on Home Page</span>
-                  </label>
-
-                  <label className="flex items-center gap-2.5 cursor-pointer select-none p-2 rounded-xl bg-black/30 border border-white/5">
-                    <input
-                      type="checkbox"
-                      checked={formData.is_hero_carousel}
-                      onChange={(e) => setFormData({ ...formData, is_hero_carousel: e.target.checked })}
-                      className="rounded text-[#D4AF37] focus:ring-0 w-4 h-4 cursor-pointer"
-                    />
-                    <span className="text-gray-300 text-xs">Show in Buy Hero Carousel</span>
-                  </label>
-                </div>
-              </div>
-
-              {/* Step 6: Optional / Advanced Settings Accordion (Collapsed by default) */}
-              <div className="border border-white/10 rounded-2xl overflow-hidden">
-                <button
-                  type="button"
-                  onClick={() => setShowAdvanced(!showAdvanced)}
-                  className="w-full flex items-center justify-between p-3 bg-white/[0.03] hover:bg-white/[0.06] text-left text-xs font-semibold text-gray-300 transition-colors cursor-pointer"
-                >
-                  <span className="flex items-center gap-2">
-                    <SlidersHorizontal className="w-3.5 h-3.5 text-[#D4AF37]" />
-                    <span>More Optional Details (RERA, Overview, Status, NRI Price)</span>
-                  </span>
-                  <span className="text-gray-500 font-bold">{showAdvanced ? '▲ Hide' : '▼ Show'}</span>
-                </button>
-
-                {showAdvanced && (
-                  <div className="p-4 bg-black/30 space-y-3.5 border-t border-white/10">
+                  {imageInputMode === 'upload' ? (
                     <div>
-                      <label className="block text-gray-300 font-medium mb-1">
-                        Short Description / Overview
-                      </label>
-                      <textarea
-                        rows={2}
-                        placeholder="Brief 1-2 sentence description of luxury features, flooring, layout..."
-                        value={formData.overview}
-                        onChange={(e) => setFormData({ ...formData, overview: e.target.value })}
-                        className="w-full px-3 py-2 bg-black/40 border border-white/15 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-[#D4AF37]"
+                      <input
+                        type="file"
+                        ref={fileInputRef}
+                        accept="image/*"
+                        onChange={handleFileUpload}
+                        className="hidden"
                       />
+                      <button
+                        type="button"
+                        disabled={isUploading}
+                        onClick={() => fileInputRef.current?.click()}
+                        className="w-full py-4 px-3 border-2 border-dashed border-slate-300 hover:border-[#013724] rounded-xl flex flex-col items-center justify-center gap-1.5 bg-white hover:bg-slate-50 transition-all cursor-pointer"
+                      >
+                        <Upload className="w-5 h-5 text-[#013724]" />
+                        <span className="text-xs font-semibold text-slate-700">
+                          {isUploading ? 'Uploading image...' : 'Click to select photo from computer'}
+                        </span>
+                        <span className="text-[10px] text-slate-500">JPG, PNG, or WEBP photo</span>
+                      </button>
                     </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      <div>
-                        <label className="block text-gray-300 font-medium mb-1">Built Form / Configuration</label>
-                        <input
-                          type="text"
-                          placeholder="e.g. 4 BHK Independent Villa"
-                          value={formData.builtForm}
-                          onChange={(e) => setFormData({ ...formData, builtForm: e.target.value })}
-                          className="w-full px-3 py-2 bg-black/40 border border-white/15 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-[#D4AF37]"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-gray-300 font-medium mb-1">Construction Status</label>
-                        <select
-                          value={formData.status}
-                          onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                          className="w-full px-3 py-2 bg-black/40 border border-white/15 rounded-xl text-white focus:outline-none focus:border-[#D4AF37]"
-                        >
-                          <option value="Ready to Move">Ready to Move</option>
-                          <option value="Exclusive Launch">Exclusive Launch</option>
-                          <option value="Under Construction">Under Construction</option>
-                          <option value="Ready for Registry">Ready for Registry</option>
-                        </select>
-                      </div>
+                  ) : (
+                    <div>
+                      <input
+                        type="url"
+                        placeholder="Paste Google Drive link or image URL..."
+                        value={formData.image}
+                        onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+                        className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#013724]"
+                      />
+                      <p className="text-[10px] text-slate-500 mt-1">
+                        💡 Google Drive links are automatically converted into direct photos.
+                      </p>
                     </div>
+                  )}
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      <div>
-                        <label className="block text-gray-300 font-medium mb-1">RERA Number</label>
-                        <input
-                          type="text"
-                          placeholder="e.g. RAJ/P/2026/001"
-                          value={formData.rera}
-                          onChange={(e) => setFormData({ ...formData, rera: e.target.value })}
-                          className="w-full px-3 py-2 bg-black/40 border border-white/15 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-[#D4AF37]"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-gray-300 font-medium mb-1">Price USD (NRI International)</label>
-                        <input
-                          type="text"
-                          placeholder="e.g. $420,000"
-                          value={formData.priceUsd}
-                          onChange={(e) => setFormData({ ...formData, priceUsd: e.target.value })}
-                          className="w-full px-3 py-2 bg-black/40 border border-white/15 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-[#D4AF37]"
-                        />
+                  {/* Instant Photo Preview */}
+                  {formData.image && (
+                    <div className="flex items-center gap-3 p-2 rounded-xl bg-white border border-slate-200">
+                      <img
+                        src={formatGoogleDriveUrl(formData.image)}
+                        alt="Preview"
+                        className="w-16 h-12 object-cover rounded-lg border border-slate-200"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <div className="text-[11px] text-emerald-700 font-semibold flex items-center gap-1">
+                          <Check className="w-3.5 h-3.5" />
+                          <span>Photo Ready</span>
+                        </div>
+                        <div className="text-[10px] text-slate-500 truncate">{formData.image}</div>
                       </div>
                     </div>
+                  )}
+                </div>
+
+                {/* Step 5: Website Placement Controls */}
+                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                  <div className="text-slate-800 font-bold mb-2">Display Settings:</div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <label className="flex items-center gap-2.5 cursor-pointer select-none p-2.5 rounded-xl bg-white border border-slate-200 shadow-sm">
+                      <input
+                        type="checkbox"
+                        checked={formData.is_featured_home}
+                        onChange={(e) => setFormData({ ...formData, is_featured_home: e.target.checked })}
+                        className="rounded text-[#013724] focus:ring-0 w-4 h-4 cursor-pointer"
+                      />
+                      <span className="text-slate-800 text-xs font-medium">Show on Home Page</span>
+                    </label>
+
+                    <label className="flex items-center gap-2.5 cursor-pointer select-none p-2.5 rounded-xl bg-white border border-slate-200 shadow-sm">
+                      <input
+                        type="checkbox"
+                        checked={formData.is_hero_carousel}
+                        onChange={(e) => setFormData({ ...formData, is_hero_carousel: e.target.checked })}
+                        className="rounded text-[#013724] focus:ring-0 w-4 h-4 cursor-pointer"
+                      />
+                      <span className="text-slate-800 text-xs font-medium">Show in Buy Hero Carousel</span>
+                    </label>
                   </div>
-                )}
+                </div>
+
+                {/* Step 6: Optional / Advanced Settings Accordion */}
+                <div className="border border-slate-200 rounded-2xl overflow-hidden bg-white">
+                  <button
+                    type="button"
+                    onClick={() => setShowAdvanced(!showAdvanced)}
+                    className="w-full flex items-center justify-between p-3.5 bg-slate-50 hover:bg-slate-100 text-left text-xs font-semibold text-slate-700 transition-colors cursor-pointer"
+                  >
+                    <span className="flex items-center gap-2">
+                      <SlidersHorizontal className="w-3.5 h-3.5 text-[#013724]" />
+                      <span>More Optional Details (RERA, Overview, Status, NRI Price)</span>
+                    </span>
+                    <span className="text-slate-500 font-bold">{showAdvanced ? '▲ Hide' : '▼ Show'}</span>
+                  </button>
+
+                  {showAdvanced && (
+                    <div className="p-4 bg-slate-50/50 space-y-3.5 border-t border-slate-200">
+                      <div>
+                        <label className="block text-slate-700 font-medium mb-1">
+                          Short Description / Overview
+                        </label>
+                        <textarea
+                          rows={2}
+                          placeholder="Brief 1-2 sentence description of luxury features, flooring, layout..."
+                          value={formData.overview}
+                          onChange={(e) => setFormData({ ...formData, overview: e.target.value })}
+                          className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#013724]"
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-slate-700 font-medium mb-1">Built Form / Configuration</label>
+                          <input
+                            type="text"
+                            placeholder="e.g. 4 BHK Independent Villa"
+                            value={formData.builtForm}
+                            onChange={(e) => setFormData({ ...formData, builtForm: e.target.value })}
+                            className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#013724]"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-slate-700 font-medium mb-1">Construction Status</label>
+                          <select
+                            value={formData.status}
+                            onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+                            className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-slate-900 focus:outline-none focus:border-[#013724]"
+                          >
+                            <option value="Ready to Move">Ready to Move</option>
+                            <option value="Exclusive Launch">Exclusive Launch</option>
+                            <option value="Under Construction">Under Construction</option>
+                            <option value="Ready for Registry">Ready for Registry</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-slate-700 font-medium mb-1">RERA Number</label>
+                          <input
+                            type="text"
+                            placeholder="e.g. RAJ/P/2026/001"
+                            value={formData.rera}
+                            onChange={(e) => setFormData({ ...formData, rera: e.target.value })}
+                            className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#013724]"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-slate-700 font-medium mb-1">Price USD (NRI International)</label>
+                          <input
+                            type="text"
+                            placeholder="e.g. $420,000"
+                            value={formData.priceUsd}
+                            onChange={(e) => setFormData({ ...formData, priceUsd: e.target.value })}
+                            className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#013724]"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
               </div>
 
-              {/* Submit Buttons */}
-              <div className="flex items-center justify-end gap-3 pt-3 border-t border-white/10">
+              {/* Pinned Modal Footer */}
+              <div className="shrink-0 px-6 py-3.5 border-t border-slate-200 flex items-center justify-end gap-3 bg-slate-50">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-gray-300 font-semibold cursor-pointer"
+                  className="px-4 py-2 rounded-xl bg-white border border-slate-200 hover:bg-slate-100 text-slate-700 font-semibold cursor-pointer transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#aa8c2c] text-[#013724] font-bold shadow-lg hover:brightness-110 cursor-pointer"
+                  className="px-6 py-2 rounded-xl bg-[#013724] hover:bg-[#024d33] text-white font-bold shadow-md transition-all cursor-pointer"
                 >
                   {editingPropId ? 'Save Changes' : 'Publish Property'}
                 </button>
               </div>
+
             </form>
+
           </div>
         </div>
-      </div>
-    )}
+      )}
     </div>
   );
 };

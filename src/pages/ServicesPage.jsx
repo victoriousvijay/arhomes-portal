@@ -75,13 +75,13 @@ export const ServicesPage = ({ onOpenEnquiry }) => {
   const phoneVal = settings?.phone || BRAND.phone;
   const phoneDisplayVal = settings?.phone_display || settings?.phone || BRAND.phoneDisplay;
 
-  // Ultra-smooth video scrub with direct cursor mapping & frame queue
+  // Ultra-smooth video scrub with blob preloading & character hover interaction
   const videoRef = useRef(null);
+  const characterAreaRef = useRef(null);
   const targetProgressRef = useRef(0.25);
   const currentProgressRef = useRef(0.25);
-  const isSeekingRef = useRef(false);
-  const pendingSeekTimeRef = useRef(null);
   const rafIdRef = useRef(null);
+  const [isHovered, setIsHovered] = useState(false);
 
   // Typewriter heading & subtitle text
   const typewriterText = "How AR Homes Assists You. Whether securing competitive capital for your enterprise, improving your credit score, or acquiring prime residential land, our advisory desk guides you every step of the way.";
@@ -102,7 +102,37 @@ export const ServicesPage = ({ onOpenEnquiry }) => {
     setTimeout(() => setCopied(false), 2200);
   };
 
-  // Ultra-smooth, freely movable video mouse & touch scrub engine
+  // 1. Preload video into memory blob to eliminate network seeking latency & lag
+  useEffect(() => {
+    let active = true;
+    let blobUrl = null;
+
+    const loadVideoBlob = async () => {
+      try {
+        const res = await fetch("https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260530_042513_df96a13b-6155-4f6e-8b93-c9dee66fba08.mp4");
+        if (!res.ok) return;
+        const blob = await res.blob();
+        if (!active) return;
+        blobUrl = URL.createObjectURL(blob);
+        if (videoRef.current) {
+          const currentT = videoRef.current.currentTime;
+          videoRef.current.src = blobUrl;
+          videoRef.current.currentTime = currentT;
+        }
+      } catch (e) {
+        console.warn('Video blob caching fallback:', e);
+      }
+    };
+
+    loadVideoBlob();
+
+    return () => {
+      active = false;
+      if (blobUrl) URL.revokeObjectURL(blobUrl);
+    };
+  }, []);
+
+  // 2. Continuous silky smooth frame updater loop
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
@@ -116,66 +146,49 @@ export const ServicesPage = ({ onOpenEnquiry }) => {
 
     video.addEventListener('loadedmetadata', handleLoadedMetadata);
 
-    // Direct 1:1 cursor tracking across the screen
-    const handlePointerMove = (e) => {
-      if (!video || !video.duration) return;
-      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-      const width = window.innerWidth || 1;
-      const progress = Math.max(0, Math.min(1, clientX / width));
-      targetProgressRef.current = progress;
-    };
-
-    // Smooth continuous animation frame loop (60/120fps responsive follow)
-    const updateVideoFrame = () => {
+    const updateFrame = () => {
       if (video && video.duration) {
         const diff = targetProgressRef.current - currentProgressRef.current;
-        if (Math.abs(diff) > 0.001) {
-          currentProgressRef.current += diff * 0.35;
+        if (Math.abs(diff) > 0.0008) {
+          // Smooth exponential lerp
+          currentProgressRef.current += diff * 0.14;
           const desiredTime = Math.max(0, Math.min(video.duration, currentProgressRef.current * video.duration));
 
-          if (!isSeekingRef.current) {
-            isSeekingRef.current = true;
-            if ('fastSeek' in video) {
-              video.fastSeek(desiredTime);
-            } else {
-              video.currentTime = desiredTime;
-            }
-          } else {
-            pendingSeekTimeRef.current = desiredTime;
+          if (!video.seeking) {
+            video.currentTime = desiredTime;
           }
         }
       }
-      rafIdRef.current = requestAnimationFrame(updateVideoFrame);
+      rafIdRef.current = requestAnimationFrame(updateFrame);
     };
 
-    const handleSeeked = () => {
-      isSeekingRef.current = false;
-      if (pendingSeekTimeRef.current !== null && video && video.duration) {
-        const nextTime = pendingSeekTimeRef.current;
-        pendingSeekTimeRef.current = null;
-        isSeekingRef.current = true;
-        if ('fastSeek' in video) {
-          video.fastSeek(nextTime);
-        } else {
-          video.currentTime = nextTime;
-        }
-      }
-    };
-
-    video.addEventListener('seeked', handleSeeked);
-    window.addEventListener('mousemove', handlePointerMove, { passive: true });
-    window.addEventListener('touchmove', handlePointerMove, { passive: true });
-
-    rafIdRef.current = requestAnimationFrame(updateVideoFrame);
+    rafIdRef.current = requestAnimationFrame(updateFrame);
 
     return () => {
       if (rafIdRef.current) cancelAnimationFrame(rafIdRef.current);
       video.removeEventListener('loadedmetadata', handleLoadedMetadata);
-      video.removeEventListener('seeked', handleSeeked);
-      window.removeEventListener('mousemove', handlePointerMove);
-      window.removeEventListener('touchmove', handlePointerMove);
     };
   }, []);
+
+  // 3. Pointer handlers tied strictly to hovering OVER the robot character
+  const handleCharacterPointerMove = (e) => {
+    if (!characterAreaRef.current) return;
+    const rect = characterAreaRef.current.getBoundingClientRect();
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const localX = clientX - rect.left;
+    const progress = Math.max(0, Math.min(1, localX / rect.width));
+    targetProgressRef.current = progress;
+  };
+
+  const handleCharacterMouseEnter = () => {
+    setIsHovered(true);
+  };
+
+  const handleCharacterMouseLeave = () => {
+    setIsHovered(false);
+    // Smoothly return to center resting angle
+    targetProgressRef.current = 0.25;
+  };
 
   // Display services from CMS context
   const displayServices = services && services.length > 0 ? services : [];
@@ -198,6 +211,29 @@ export const ServicesPage = ({ onOpenEnquiry }) => {
 
         {/* Soft Vignette Overlay for Crisp Typography Legibility */}
         <div className="absolute inset-0 bg-gradient-to-t from-[#F8FAFC] via-[#F8FAFC]/30 to-transparent pointer-events-none z-[1]" />
+
+        {/* Interactive Character Zone (Triggers strictly when mouse is OVER the robot character) */}
+        <div
+          ref={characterAreaRef}
+          onMouseEnter={handleCharacterMouseEnter}
+          onMouseMove={handleCharacterPointerMove}
+          onMouseLeave={handleCharacterMouseLeave}
+          onTouchStart={handleCharacterMouseEnter}
+          onTouchMove={handleCharacterPointerMove}
+          onTouchEnd={handleCharacterMouseLeave}
+          className="absolute inset-y-0 right-0 w-full md:w-3/5 lg:w-1/2 z-10 cursor-ew-resize flex items-end justify-end p-6 sm:p-10 pointer-events-auto"
+          title="Move mouse horizontally to look around"
+        >
+          {/* Subtle indicator pill when hovering */}
+          <div 
+            className={`transition-all duration-300 px-3.5 py-1.5 rounded-full bg-black/75 backdrop-blur-md border border-white/20 text-white text-[11px] font-medium flex items-center gap-2 shadow-lg select-none pointer-events-none ${
+              isHovered ? 'opacity-90 scale-100 translate-y-0' : 'opacity-0 scale-95 translate-y-2'
+            }`}
+          >
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span>Move cursor to interact</span>
+          </div>
+        </div>
 
         {/* Breadcrumb Navigation at Top-Left */}
         <div className="absolute top-24 left-6 sm:left-12 md:left-16 lg:left-24 z-10">
