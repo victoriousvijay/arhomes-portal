@@ -35,7 +35,7 @@ export const ResidenceModal = ({ residence, onClose, onOpenEnquiry }) => {
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 animate-fade-in">
-      <div className="relative w-full max-w-4xl bg-[#013724] border border-[#205843] rounded-2xl shadow-2xl overflow-hidden my-auto text-white max-h-[92vh] overflow-y-auto">
+      <div className="relative w-full max-w-4xl bg-[#013724] border border-[#205843] rounded-2xl shadow-2xl overflow-hidden my-auto text-white">
         
         {/* Close Button */}
         <button

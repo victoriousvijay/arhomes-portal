@@ -59,12 +59,12 @@ export const EnquiryModal = ({ initialProject, onClose }) => {
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 animate-fade-in font-sans">
-      <div className="relative w-full max-w-lg bg-[#013724] border border-[#D4AF37]/40 rounded-2xl shadow-2xl p-5 sm:p-8 my-auto text-white max-h-[92vh] overflow-y-auto">
+      <div className="relative w-full max-w-2xl bg-[#013724] border border-[#D4AF37]/40 rounded-3xl shadow-2xl p-5 sm:p-7 my-auto text-white">
         
         {/* Close */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 p-2 bg-[#002719] hover:bg-[#D4AF37] text-white hover:text-[#013724] rounded-full border border-[#205843] transition-colors cursor-pointer"
+          className="absolute top-4 right-4 p-2 bg-[#002719] hover:bg-[#D4AF37] text-white hover:text-[#013724] rounded-full border border-[#205843] transition-colors cursor-pointer z-10"
           aria-label="Close modal"
         >
           <X className="w-5 h-5" />
@@ -90,17 +90,19 @@ export const EnquiryModal = ({ initialProject, onClose }) => {
           </div>
         ) : (
           <div>
-            <div className="text-[10px] uppercase tracking-[0.25em] text-[#D4AF37] font-semibold mb-1">
+            <div className="text-[10px] uppercase tracking-[0.25em] text-[#D4AF37] font-semibold mb-0.5">
               AR HOMES CLIENT SERVICES
             </div>
-            <h3 className="font-serif text-2xl sm:text-3xl font-normal text-white mb-2">
+            <h3 className="font-serif text-2xl sm:text-3xl font-normal text-white mb-1">
               Request Information
             </h3>
-            <p className="text-xs text-slate-300 font-light mb-6">
+            <p className="text-xs text-slate-300 font-light mb-4">
               Connect directly with our relationship managers for floor plans, private walkthroughs, and official price sheets.
             </p>
 
-            <form onSubmit={handleSubmit} className="space-y-4 text-xs">
+            <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+              
+              {/* Full Name */}
               <div>
                 <label className="text-[10px] uppercase tracking-wider text-slate-300 block mb-1 font-semibold">
                   Full Name *
@@ -111,37 +113,38 @@ export const EnquiryModal = ({ initialProject, onClose }) => {
                   placeholder="Enter your full name"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full bg-[#002719] border border-[#205843] rounded-lg px-3.5 py-2.5 text-sm sm:text-xs text-white placeholder-slate-400 focus:outline-none focus:border-[#D4AF37]"
+                  className="w-full bg-[#002719] border border-[#205843] rounded-xl px-3.5 py-2 text-sm sm:text-xs text-white placeholder-slate-400 focus:outline-none focus:border-[#D4AF37]"
                 />
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="text-[10px] uppercase tracking-wider text-slate-300 block mb-1 font-semibold">
-                    Phone / WhatsApp *
-                  </label>
-                  <input
-                    type="tel"
-                    required
-                    placeholder="+91 98765 00000"
-                    value={formData.phone}
-                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    className="w-full bg-[#002719] border border-[#205843] rounded-lg px-3.5 py-2.5 text-sm sm:text-xs text-white placeholder-slate-400 focus:outline-none focus:border-[#D4AF37]"
-                  />
-                </div>
-                <div>
-                  <label className="text-[10px] uppercase tracking-wider text-slate-300 block mb-1 font-semibold">
-                    Email Address *
-                  </label>
-                  <input
-                    type="email"
-                    required
-                    placeholder="email@example.com"
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full bg-[#002719] border border-[#205843] rounded-lg px-3.5 py-2.5 text-sm sm:text-xs text-white placeholder-slate-400 focus:outline-none focus:border-[#D4AF37]"
-                  />
-                </div>
+              {/* Phone / WhatsApp */}
+              <div>
+                <label className="text-[10px] uppercase tracking-wider text-slate-300 block mb-1 font-semibold">
+                  Phone / WhatsApp *
+                </label>
+                <input
+                  type="tel"
+                  required
+                  placeholder="+91 98765 00000"
+                  value={formData.phone}
+                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                  className="w-full bg-[#002719] border border-[#205843] rounded-xl px-3.5 py-2 text-sm sm:text-xs text-white placeholder-slate-400 focus:outline-none focus:border-[#D4AF37]"
+                />
+              </div>
+
+              {/* Email Address */}
+              <div>
+                <label className="text-[10px] uppercase tracking-wider text-slate-300 block mb-1 font-semibold">
+                  Email Address *
+                </label>
+                <input
+                  type="email"
+                  required
+                  placeholder="email@example.com"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  className="w-full bg-[#002719] border border-[#205843] rounded-xl px-3.5 py-2 text-sm sm:text-xs text-white placeholder-slate-400 focus:outline-none focus:border-[#D4AF37]"
+                />
               </div>
 
               {/* Dynamic Property Selection */}
@@ -153,7 +156,7 @@ export const EnquiryModal = ({ initialProject, onClose }) => {
                   <select
                     value={formData.project}
                     onChange={(e) => setFormData({ ...formData, project: e.target.value })}
-                    className="w-full bg-[#002719] border border-[#205843] rounded-lg px-3.5 py-2.5 text-sm sm:text-xs text-white focus:outline-none focus:border-[#D4AF37]"
+                    className="w-full bg-[#002719] border border-[#205843] rounded-xl px-3.5 py-2 text-sm sm:text-xs text-white focus:outline-none focus:border-[#D4AF37]"
                   >
                     {propertyOptions.map((r) => (
                       <option key={r.id} value={r.title} className="bg-[#002719]">
@@ -176,7 +179,7 @@ export const EnquiryModal = ({ initialProject, onClose }) => {
                   <select
                     value={formData.budget}
                     onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
-                    className="w-full bg-[#002719] border border-[#205843] rounded-lg px-3.5 py-2.5 text-sm sm:text-xs text-white focus:outline-none focus:border-[#D4AF37]"
+                    className="w-full bg-[#002719] border border-[#205843] rounded-xl px-3.5 py-2 text-sm sm:text-xs text-white focus:outline-none focus:border-[#D4AF37]"
                   >
                     <option value="₹1.5 - 2.5 Cr" className="bg-[#002719]">₹1.50 Cr - ₹2.50 Cr</option>
                     <option value="₹2.5 - 4 Cr" className="bg-[#002719]">₹2.50 Cr - ₹4.00 Cr</option>
@@ -196,14 +199,14 @@ export const EnquiryModal = ({ initialProject, onClose }) => {
                     type="date"
                     value={formData.visitDate}
                     onChange={(e) => setFormData({ ...formData, visitDate: e.target.value })}
-                    className="w-full bg-[#002719] border border-[#205843] rounded-lg px-3.5 py-2.5 text-sm sm:text-xs text-white focus:outline-none focus:border-[#D4AF37]"
+                    className="w-full bg-[#002719] border border-[#205843] rounded-xl px-3.5 py-2 text-sm sm:text-xs text-white focus:outline-none focus:border-[#D4AF37]"
                   />
                 </div>
               )}
 
               {/* DYNAMIC CUSTOM FIELDS ADDED VIA CMS */}
               {customFields.map((cf) => (
-                <div key={cf.id}>
+                <div key={cf.id} className={customFields.length === 1 ? "col-span-1" : "col-span-1"}>
                   <label className="text-[10px] uppercase tracking-wider text-slate-300 block mb-1 font-semibold">
                     {cf.label} {cf.required && <span className="text-[#D4AF37]">*</span>}
                   </label>
@@ -213,7 +216,7 @@ export const EnquiryModal = ({ initialProject, onClose }) => {
                       required={cf.required}
                       value={customResponses[cf.label] || ''}
                       onChange={(e) => setCustomResponses({ ...customResponses, [cf.label]: e.target.value })}
-                      className="w-full bg-[#002719] border border-[#205843] rounded-lg px-3.5 py-2.5 text-sm sm:text-xs text-white focus:outline-none focus:border-[#D4AF37]"
+                      className="w-full bg-[#002719] border border-[#205843] rounded-xl px-3.5 py-2 text-sm sm:text-xs text-white focus:outline-none focus:border-[#D4AF37]"
                     >
                       <option value="">{cf.placeholder || 'Select an option...'}</option>
                       {(cf.options || []).map((opt, oIdx) => (
@@ -226,7 +229,7 @@ export const EnquiryModal = ({ initialProject, onClose }) => {
                       required={cf.required}
                       value={customResponses[cf.label] || ''}
                       onChange={(e) => setCustomResponses({ ...customResponses, [cf.label]: e.target.value })}
-                      className="w-full bg-[#002719] border border-[#205843] rounded-lg px-3.5 py-2.5 text-sm sm:text-xs text-white focus:outline-none focus:border-[#D4AF37]"
+                      className="w-full bg-[#002719] border border-[#205843] rounded-xl px-3.5 py-2 text-sm sm:text-xs text-white focus:outline-none focus:border-[#D4AF37]"
                     />
                   ) : cf.type === 'number' ? (
                     <input
@@ -235,7 +238,7 @@ export const EnquiryModal = ({ initialProject, onClose }) => {
                       placeholder={cf.placeholder || 'Enter number'}
                       value={customResponses[cf.label] || ''}
                       onChange={(e) => setCustomResponses({ ...customResponses, [cf.label]: e.target.value })}
-                      className="w-full bg-[#002719] border border-[#205843] rounded-lg px-3.5 py-2.5 text-sm sm:text-xs text-white focus:outline-none focus:border-[#D4AF37]"
+                      className="w-full bg-[#002719] border border-[#205843] rounded-xl px-3.5 py-2 text-sm sm:text-xs text-white focus:outline-none focus:border-[#D4AF37]"
                     />
                   ) : (
                     <input
@@ -244,7 +247,7 @@ export const EnquiryModal = ({ initialProject, onClose }) => {
                       placeholder={cf.placeholder || 'Enter details...'}
                       value={customResponses[cf.label] || ''}
                       onChange={(e) => setCustomResponses({ ...customResponses, [cf.label]: e.target.value })}
-                      className="w-full bg-[#002719] border border-[#205843] rounded-lg px-3.5 py-2.5 text-sm sm:text-xs text-white placeholder-slate-400 focus:outline-none focus:border-[#D4AF37]"
+                      className="w-full bg-[#002719] border border-[#205843] rounded-xl px-3.5 py-2 text-sm sm:text-xs text-white placeholder-slate-400 focus:outline-none focus:border-[#D4AF37]"
                     />
                   )}
                 </div>
@@ -252,26 +255,28 @@ export const EnquiryModal = ({ initialProject, onClose }) => {
 
               {/* Optional Message Field */}
               {enquiryFields.message !== false && (
-                <div>
+                <div className="col-span-full">
                   <label className="text-[10px] uppercase tracking-wider text-slate-300 block mb-1 font-semibold">
                     Message / Special Requests
                   </label>
                   <textarea
-                    rows="3"
+                    rows="2"
                     placeholder="Preferred facing, floor level, loan assistance, or specific questions..."
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    className="w-full bg-[#002719] border border-[#205843] rounded-lg px-3.5 py-2.5 text-sm sm:text-xs text-white placeholder-slate-400 focus:outline-none focus:border-[#D4AF37] resize-none"
+                    className="w-full bg-[#002719] border border-[#205843] rounded-xl px-3.5 py-2 text-sm sm:text-xs text-white placeholder-slate-400 focus:outline-none focus:border-[#D4AF37] resize-none"
                   />
                 </div>
               )}
 
-              <button
-                type="submit"
-                className="w-full py-3.5 bg-gradient-to-r from-[#D4AF37] via-[#E5C86C] to-[#D4AF37] text-[#013724] font-bold text-xs uppercase tracking-wider rounded-xl hover:brightness-105 transition-all shadow-md active:scale-95 cursor-pointer"
-              >
-                Submit Enquiry to Concierge
-              </button>
+              <div className="col-span-full pt-1">
+                <button
+                  type="submit"
+                  className="w-full py-3 bg-gradient-to-r from-[#D4AF37] via-[#E5C86C] to-[#D4AF37] text-[#013724] font-bold text-xs uppercase tracking-wider rounded-xl hover:brightness-105 transition-all shadow-md active:scale-95 cursor-pointer"
+                >
+                  Submit Enquiry to Concierge
+                </button>
+              </div>
             </form>
           </div>
         )}
