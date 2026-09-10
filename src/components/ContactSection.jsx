@@ -15,6 +15,7 @@ export const ContactSection = () => {
   const [marketingConsent, setMarketingConsent] = useState(false);
   const [honeypot, setHoneypot] = useState('');
   const [consentError, setConsentError] = useState(false);
+  const [termsError, setTermsError] = useState(false);
   const formLoadTimeRef = useRef(Date.now());
 
   const [formData, setFormData] = useState({
@@ -43,13 +44,26 @@ export const ContactSection = () => {
       return;
     }
 
-    // 3. Mandatory Privacy Consent check
+    // 3. Mandatory Privacy Consent & Terms acceptance check
+    let hasValidationError = false;
     if (!privacyConsent) {
       setConsentError(true);
+      hasValidationError = true;
+    } else {
+      setConsentError(false);
+    }
+
+    if (!termsAccepted) {
+      setTermsError(true);
+      hasValidationError = true;
+    } else {
+      setTermsError(false);
+    }
+
+    if (hasValidationError) {
       return;
     }
 
-    setConsentError(false);
     setIsSubmitting(true);
 
     // Save lead into CRM with consent metadata
@@ -287,13 +301,18 @@ export const ContactSection = () => {
                       if (val) setConsentError(false);
                     }}
                     termsAccepted={termsAccepted}
-                    setTermsAccepted={setTermsAccepted}
+                    setTermsAccepted={(val) => {
+                      setTermsAccepted(val);
+                      if (val) setTermsError(false);
+                    }}
                     marketingConsent={marketingConsent}
                     setMarketingConsent={setMarketingConsent}
                     honeypot={honeypot}
                     setHoneypot={setHoneypot}
                     hasError={consentError}
                     errorMessage="You must consent to AR Homes collecting and processing your information before submitting."
+                    hasTermsError={termsError}
+                    termsErrorMessage="You must read and agree to our Terms & Conditions before submitting."
                     companyName="AR Homes"
                     variant="default"
                   />

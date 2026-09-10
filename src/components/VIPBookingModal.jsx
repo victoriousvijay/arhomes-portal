@@ -1,14 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { X, Calendar, Clock, MapPin, CheckCircle2, Car, Sparkles, Phone, Mail, ShieldCheck } from 'lucide-react';
 import { BRAND_INFO, PROJECTS } from '../data/projectsData';
+import { useSiteData } from '../context/SiteDataContext';
+import { PrivacyConsentGroup } from './PrivacyConsentGroup';
 
 export const VIPBookingModal = ({ initialProject, onClose }) => {
+  const { addLead } = useSiteData();
   const [selectedProjectId, setSelectedProjectId] = useState(initialProject?.id || PROJECTS[0].id);
   const [tourType, setTourType] = useState('In-Person Site Inspection');
   const [date, setDate] = useState('');
   const [timeSlot, setTimeSlot] = useState('11:00 AM');
   const [requestChauffeur, setRequestChauffeur] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Legal Consent & Anti-Spam States
+  const [privacyConsent, setPrivacyConsent] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [marketingConsent, setMarketingConsent] = useState(false);
+  const [honeypot, setHoneypot] = useState('');
+  const [consentError, setConsentError] = useState(false);
+  const [termsError, setTermsError] = useState(false);
+  const formLoadTimeRef = useRef(Date.now());
 
   const [formData, setFormData] = useState({
     name: '',
@@ -21,12 +34,53 @@ export const VIPBookingModal = ({ initialProject, onClose }) => {
     '10:00 AM', '11:30 AM', '02:00 PM', '03:30 PM', '05:00 PM'
   ];
 
+  const currentSelectedProject = PROJECTS.find(p => p.id === selectedProjectId) || PROJECTS[0];
+
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (honeypot && honeypot.trim().length > 0) {
+      setIsSubmitted(true);
+      return;
+    }
+    if (Date.now() - formLoadTimeRef.current < 1500) {
+      setIsSubmitted(true);
+      return;
+    }
+
+    let hasValidationError = false;
+    if (!privacyConsent) {
+      setConsentError(true);
+      hasValidationError = true;
+    } else {
+      setConsentError(false);
+    }
+    if (!termsAccepted) {
+      setTermsError(true);
+      hasValidationError = true;
+    } else {
+      setTermsError(false);
+    }
+    if (hasValidationError) return;
+
+    setIsSubmitting(true);
+    addLead({
+      name: formData.name,
+      phone: formData.phone,
+      email: formData.email,
+      property_interest: `VIP Tour: ${currentSelectedProject.title} (${tourType})`,
+      message: `Date: ${date} at ${timeSlot} | Chauffeur: ${requestChauffeur ? 'Yes' : 'No'} | Notes: ${formData.notes || 'None'}`,
+      source: 'VIP Tour Reservation Modal',
+      temperature: 'Hot',
+      privacy_consent: true,
+      marketing_consent: marketingConsent,
+      terms_accepted: termsAccepted,
+      policy_version: 'v2026.1',
+      consent_timestamp: new Date().toISOString()
+    });
+    setIsSubmitting(false);
     setIsSubmitted(true);
   };
-
-  const currentSelectedProject = PROJECTS.find(p => p.id === selectedProjectId) || PROJECTS[0];
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 animate-fade-in">
@@ -243,13 +297,38 @@ export const VIPBookingModal = ({ initialProject, onClose }) => {
                 />
               </div>
 
+              {/* Privacy and Terms Consent Group */}
+              <PrivacyConsentGroup
+                privacyConsent={privacyConsent}
+                setPrivacyConsent={(val) => {
+                  setPrivacyConsent(val);
+                  if (val) setConsentError(false);
+                }}
+                termsAccepted={termsAccepted}
+                setTermsAccepted={(val) => {
+                  setTermsAccepted(val);
+                  if (val) setTermsError(false);
+                }}
+                marketingConsent={marketingConsent}
+                setMarketingConsent={setMarketingConsent}
+                honeypot={honeypot}
+                setHoneypot={setHoneypot}
+                hasError={consentError}
+                errorMessage="You must consent to AR Homes collecting and processing your information before reserving."
+                hasTermsError={termsError}
+                termsErrorMessage="You must read and agree to our Terms & Conditions before reserving."
+                companyName="AR Homes"
+                variant="modal"
+              />
+
               {/* Submit CTA */}
-              <div className="pt-3">
+              <div className="pt-2">
                 <button
                   type="submit"
-                  className="w-full py-3.5 bg-gradient-to-r from-luxury-gold via-luxury-goldLight to-luxury-gold text-luxury-black font-semibold text-xs tracking-wider uppercase rounded shadow-lg shadow-luxury-gold/20 hover:shadow-luxury-gold/40 transition-all active:scale-[0.99]"
+                  disabled={isSubmitting}
+                  className="w-full py-3.5 bg-gradient-to-r from-luxury-gold via-luxury-goldLight to-luxury-gold text-luxury-black font-semibold text-xs tracking-wider uppercase rounded shadow-lg shadow-luxury-gold/20 hover:shadow-luxury-gold/40 transition-all active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                 >
-                  Confirm VIP Reservation
+                  {isSubmitting ? 'Securing Reservation...' : 'Confirm VIP Reservation'}
                 </button>
               </div>
 

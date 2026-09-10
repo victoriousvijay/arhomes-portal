@@ -184,10 +184,20 @@ export const Footer = ({ onOpenEnquiry }) => {
                 />
                 <button
                   type="submit"
-                  className="w-full py-2 bg-[#D4AF37] hover:bg-[#E5C86C] text-[#013724] font-semibold text-xs uppercase tracking-wider rounded transition-colors"
+                  className="w-full py-2 bg-[#D4AF37] hover:bg-[#E5C86C] text-[#013724] font-semibold text-xs uppercase tracking-wider rounded transition-colors cursor-pointer"
                 >
                   Subscribe
                 </button>
+                <p className="text-[10px] text-gray-400 font-light leading-tight pt-1">
+                  By subscribing, you agree to our{' '}
+                  <Link to="/terms-and-conditions" className="text-[#D4AF37] hover:underline">
+                    Terms & Conditions
+                  </Link>{' '}
+                  and{' '}
+                  <Link to="/privacy-policy" className="text-[#D4AF37] hover:underline">
+                    Privacy Policy
+                  </Link>.
+                </p>
               </form>
             )}
 

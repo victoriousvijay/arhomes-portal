@@ -1,4 +1,4 @@
-﻿import { test, describe } from 'node:test';
+import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
 
 describe('Privacy Consent & Anti-Spam Logic Suite', () => {
@@ -70,6 +70,20 @@ describe('Privacy Consent & Anti-Spam Logic Suite', () => {
     });
     assert.match(auditOptOut, /Marketing=Opt-Out/);
     assert.match(auditOptOut, /Terms=Unchecked/);
+  });
+
+  test('Mandatory Terms & Conditions check blocks submission when false/unprovided', () => {
+    const validateTerms = (termsAccepted) => {
+      if (!termsAccepted) {
+        return { success: false, error: 'You must read and agree to the Terms & Conditions' };
+      }
+      return { success: true, error: null };
+    };
+
+    assert.equal(validateTerms(false).success, false);
+    assert.equal(validateTerms(undefined).success, false);
+    assert.equal(validateTerms(null).success, false);
+    assert.equal(validateTerms(true).success, true);
   });
 
 });

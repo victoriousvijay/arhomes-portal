@@ -24,6 +24,8 @@ export const PrivacyConsentGroup = ({
   setHoneypot,
   hasError = false,
   errorMessage = '',
+  hasTermsError = false,
+  termsErrorMessage = '',
   companyName = 'AR Homes',
   policyVersion = 'v2026.1',
   variant = 'default' // 'default' (dark) or 'modal' (emerald)
@@ -85,7 +87,7 @@ export const PrivacyConsentGroup = ({
           </span>
         </label>
 
-        {/* Validation error message if user tries to submit without checking */}
+        {/* Validation error message if user tries to submit without checking privacy */}
         {hasError && !privacyConsent && (
           <div 
             role="alert" 
@@ -97,7 +99,7 @@ export const PrivacyConsentGroup = ({
         )}
       </div>
 
-      {/* 3. Separate Terms & Conditions Checkbox */}
+      {/* 3. Mandatory Terms & Conditions Checkbox */}
       <div className="space-y-1">
         <label 
           htmlFor="consent-terms"
@@ -107,12 +109,16 @@ export const PrivacyConsentGroup = ({
             id="consent-terms"
             name="terms_accepted"
             type="checkbox"
+            required
             checked={Boolean(termsAccepted)}
             onChange={(e) => setTermsAccepted(e.target.checked)}
             className="mt-1 w-4 h-4 rounded border-gray-600 text-[#D4AF37] focus:ring-[#D4AF37] focus:ring-offset-0 focus:ring-1 accent-[#D4AF37] cursor-pointer shrink-0 transition-transform active:scale-95"
+            aria-required="true"
+            aria-invalid={hasTermsError && !termsAccepted}
           />
-          <span className="text-xs text-gray-300 group-hover:text-white leading-snug">
-            I have read and agree to the{' '}
+          <span className="text-xs text-gray-200 group-hover:text-white leading-snug">
+            <span className="text-[#D4AF37] font-semibold mr-1">[Required]</span>
+            I have read, understood, and agree to the{' '}
             <Link 
               to="/terms-and-conditions" 
               target="_blank" 
@@ -121,9 +127,21 @@ export const PrivacyConsentGroup = ({
               onClick={(e) => e.stopPropagation()}
             >
               Terms & Conditions
-            </Link>.
+            </Link>
+            {' '}(including data protection, digital privacy safeguards, and security terms).
           </span>
         </label>
+
+        {/* Validation error message if user tries to submit without checking terms */}
+        {hasTermsError && !termsAccepted && (
+          <div 
+            role="alert" 
+            className="flex items-center gap-1.5 text-rose-400 text-[11px] font-medium pl-7 pt-1"
+          >
+            <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+            <span>{termsErrorMessage || 'You must read and agree to the Terms & Conditions before submitting.'}</span>
+          </div>
+        )}
       </div>
 
       {/* 4. Optional Marketing Consent Checkbox */}

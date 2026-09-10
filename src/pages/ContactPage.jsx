@@ -30,6 +30,7 @@ export const ContactPage = () => {
   const [marketingConsent, setMarketingConsent] = useState(false);
   const [honeypot, setHoneypot] = useState('');
   const [consentError, setConsentError] = useState(false);
+  const [termsError, setTermsError] = useState(false);
   const formLoadTimeRef = useRef(Date.now());
 
   const handleSubmit = (e) => {
@@ -50,13 +51,26 @@ export const ContactPage = () => {
       return;
     }
 
-    // 3. Mandatory Privacy Consent validation (must be checked)
+    // 3. Mandatory Privacy Consent & Terms acceptance validation
+    let hasValidationError = false;
     if (!privacyConsent) {
       setConsentError(true);
+      hasValidationError = true;
+    } else {
+      setConsentError(false);
+    }
+
+    if (!termsAccepted) {
+      setTermsError(true);
+      hasValidationError = true;
+    } else {
+      setTermsError(false);
+    }
+
+    if (hasValidationError) {
       return;
     }
 
-    setConsentError(false);
     setIsSubmitting(true);
     
     // Push lead to CRM in real-time with full consent audit record
@@ -308,13 +322,18 @@ export const ContactPage = () => {
                       if (val) setConsentError(false);
                     }}
                     termsAccepted={termsAccepted}
-                    setTermsAccepted={setTermsAccepted}
+                    setTermsAccepted={(val) => {
+                      setTermsAccepted(val);
+                      if (val) setTermsError(false);
+                    }}
                     marketingConsent={marketingConsent}
                     setMarketingConsent={setMarketingConsent}
                     honeypot={honeypot}
                     setHoneypot={setHoneypot}
                     hasError={consentError}
                     errorMessage="You must consent to AR Homes collecting and processing your information before submitting."
+                    hasTermsError={termsError}
+                    termsErrorMessage="You must read and agree to our Terms & Conditions before submitting."
                     companyName="AR Homes"
                     variant="default"
                   />

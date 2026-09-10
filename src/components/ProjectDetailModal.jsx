@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { X, MapPin, CheckCircle2, Download, Calendar, ShieldCheck, Sparkles, Phone, ArrowRight } from 'lucide-react';
 import { BRAND_INFO } from '../data/projectsData';
+import { useSiteData } from '../context/SiteDataContext';
 
 export const ProjectDetailModal = ({ project, currency, onClose, onOpenVipModal }) => {
+  const { addLead } = useSiteData();
   const [selectedImage, setSelectedImage] = useState(0);
   const [brochureDownloading, setBrochureDownloading] = useState(false);
   const [brochureDownloaded, setBrochureDownloaded] = useState(false);
   const [enquirySent, setEnquirySent] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [termsError, setTermsError] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -45,6 +50,25 @@ export const ProjectDetailModal = ({ project, currency, onClose, onOpenVipModal 
 
   const handleEnquirySubmit = (e) => {
     e.preventDefault();
+    if (!termsAccepted) {
+      setTermsError(true);
+      return;
+    }
+    setTermsError(false);
+    addLead({
+      name: formData.name,
+      phone: formData.phone,
+      email: formData.email,
+      property_interest: project.title,
+      message: formData.message,
+      source: 'Project Detail Modal Instant Inquiry',
+      temperature: 'Hot',
+      privacy_consent: true,
+      terms_accepted: true,
+      marketing_consent: false,
+      policy_version: 'v2026.1',
+      consent_timestamp: new Date().toISOString()
+    });
     setEnquirySent(true);
   };
 
@@ -243,9 +267,38 @@ export const ProjectDetailModal = ({ project, currency, onClose, onOpenVipModal 
                         className="w-full bg-luxury-black/70 border border-luxury-border rounded px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-luxury-gold"
                       />
                     </div>
+
+                    <label className="flex items-start gap-2 pt-1 cursor-pointer select-none text-[11px] text-gray-300">
+                      <input
+                        type="checkbox"
+                        required
+                        checked={termsAccepted}
+                        onChange={(e) => {
+                          setTermsAccepted(e.target.checked);
+                          if (e.target.checked) setTermsError(false);
+                        }}
+                        className="mt-0.5 w-3.5 h-3.5 rounded border-gray-600 text-[#D4AF37] focus:ring-[#D4AF37] accent-[#D4AF37] cursor-pointer shrink-0"
+                      />
+                      <span>
+                        <span className="text-[#D4AF37] font-semibold mr-1">[Required]</span>
+                        I agree to the{' '}
+                        <Link to="/terms-and-conditions" target="_blank" rel="noopener noreferrer" className="text-[#D4AF37] underline font-medium">
+                          Terms & Conditions
+                        </Link>{' '}
+                        and{' '}
+                        <Link to="/privacy-policy" target="_blank" rel="noopener noreferrer" className="text-[#D4AF37] underline font-medium">
+                          Privacy Policy
+                        </Link>.
+                      </span>
+                    </label>
+
+                    {termsError && !termsAccepted && (
+                      <div className="text-[10px] text-rose-400 font-medium">Please accept the Terms & Conditions before submitting.</div>
+                    )}
+
                     <button
                       type="submit"
-                      className="w-full py-2.5 bg-luxury-gold hover:bg-luxury-goldHover text-luxury-black font-semibold text-xs uppercase tracking-wider rounded transition-all shadow-md active:scale-98 flex items-center justify-center gap-1.5"
+                      className="w-full py-2.5 bg-luxury-gold hover:bg-luxury-goldHover text-luxury-black font-semibold text-xs uppercase tracking-wider rounded transition-all shadow-md active:scale-98 flex items-center justify-center gap-1.5 cursor-pointer"
                     >
                       <span>Send Instant Inquiry</span>
                       <ArrowRight className="w-3.5 h-3.5" />
