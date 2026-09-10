@@ -1,10 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, CheckCircle2, Download, ArrowRight, Home, Maximize, Wind, Sun, MapPin } from 'lucide-react';
 import { BRAND } from '../data/projectsData';
 
 export const ResidenceModal = ({ residence, onClose, onOpenEnquiry }) => {
   const [downloading, setDownloading] = useState(false);
   const [downloaded, setDownloaded] = useState(false);
+
+  useEffect(() => {
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, []);
 
   if (!residence) return null;
 
@@ -34,19 +42,28 @@ export const ResidenceModal = ({ residence, onClose, onOpenEnquiry }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 animate-fade-in">
-      <div className="relative w-full max-w-4xl bg-[#013724] border border-[#205843] rounded-2xl shadow-2xl overflow-hidden my-auto text-white">
+    <div 
+      className="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 animate-fade-in"
+      data-lenis-prevent
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
+      <div 
+        className="relative w-full max-w-4xl max-h-[88vh] sm:max-h-[90vh] bg-[#013724] border border-[#205843] rounded-2xl shadow-2xl overflow-hidden my-auto text-white flex flex-col"
+        data-lenis-prevent
+      >
         
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-3 right-3 sm:top-4 sm:right-4 z-20 p-2 bg-[#002719] hover:bg-[#D4AF37] text-white hover:text-[#013724] rounded-full border border-[#205843] transition-colors"
+          className="absolute top-3 right-3 sm:top-4 sm:right-4 z-20 p-2 bg-[#002719] hover:bg-[#D4AF37] text-white hover:text-[#013724] rounded-full border border-[#205843] transition-colors cursor-pointer"
           aria-label="Close modal"
         >
           <X className="w-5 h-5" />
         </button>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 overflow-y-auto overscroll-contain flex-1 custom-modal-scroll" data-lenis-prevent tabIndex={0}>
           
           {/* Left: Image Container */}
           <div className="lg:col-span-6 h-52 sm:h-72 lg:h-auto relative">

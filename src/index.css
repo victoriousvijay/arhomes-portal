@@ -69,6 +69,34 @@
   background: #D4AF37;
 }
 
+/* Custom Modal Internal Scrollbar for Touchpad & Mouse */
+.custom-modal-scroll {
+  overflow-y: auto !important;
+  overscroll-behavior: contain !important;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+  scrollbar-width: thin;
+  scrollbar-color: #D4AF37 #002719;
+}
+
+.custom-modal-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-modal-scroll::-webkit-scrollbar-track {
+  background: #002719;
+  border-radius: 9999px;
+}
+
+.custom-modal-scroll::-webkit-scrollbar-thumb {
+  background: #D4AF37;
+  border-radius: 9999px;
+}
+
+.custom-modal-scroll::-webkit-scrollbar-thumb:hover {
+  background: #f0c950;
+}
+
 /* Hide scrollbar for clean carousels */
 .no-scrollbar::-webkit-scrollbar {
   display: none;

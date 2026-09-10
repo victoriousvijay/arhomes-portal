@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { X, Calendar, Clock, MapPin, CheckCircle2, Car, Sparkles, Phone, Mail, ShieldCheck } from 'lucide-react';
 import { BRAND_INFO, PROJECTS } from '../data/projectsData';
 import { useSiteData } from '../context/SiteDataContext';
@@ -82,21 +82,38 @@ export const VIPBookingModal = ({ initialProject, onClose }) => {
     setIsSubmitted(true);
   };
 
+  useEffect(() => {
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, []);
+
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 animate-fade-in">
-      <div className="relative w-full max-w-2xl bg-luxury-dark border border-luxury-gold/40 rounded-lg shadow-2xl overflow-hidden my-8">
+    <div 
+      className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 animate-fade-in"
+      data-lenis-prevent
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
+      <div 
+        className="relative w-full max-w-2xl max-h-[88vh] sm:max-h-[90vh] bg-luxury-dark border border-luxury-gold/40 rounded-lg shadow-2xl overflow-hidden my-auto flex flex-col"
+        data-lenis-prevent
+      >
         
         {/* Close button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 z-20 p-2 bg-luxury-black/80 hover:bg-luxury-gold text-slate-300 hover:text-luxury-black rounded-full border border-luxury-border transition-colors"
+          className="absolute top-4 right-4 z-20 p-2 bg-luxury-black/80 hover:bg-luxury-gold text-slate-300 hover:text-luxury-black rounded-full border border-luxury-border transition-colors cursor-pointer"
           aria-label="Close modal"
         >
           <X className="w-5 h-5" />
         </button>
 
         {isSubmitted ? (
-          <div className="p-8 sm:p-12 text-center bg-luxury-card">
+          <div className="p-8 sm:p-12 text-center bg-luxury-card overflow-y-auto overscroll-contain custom-modal-scroll" data-lenis-prevent>
             <div className="w-16 h-16 rounded-full bg-luxury-gold/20 border-2 border-luxury-gold flex items-center justify-center mx-auto mb-6">
               <CheckCircle2 className="w-8 h-8 text-luxury-gold" />
             </div>
@@ -131,13 +148,13 @@ export const VIPBookingModal = ({ initialProject, onClose }) => {
 
             <button
               onClick={onClose}
-              className="px-8 py-3 bg-luxury-gold text-luxury-black font-semibold text-xs uppercase tracking-wider rounded shadow-lg"
+              className="px-8 py-3 bg-luxury-gold text-luxury-black font-semibold text-xs uppercase tracking-wider rounded shadow-lg hover:bg-white transition-colors cursor-pointer"
             >
               Return to Website
             </button>
           </div>
         ) : (
-          <div className="p-6 sm:p-8">
+          <div className="p-6 sm:p-8 overflow-y-auto overscroll-contain flex-1 custom-modal-scroll" data-lenis-prevent tabIndex={0}>
             
             {/* Header */}
             <div className="mb-6">

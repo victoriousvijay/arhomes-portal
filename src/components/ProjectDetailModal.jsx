@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { X, MapPin, CheckCircle2, Download, Calendar, ShieldCheck, Sparkles, Phone, ArrowRight } from 'lucide-react';
 import { BRAND_INFO } from '../data/projectsData';
@@ -18,6 +18,14 @@ export const ProjectDetailModal = ({ project, currency, onClose, onOpenVipModal 
     email: '',
     message: `I would like detailed pricing, floor plans, and payment schedules for ${project?.title}.`
   });
+
+  useEffect(() => {
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, []);
 
   if (!project) return null;
 
@@ -73,19 +81,28 @@ export const ProjectDetailModal = ({ project, currency, onClose, onOpenVipModal 
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 animate-fade-in">
-      <div className="relative w-full max-w-5xl bg-luxury-dark border border-luxury-border rounded-lg shadow-2xl overflow-hidden my-8">
+    <div 
+      className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 animate-fade-in"
+      data-lenis-prevent
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
+      <div 
+        className="relative w-full max-w-5xl max-h-[88vh] sm:max-h-[90vh] bg-luxury-dark border border-luxury-border rounded-lg shadow-2xl overflow-hidden my-auto flex flex-col"
+        data-lenis-prevent
+      >
         
         {/* Modal Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 z-20 p-2 bg-luxury-black/80 hover:bg-luxury-gold text-slate-300 hover:text-luxury-black rounded-full border border-luxury-border transition-colors"
+          className="absolute top-4 right-4 z-20 p-2 bg-luxury-black/80 hover:bg-luxury-gold text-slate-300 hover:text-luxury-black rounded-full border border-luxury-border transition-colors cursor-pointer"
           aria-label="Close modal"
         >
           <X className="w-5 h-5" />
         </button>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 max-h-[85vh] overflow-y-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-12 overflow-y-auto overscroll-contain flex-1 custom-modal-scroll" data-lenis-prevent tabIndex={0}>
           
           {/* Left Column: Media & Highlights */}
           <div className="lg:col-span-7 p-6 sm:p-8 bg-luxury-black/40 border-b lg:border-b-0 lg:border-r border-luxury-border">

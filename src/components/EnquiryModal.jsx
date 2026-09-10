@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { X, CheckCircle2, Phone, Mail, Calendar, Sparkles } from 'lucide-react';
 import { useSiteData } from '../context/SiteDataContext';
 import { BRAND, RESIDENCES } from '../data/projectsData';
@@ -111,49 +111,90 @@ export const EnquiryModal = ({ initialProject, onClose }) => {
     setSubmitted(true);
   };
 
-  return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 animate-fade-in font-sans">
-      <div className="relative w-full max-w-2xl bg-[#013724] border border-[#D4AF37]/40 rounded-3xl shadow-2xl p-5 sm:p-7 my-auto text-white">
-        
-        {/* Close */}
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 p-2 bg-[#002719] hover:bg-[#D4AF37] text-white hover:text-[#013724] rounded-full border border-[#205843] transition-colors cursor-pointer z-10"
-          aria-label="Close modal"
-        >
-          <X className="w-5 h-5" />
-        </button>
+  const scrollContainerRef = useRef(null);
 
-        {submitted ? (
-          <div className="py-10 text-center space-y-4">
-            <div className="w-16 h-16 rounded-full bg-[#01472E] border-2 border-[#D4AF37] flex items-center justify-center mx-auto">
-              <CheckCircle2 className="w-8 h-8 text-[#D4AF37]" />
-            </div>
-            <h3 className="font-serif text-2xl font-normal text-white">
-              Enquiry Submitted Successfully
-            </h3>
-            <p className="text-xs text-slate-300 max-w-sm mx-auto leading-relaxed">
-              Thank you, <strong className="text-white">{formData.name}</strong>. Your inquiry for <strong className="text-[#D4AF37]">{formData.project}</strong> has been logged in our CRM. Our sales director will contact you shortly on <strong>{formData.phone}</strong>.
-            </p>
-            <button
-              onClick={onClose}
-              className="mt-4 px-6 py-2.5 bg-[#D4AF37] text-[#013724] font-bold text-xs uppercase tracking-wider rounded cursor-pointer"
-            >
-              Done
-            </button>
-          </div>
-        ) : (
+  // Lock background body scroll while modal is active
+  useEffect(() => {
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, []);
+
+  // Forward touchpad / mouse wheel anywhere on the modal to the internal scroll container
+  const handleWheel = (e) => {
+    if (scrollContainerRef.current) {
+      if (!scrollContainerRef.current.contains(e.target)) {
+        scrollContainerRef.current.scrollTop += e.deltaY;
+      }
+    }
+  };
+
+  return (
+    <div 
+      className="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 animate-fade-in font-sans"
+      data-lenis-prevent
+      onWheel={handleWheel}
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
+      <div 
+        className="relative w-full max-w-2xl max-h-[88vh] sm:max-h-[90vh] bg-[#013724] border border-[#D4AF37]/40 rounded-3xl shadow-2xl flex flex-col text-white overflow-hidden my-auto"
+        data-lenis-prevent
+      >
+        {/* Sticky Header with Close Button */}
+        <div className="p-5 sm:p-6 pb-4 border-b border-[#205843]/60 flex items-start justify-between shrink-0 bg-[#013724] relative z-10">
           <div>
             <div className="text-[10px] uppercase tracking-[0.25em] text-[#D4AF37] font-semibold mb-0.5">
               AR HOMES CLIENT SERVICES
             </div>
             <h3 className="font-serif text-2xl sm:text-3xl font-normal text-white mb-1">
-              Request Information
+              {submitted ? 'Enquiry Status' : 'Request Information'}
             </h3>
-            <p className="text-xs text-slate-300 font-light mb-4">
-              Connect directly with our relationship managers for floor plans, private walkthroughs, and official price sheets.
+            <p className="text-xs text-slate-300 font-light">
+              {submitted 
+                ? 'Your request has been routed to our direct VIP advisory desk.' 
+                : 'Connect directly with our relationship managers for floor plans, private walkthroughs, and official price sheets.'}
             </p>
+          </div>
 
+          <button
+            onClick={onClose}
+            className="ml-3 p-2 bg-[#002719] hover:bg-[#D4AF37] text-white hover:text-[#013724] rounded-full border border-[#205843] transition-colors cursor-pointer shrink-0"
+            aria-label="Close modal"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* Scrollable Form Body */}
+        <div 
+          ref={scrollContainerRef}
+          className="p-5 sm:p-6 pt-4 overflow-y-auto overscroll-contain flex-1 custom-modal-scroll"
+          data-lenis-prevent
+          tabIndex={0}
+        >
+          {submitted ? (
+            <div className="py-8 text-center space-y-4">
+              <div className="w-16 h-16 rounded-full bg-[#01472E] border-2 border-[#D4AF37] flex items-center justify-center mx-auto">
+                <CheckCircle2 className="w-8 h-8 text-[#D4AF37]" />
+              </div>
+              <h3 className="font-serif text-2xl font-normal text-white">
+                Enquiry Submitted Successfully
+              </h3>
+              <p className="text-xs text-slate-300 max-w-sm mx-auto leading-relaxed">
+                Thank you, <strong className="text-white">{formData.name}</strong>. Your inquiry for <strong className="text-[#D4AF37]">{formData.project}</strong> has been logged in our CRM. Our sales director will contact you shortly on <strong>{formData.phone}</strong>.
+              </p>
+              <button
+                onClick={onClose}
+                className="mt-4 px-6 py-2.5 bg-[#D4AF37] hover:bg-[#e8c868] text-[#013724] font-bold text-xs uppercase tracking-wider rounded-xl cursor-pointer transition-colors"
+              >
+                Done
+              </button>
+            </div>
+          ) : (
             <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
               
               {/* Full Name */}
@@ -356,9 +397,8 @@ export const EnquiryModal = ({ initialProject, onClose }) => {
                 </button>
               </div>
             </form>
-          </div>
-        )}
-
+          )}
+        </div>
       </div>
     </div>
   );
