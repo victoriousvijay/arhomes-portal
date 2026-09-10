@@ -29,7 +29,7 @@ const FAQS_LIST = [
   },
   {
     q: 'How can I schedule a private visit to an AR Homes show residence in Jaipur?',
-    a: 'You can book a viewing by clicking "Enquire Now" on our website, messaging us directly on WhatsApp, or calling our helpline at +91 84509 84509. Our client hospitality team in Civil Lines or Vaishali Nagar will arrange a personalized VIP walkthrough.'
+    a: 'You can book a viewing by clicking "Enquire Now" on our website, messaging us directly on WhatsApp, or calling our helpline at +91 88755 66970. Our client hospitality team will arrange a personalized VIP walkthrough.'
   }
 ];
 

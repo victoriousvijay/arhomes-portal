@@ -10,8 +10,9 @@ const DEFAULT_SETTINGS = {
   whatsapp: BRAND.whatsapp,
   email: BRAND.email,
   corporate_address: BRAND.corporateAddress,
-  facebook: 'https://facebook.com',
-  instagram: 'https://instagram.com',
+  facebook: BRAND.facebook,
+  instagram: BRAND.instagram,
+  youtube: BRAND.youtube,
   linkedin: 'https://linkedin.com',
   enquiry_fields: {
     budget: true,
@@ -370,7 +371,26 @@ const DEFAULT_DEALS = [
 export const SiteDataProvider = ({ children }) => {
   const [settings, setSettings] = useState(() => {
     const saved = localStorage.getItem('arhomes_settings');
-    return saved ? JSON.parse(saved) : DEFAULT_SETTINGS;
+    if (!saved) return DEFAULT_SETTINGS;
+    try {
+      const parsed = JSON.parse(saved);
+      const isStale = !parsed.youtube || parsed.phone === '+91 84509 84509' || parsed.corporate_address?.includes('Civil Lines / C-Scheme') || parsed.email === 'info@arhomes.in';
+      const merged = { ...DEFAULT_SETTINGS, ...parsed };
+      if (isStale) {
+        merged.phone = DEFAULT_SETTINGS.phone;
+        merged.phone_display = DEFAULT_SETTINGS.phone_display;
+        merged.whatsapp = DEFAULT_SETTINGS.whatsapp;
+        merged.email = DEFAULT_SETTINGS.email;
+        merged.corporate_address = DEFAULT_SETTINGS.corporate_address;
+        merged.facebook = DEFAULT_SETTINGS.facebook;
+        merged.instagram = DEFAULT_SETTINGS.instagram;
+        merged.youtube = DEFAULT_SETTINGS.youtube;
+        localStorage.setItem('arhomes_settings', JSON.stringify(merged));
+      }
+      return merged;
+    } catch {
+      return DEFAULT_SETTINGS;
+    }
   });
 
   const [properties, setProperties] = useState(() => {
@@ -512,6 +532,7 @@ export const SiteDataProvider = ({ children }) => {
           corporate_address: merged.corporate_address,
           facebook: merged.facebook,
           instagram: merged.instagram,
+          youtube: merged.youtube,
           linkedin: merged.linkedin,
           enquiry_fields: merged.enquiry_fields,
           updated_at: new Date().toISOString()

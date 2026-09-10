@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSiteData } from '../../context/SiteDataContext';
 import { 
   Settings, 
@@ -25,6 +25,12 @@ export const CMSSettings = () => {
   const [formData, setFormData] = useState({ ...settings });
   const [savedSuccess, setSavedSuccess] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+
+  useEffect(() => {
+    if (settings) {
+      setFormData(prev => ({ ...prev, ...settings }));
+    }
+  }, [settings]);
 
   // New Custom Field Creator State
   const [isAddFieldOpen, setIsAddFieldOpen] = useState(false);
@@ -167,7 +173,7 @@ export const CMSSettings = () => {
                   required
                   value={formData.phone || ''}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  placeholder="+91 98290 12345"
+                  placeholder="+91 88755 66970"
                   className="w-full pl-9 pr-3 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 font-mono focus:bg-white focus:outline-none focus:border-[#013724]"
                 />
               </div>
@@ -186,7 +192,7 @@ export const CMSSettings = () => {
                   required
                   value={formData.whatsapp || ''}
                   onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
-                  placeholder="919829012345"
+                  placeholder="918875566970"
                   className="w-full pl-9 pr-3 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 font-mono focus:bg-white focus:outline-none focus:border-[#013724]"
                 />
               </div>
@@ -205,7 +211,7 @@ export const CMSSettings = () => {
                   required
                   value={formData.email || ''}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  placeholder="concierge@arhomes.in"
+                  placeholder="arhomesjaipur@gmail.com"
                   className="w-full pl-9 pr-3 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 focus:bg-white focus:outline-none focus:border-[#013724]"
                 />
               </div>
@@ -224,7 +230,7 @@ export const CMSSettings = () => {
                   required
                   value={formData.corporate_address || ''}
                   onChange={(e) => setFormData({ ...formData, corporate_address: e.target.value })}
-                  placeholder="AR Homes, Royal Enclave, Civil Lines, Jaipur, Rajasthan - 302006"
+                  placeholder="Shop No. 1&2, opposed Chaska restaurant & BAR, Saket Vihar, Hatoj - Kalwar - Jaipur Rd, Jaipur, Rajasthan 302012"
                   className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 focus:bg-white focus:outline-none focus:border-[#013724]"
                 />
               </div>
@@ -240,18 +246,18 @@ export const CMSSettings = () => {
               <span>Social Media Profiles</span>
             </h2>
             <p className="text-xs text-slate-500 mt-0.5">
-              Update links for your company pages.
+              Update links for your company social channels (Instagram, Facebook, YouTube, LinkedIn).
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
             <div>
               <label className="block text-slate-700 font-semibold mb-1">Instagram Profile</label>
               <input
                 type="url"
                 value={formData.instagram || ''}
                 onChange={(e) => setFormData({ ...formData, instagram: e.target.value })}
-                placeholder="https://instagram.com/arhomes"
+                placeholder="https://www.instagram.com/arhomesindia/?hl=en"
                 className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 focus:bg-white focus:outline-none focus:border-[#013724]"
               />
             </div>
@@ -261,7 +267,17 @@ export const CMSSettings = () => {
                 type="url"
                 value={formData.facebook || ''}
                 onChange={(e) => setFormData({ ...formData, facebook: e.target.value })}
-                placeholder="https://facebook.com/arhomes"
+                placeholder="https://www.facebook.com/arhomesjaipur/reels/"
+                className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 focus:bg-white focus:outline-none focus:border-[#013724]"
+              />
+            </div>
+            <div>
+              <label className="block text-slate-700 font-semibold mb-1">YouTube Channel</label>
+              <input
+                type="url"
+                value={formData.youtube || ''}
+                onChange={(e) => setFormData({ ...formData, youtube: e.target.value })}
+                placeholder="https://www.youtube.com/@ARHOMES"
                 className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 focus:bg-white focus:outline-none focus:border-[#013724]"
               />
             </div>

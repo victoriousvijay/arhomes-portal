@@ -97,7 +97,7 @@ export const ServicesPage = ({ onOpenEnquiry }) => {
   }, []);
 
   const handleCopyContact = () => {
-    navigator.clipboard.writeText(phoneVal || '+918450984509');
+    navigator.clipboard.writeText(phoneVal || '+918875566970');
     setCopied(true);
     setTimeout(() => setCopied(false), 2200);
   };
@@ -331,7 +331,7 @@ export const ServicesPage = ({ onOpenEnquiry }) => {
               title="Click to copy contact"
             >
               <span>
-                Advisory Desk: <span className="underline underline-offset-1 font-semibold">{phoneDisplayVal || '+91 84509 84509'}</span>
+                Advisory Desk: <span className="underline underline-offset-1 font-semibold">{phoneDisplayVal || '+91 88755 66970'}</span>
               </span>
               {copied ? (
                 <span className="text-xs font-bold text-emerald-600">Copied!</span>

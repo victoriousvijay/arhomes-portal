@@ -108,7 +108,7 @@ export const BUY_CATALOG = [
 ];
 
 export const BuyPage = ({ onOpenEnquiry, onSelectResidence }) => {
-  const { properties } = useSiteData();
+  const { properties, settings } = useSiteData();
   const catalog = properties && properties.length > 0 ? properties : BUY_CATALOG;
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -484,7 +484,7 @@ export const BuyPage = ({ onOpenEnquiry, onSelectResidence }) => {
               Book Private Site Visit
             </button>
             <a
-              href="tel:+918450984509"
+              href={`tel:${settings?.phone || '+918875566970'}`}
               className="w-full sm:w-auto px-5 py-3.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold text-xs uppercase tracking-wider border border-white/20 transition-all flex items-center justify-center gap-2"
             >
               <PhoneCall className="w-3.5 h-3.5 text-[#D4AF37]" />

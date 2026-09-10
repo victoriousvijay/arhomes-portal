@@ -5,13 +5,21 @@ export const BRAND = {
   subTagline: "Designed With Quality That Lasts",
   philosophy: "More Than Four Walls",
   philosophyText: "The celebrations, the quiet evenings, the moments that bring everyone together — life's best moments happen at home. At AR Homes, this is where moments like these find their place. Thoughtfully planned, beautifully finished and built to a standard that makes every day feel a little more special.",
-  phone: "+91 84509 84509",
-  phoneDisplay: "+91 84509 84509",
-  whatsapp: "918450984509",
-  email: "info@arhomes.in",
-  corporateAddress: "Civil Lines / C-Scheme, Jaipur, Rajasthan - 302006",
-  reraDisclaimer: "The information provided on this website is for general informational purposes only and does not constitute an offer to sell or a solicitation of an offer to buy any property. All artist impressions, specifications, floor plans, and perspectives are artistic representations designed to convey design intent."
+  phone: "+91 88755 66970",
+  phoneDisplay: "+91 88755 66970",
+  whatsapp: "918875566970",
+  email: "arhomesjaipur@gmail.com",
+  salesEmail: "arhomesjaipur@gmail.com",
+  corporateAddress: "Shop No. 1&2, opposed Chaska restaurant & BAR, Saket Vihar, Hatoj - Kalwar - Jaipur Rd, Jaipur, Rajasthan 302012",
+  address: "Shop No. 1&2, opposed Chaska restaurant & BAR, Saket Vihar, Hatoj - Kalwar - Jaipur Rd, Jaipur, Rajasthan 302012",
+  facebook: "https://www.facebook.com/arhomesjaipur/reels/",
+  instagram: "https://www.instagram.com/arhomesindia/?hl=en",
+  youtube: "https://www.youtube.com/@ARHOMES",
+  reraDisclaimer: "The information provided on this website is for general informational purposes only and does not constitute an offer to sell or a solicitation of an offer to buy any property. All artist impressions, specifications, floor plans, and perspectives are artistic representations designed to convey design intent.",
+  reraCert: "RAJ/RERA/2026/G-8812"
 };
+
+export const BRAND_INFO = BRAND;
 
 export const RESIDENCES = [
   {
@@ -220,3 +228,5 @@ export const INSIGHTS_ARTICLES = [
     image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80"
   }
 ];
+
+export const PROJECTS = RESIDENCES;

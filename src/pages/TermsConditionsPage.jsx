@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { PageHeader } from '../components/PageHeader';
 import { Link } from 'react-router-dom';
 import { 
@@ -293,18 +293,18 @@ export const TermsConditionsPage = () => {
           <div className="p-6 rounded-2xl bg-[#0b1612] border border-[#205843] text-xs space-y-2 text-gray-300">
             <p className="font-semibold text-white text-sm">AR Homes Legal, Compliance & Grievance Cell</p>
             <p className="text-[#D4AF37] font-medium">Designated Grievance Officer: Legal Counsel & Privacy Lead</p>
-            <p>Corporate Galleria: 2nd Floor, Royal Enclave, Civil Lines / C-Scheme, Jaipur, Rajasthan - 302006</p>
+            <p>Corporate Office: Shop No. 1&2, opposed Chaska restaurant & BAR, Saket Vihar, Hatoj - Kalwar - Jaipur Rd, Jaipur, Rajasthan 302012</p>
             <p>
               Direct Email:{' '}
-              <a href="mailto:privacy@arhomes.in" className="text-[#D4AF37] hover:underline font-mono">
-                privacy@arhomes.in
+              <a href="mailto:arhomesjaipur@gmail.com" className="text-[#D4AF37] hover:underline font-mono">
+                arhomesjaipur@gmail.com
               </a>{' '}
               | Legal Escalations:{' '}
-              <a href="mailto:legal@arhomes.in" className="text-[#D4AF37] hover:underline font-mono">
-                legal@arhomes.in
+              <a href="mailto:arhomesjaipur@gmail.com" className="text-[#D4AF37] hover:underline font-mono">
+                arhomesjaipur@gmail.com
               </a>
             </p>
-            <p>Direct Helpline: +91 84509 84509 (Available Mon–Sat: 10:00 AM – 6:00 PM IST)</p>
+            <p>Direct Helpline: +91 88755 66970 (Available Mon–Sat: 10:00 AM – 6:00 PM IST)</p>
             <p className="text-gray-400 text-[11px] pt-1">
               Statutory Resolution Timeline: All verified data principal grievances will be formally acknowledged within 48 hours and resolved within <strong>7 business days</strong>. Unresolved disputes may be escalated to the <strong>Data Protection Board of India</strong>.
             </p>

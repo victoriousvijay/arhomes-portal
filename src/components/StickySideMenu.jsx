@@ -6,7 +6,8 @@ import { BRAND } from '../data/projectsData';
 export const StickySideMenu = ({ onOpenCallback }) => {
   const { settings } = useSiteData();
   const whatsappVal = settings?.whatsapp || BRAND.whatsapp;
-  const instagramVal = settings?.instagram || 'https://instagram.com';
+  const instagramVal = settings?.instagram || BRAND.instagram;
+  const youtubeVal = settings?.youtube || BRAND.youtube;
 
   return (
     <aside aria-label="Quick contact links" className="hidden md:flex fixed right-0 top-1/2 -translate-y-1/2 z-40 flex-col items-center bg-[#01472E] border-l border-t border-b border-[#205843] rounded-l-md shadow-2xl text-white overflow-hidden">
@@ -40,7 +41,7 @@ export const StickySideMenu = ({ onOpenCallback }) => {
         href={instagramVal}
         target="_blank"
         rel="noopener noreferrer"
-        className="w-11 h-12 flex items-center justify-center hover:bg-[#0B5B3E] transition-colors group"
+        className="w-11 h-12 flex items-center justify-center hover:bg-[#0B5B3E] transition-colors border-b border-[#205843]/60 group"
         title="Follow on Instagram"
         aria-label="Follow on Instagram"
       >
@@ -48,6 +49,20 @@ export const StickySideMenu = ({ onOpenCallback }) => {
           <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
           <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
           <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+        </svg>
+      </a>
+
+      {/* 4. YouTube Button */}
+      <a
+        href={youtubeVal}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="w-11 h-12 flex items-center justify-center hover:bg-[#FF0000] transition-colors group"
+        title="Watch on YouTube"
+        aria-label="Watch on YouTube"
+      >
+        <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current text-white group-hover:text-white transition-colors">
+          <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
         </svg>
       </a>
 
