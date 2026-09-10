@@ -1,9 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { BRAND_INFO } from '../data/projectsData';
+import { useSiteData } from '../context/SiteDataContext';
+import { PrivacyConsentGroup } from './PrivacyConsentGroup';
 import { Phone, Mail, MapPin, Clock, Send, MessageSquare, CheckCircle2, Building, ShieldCheck } from 'lucide-react';
 
 export const ContactSection = () => {
+  const { addLead } = useSiteData();
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Legal Consent & Anti-Spam States (Unchecked by default)
+  const [privacyConsent, setPrivacyConsent] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [marketingConsent, setMarketingConsent] = useState(false);
+  const [honeypot, setHoneypot] = useState('');
+  const [consentError, setConsentError] = useState(false);
+  const formLoadTimeRef = useRef(Date.now());
+
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -14,6 +27,49 @@ export const ContactSection = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // 1. Anti-spam honeypot
+    if (honeypot && honeypot.trim().length > 0) {
+      console.warn('Bot submission blocked via honeypot in ContactSection.');
+      setFormSubmitted(true);
+      return;
+    }
+
+    // 2. Anti-spam velocity check (< 1.5s)
+    const elapsed = Date.now() - formLoadTimeRef.current;
+    if (elapsed < 1500) {
+      console.warn('Rapid bot submission blocked in ContactSection.');
+      setFormSubmitted(true);
+      return;
+    }
+
+    // 3. Mandatory Privacy Consent check
+    if (!privacyConsent) {
+      setConsentError(true);
+      return;
+    }
+
+    setConsentError(false);
+    setIsSubmitting(true);
+
+    // Save lead into CRM with consent metadata
+    addLead({
+      name: formData.name,
+      phone: formData.phone,
+      email: formData.email,
+      property_interest: formData.interest,
+      budget: 'Unspecified',
+      message: formData.message,
+      source: 'Inline Homepage Contact Section',
+      temperature: 'Warm',
+      privacy_consent: true,
+      marketing_consent: marketingConsent,
+      terms_accepted: termsAccepted,
+      policy_version: 'v2026.1',
+      consent_timestamp: new Date().toISOString()
+    });
+
+    setIsSubmitting(false);
     setFormSubmitted(true);
   };
 
@@ -224,12 +280,31 @@ export const ContactSection = () => {
                     />
                   </div>
 
+                  <PrivacyConsentGroup
+                    privacyConsent={privacyConsent}
+                    setPrivacyConsent={(val) => {
+                      setPrivacyConsent(val);
+                      if (val) setConsentError(false);
+                    }}
+                    termsAccepted={termsAccepted}
+                    setTermsAccepted={setTermsAccepted}
+                    marketingConsent={marketingConsent}
+                    setMarketingConsent={setMarketingConsent}
+                    honeypot={honeypot}
+                    setHoneypot={setHoneypot}
+                    hasError={consentError}
+                    errorMessage="You must consent to AR Homes collecting and processing your information before submitting."
+                    companyName="AR Homes"
+                    variant="default"
+                  />
+
                   <button
                     type="submit"
-                    className="w-full py-3.5 bg-gradient-to-r from-luxury-gold via-luxury-goldLight to-luxury-gold text-luxury-black font-semibold text-xs tracking-wider uppercase rounded shadow-lg shadow-luxury-gold/20 hover:shadow-luxury-gold/40 transition-all flex items-center justify-center gap-2 active:scale-98"
+                    disabled={isSubmitting}
+                    className="w-full py-3.5 bg-gradient-to-r from-luxury-gold via-luxury-goldLight to-luxury-gold text-luxury-black font-semibold text-xs tracking-wider uppercase rounded shadow-lg shadow-luxury-gold/20 hover:shadow-luxury-gold/40 transition-all flex items-center justify-center gap-2 active:scale-98 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                   >
                     <Send className="w-3.5 h-3.5" />
-                    <span>Submit Consultation Request</span>
+                    <span>{isSubmitting ? 'Securing Transmission...' : 'Submit Consultation Request'}</span>
                   </button>
                 </form>
               </div>

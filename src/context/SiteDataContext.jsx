@@ -729,6 +729,11 @@ export const SiteDataProvider = ({ children }) => {
 
   // Leads CRM CRUD & Capture
   const addLead = async (leadData) => {
+    const timestamp = leadData.consent_timestamp || new Date().toISOString();
+    const policyVer = leadData.policy_version || 'v2026.1';
+    const auditLine = `[Consent Audit: Privacy=${leadData.privacy_consent !== false ? 'Granted' : 'Declined'}, Marketing=${leadData.marketing_consent ? 'Opt-In' : 'Opt-Out'}, Terms=${leadData.terms_accepted ? 'Accepted' : 'Unchecked'}, Version=${policyVer} @ ${timestamp}]`;
+    const combinedNotes = leadData.notes ? `${leadData.notes}\n${auditLine}` : auditLine;
+
     const newLead = {
       id: `lead-${Date.now()}`,
       name: leadData.name || 'Anonymous Visitor',
@@ -740,8 +745,14 @@ export const SiteDataProvider = ({ children }) => {
       source: leadData.source || 'Website Form',
       status: 'New Lead',
       temperature: leadData.temperature || 'Warm',
-      notes: leadData.notes || '',
-      created_at: new Date().toISOString()
+      notes: combinedNotes,
+      privacy_consent: leadData.privacy_consent !== false,
+      marketing_consent: Boolean(leadData.marketing_consent),
+      terms_accepted: Boolean(leadData.terms_accepted),
+      policy_version: policyVer,
+      consent_timestamp: timestamp,
+      consent_audit_trail: auditLine,
+      created_at: timestamp
     };
 
     const updated = [newLead, ...leads];

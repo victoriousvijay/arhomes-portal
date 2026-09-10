@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { PageHeader } from '../components/PageHeader';
 import { useSiteData } from '../context/SiteDataContext';
 import { BRAND } from '../data/projectsData';
+import { PrivacyConsentGroup } from '../components/PrivacyConsentGroup';
 import { Phone, Mail, MapPin, MessageSquare, Clock, CheckCircle2, Send, ShieldCheck, Sparkles } from 'lucide-react';
 
 export const ContactPage = () => {
@@ -21,11 +22,44 @@ export const ContactPage = () => {
     message: ''
   });
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Legal Consent & Anti-Spam States (Unchecked by default)
+  const [privacyConsent, setPrivacyConsent] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [marketingConsent, setMarketingConsent] = useState(false);
+  const [honeypot, setHoneypot] = useState('');
+  const [consentError, setConsentError] = useState(false);
+  const formLoadTimeRef = useRef(Date.now());
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // 1. Anti-spam honeypot detection
+    if (honeypot && honeypot.trim().length > 0) {
+      console.warn('Spam bot flagged via honeypot input.');
+      setSubmitted(true);
+      return;
+    }
+
+    // 2. Anti-spam submission velocity check (< 1.5 seconds)
+    const elapsed = Date.now() - formLoadTimeRef.current;
+    if (elapsed < 1500) {
+      console.warn('Suspiciously rapid form submission blocked.');
+      setSubmitted(true);
+      return;
+    }
+
+    // 3. Mandatory Privacy Consent validation (must be checked)
+    if (!privacyConsent) {
+      setConsentError(true);
+      return;
+    }
+
+    setConsentError(false);
+    setIsSubmitting(true);
     
-    // Push lead to CRM in real-time
+    // Push lead to CRM in real-time with full consent audit record
     addLead({
       name: formData.name,
       phone: formData.phone,
@@ -34,9 +68,15 @@ export const ContactPage = () => {
       budget: formData.budget,
       message: formData.message,
       source: 'Contact Page Advisory Form',
-      temperature: 'Warm'
+      temperature: 'Warm',
+      privacy_consent: true,
+      marketing_consent: marketingConsent,
+      terms_accepted: termsAccepted,
+      policy_version: 'v2026.1',
+      consent_timestamp: new Date().toISOString()
     });
 
+    setIsSubmitting(false);
     setSubmitted(true);
   };
 
@@ -261,16 +301,30 @@ export const ContactPage = () => {
                     ></textarea>
                   </div>
 
-                  <div className="flex items-center gap-2 text-[11px] text-gray-400">
-                    <ShieldCheck className="w-4 h-4 text-[#D4AF37] shrink-0" />
-                    <span>Your privacy is guaranteed. No marketing spam. RERA compliant communication.</span>
-                  </div>
+                  <PrivacyConsentGroup
+                    privacyConsent={privacyConsent}
+                    setPrivacyConsent={(val) => {
+                      setPrivacyConsent(val);
+                      if (val) setConsentError(false);
+                    }}
+                    termsAccepted={termsAccepted}
+                    setTermsAccepted={setTermsAccepted}
+                    marketingConsent={marketingConsent}
+                    setMarketingConsent={setMarketingConsent}
+                    honeypot={honeypot}
+                    setHoneypot={setHoneypot}
+                    hasError={consentError}
+                    errorMessage="You must consent to AR Homes collecting and processing your information before submitting."
+                    companyName="AR Homes"
+                    variant="default"
+                  />
 
                   <button
                     type="submit"
-                    className="w-full py-4 bg-[#D4AF37] hover:bg-white text-[#013724] font-bold text-xs uppercase tracking-wider rounded-xl transition-all cursor-pointer shadow-xl flex items-center justify-center gap-2"
+                    disabled={isSubmitting}
+                    className="w-full py-4 bg-[#D4AF37] hover:bg-white text-[#013724] font-bold text-xs uppercase tracking-wider rounded-xl transition-all cursor-pointer shadow-xl flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    <span>Submit Consultation Request</span>
+                    <span>{isSubmitting ? 'Securing Transmission...' : 'Submit Consultation Request'}</span>
                     <Send className="w-3.5 h-3.5" />
                   </button>
                 </form>

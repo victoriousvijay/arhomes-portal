@@ -18,7 +18,8 @@ import {
   X,
   FileSpreadsheet,
   Eye,
-  Mail
+  Mail,
+  ShieldCheck
 } from 'lucide-react';
 
 const STATUS_OPTIONS = [
@@ -304,11 +305,23 @@ export const CRMLeads = () => {
                         </select>
                       </td>
 
-                      {/* Source & Date */}
+                      {/* Source, Date & Consent Badges */}
                       <td className="px-5 py-4">
-                        <span className="inline-block px-2 py-0.5 rounded bg-slate-100 text-slate-600 text-[10px] font-medium mb-1">
-                          {lead.source || 'Website'}
-                        </span>
+                        <div className="flex flex-wrap items-center gap-1.5 mb-1">
+                          <span className="inline-block px-2 py-0.5 rounded bg-slate-100 text-slate-600 text-[10px] font-medium">
+                            {lead.source || 'Website'}
+                          </span>
+                          {lead.privacy_consent !== false && (
+                            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 text-[9px] font-semibold" title="DPDPA & RERA Consent Verified">
+                              <span>🛡️ Consent</span>
+                            </span>
+                          )}
+                          {lead.marketing_consent && (
+                            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-purple-50 text-purple-700 border border-purple-200 text-[9px] font-semibold" title="Marketing Opt-In Granted">
+                              <span>📢 Marketing</span>
+                            </span>
+                          )}
+                        </div>
                         <div className="text-[10px] text-slate-400 font-mono">
                           {lead.created_at ? new Date(lead.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) : 'Recent'}
                         </div>
@@ -458,6 +471,55 @@ export const CRMLeads = () => {
                   </div>
                 </div>
               )}
+
+              {/* Legal Consent & Compliance Audit Card */}
+              <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5 text-xs">
+                <div className="text-[11px] font-bold text-slate-900 uppercase tracking-wider flex items-center justify-between">
+                  <div className="flex items-center gap-1.5">
+                    <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                    <span>DPDPA & RERA Legal Consent Audit</span>
+                  </div>
+                  <span className="text-[10px] font-mono text-slate-500 font-normal">
+                    Policy {detailLead.policy_version || 'v2026.1'}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2 pt-0.5 text-[11px]">
+                  <div className="p-2.5 rounded-xl bg-white border border-slate-200">
+                    <span className="text-[10px] text-slate-400 uppercase font-medium block">Privacy Consent</span>
+                    <span className={`font-semibold text-xs ${detailLead.privacy_consent !== false ? 'text-emerald-700' : 'text-rose-600'}`}>
+                      {detailLead.privacy_consent !== false ? '✓ Granted (Mandatory)' : '✗ Not Granted'}
+                    </span>
+                  </div>
+
+                  <div className="p-2.5 rounded-xl bg-white border border-slate-200">
+                    <span className="text-[10px] text-slate-400 uppercase font-medium block">Marketing Opt-In</span>
+                    <span className={`font-semibold text-xs ${detailLead.marketing_consent ? 'text-purple-700' : 'text-slate-600'}`}>
+                      {detailLead.marketing_consent ? '✓ Opt-In (WhatsApp/SMS)' : '○ Opt-Out (No Promo)'}
+                    </span>
+                  </div>
+
+                  <div className="p-2.5 rounded-xl bg-white border border-slate-200">
+                    <span className="text-[10px] text-slate-400 uppercase font-medium block">Terms & Conditions</span>
+                    <span className={`font-semibold text-xs ${detailLead.terms_accepted ? 'text-slate-900' : 'text-slate-500'}`}>
+                      {detailLead.terms_accepted ? '✓ Accepted' : '○ Not Clicked'}
+                    </span>
+                  </div>
+
+                  <div className="p-2.5 rounded-xl bg-white border border-slate-200">
+                    <span className="text-[10px] text-slate-400 uppercase font-medium block">Recorded Timestamp</span>
+                    <span className="font-mono text-[10.5px] text-slate-700 truncate block" title={detailLead.consent_timestamp || detailLead.created_at}>
+                      {detailLead.consent_timestamp ? new Date(detailLead.consent_timestamp).toLocaleString('en-IN') : 'Logged on submission'}
+                    </span>
+                  </div>
+                </div>
+
+                {detailLead.consent_audit_trail && (
+                  <div className="text-[10px] font-mono text-slate-600 bg-white p-2 rounded-lg border border-slate-200 break-all leading-tight">
+                    {detailLead.consent_audit_trail}
+                  </div>
+                )}
+              </div>
 
               {/* Status & Temperature Updaters */}
               <div className="grid grid-cols-2 gap-3 text-xs pt-1">

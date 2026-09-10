@@ -1,11 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { X, CheckCircle2, Phone, Mail, Calendar, Sparkles } from 'lucide-react';
 import { useSiteData } from '../context/SiteDataContext';
 import { BRAND, RESIDENCES } from '../data/projectsData';
+import { PrivacyConsentGroup } from './PrivacyConsentGroup';
 
 export const EnquiryModal = ({ initialProject, onClose }) => {
   const { addLead, properties, settings } = useSiteData();
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Legal Consent & Anti-Spam States (Unchecked by default)
+  const [privacyConsent, setPrivacyConsent] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [marketingConsent, setMarketingConsent] = useState(false);
+  const [honeypot, setHoneypot] = useState('');
+  const [consentError, setConsentError] = useState(false);
+  const formLoadTimeRef = useRef(Date.now());
 
   const propertyOptions = properties && properties.length > 0 ? properties : RESIDENCES;
   const defaultProjectTitle = initialProject?.title || propertyOptions[0]?.title || 'Signature Residencies';
@@ -34,6 +44,30 @@ export const EnquiryModal = ({ initialProject, onClose }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // 1. Anti-spam honeypot detection
+    if (honeypot && honeypot.trim().length > 0) {
+      console.warn('Spam bot flagged via honeypot input in modal.');
+      setSubmitted(true);
+      return;
+    }
+
+    // 2. Anti-spam velocity check (< 1.5s)
+    const elapsed = Date.now() - formLoadTimeRef.current;
+    if (elapsed < 1500) {
+      console.warn('Fast submission blocked in modal.');
+      setSubmitted(true);
+      return;
+    }
+
+    // 3. Mandatory Privacy Consent check
+    if (!privacyConsent) {
+      setConsentError(true);
+      return;
+    }
+
+    setConsentError(false);
+    setIsSubmitting(true);
     
     // Format all custom fields answers
     const customSummary = Object.entries(customResponses)
@@ -41,7 +75,7 @@ export const EnquiryModal = ({ initialProject, onClose }) => {
       .map(([k, v]) => `${k}: ${v}`)
       .join(' | ');
 
-    // Auto-capture enquiry directly into CRM
+    // Auto-capture enquiry directly into CRM with consent metadata
     addLead({
       name: formData.name,
       phone: formData.phone,
@@ -51,9 +85,15 @@ export const EnquiryModal = ({ initialProject, onClose }) => {
       message: `${formData.visitDate ? `[Requested Visit Date: ${formData.visitDate}] ` : ''}${formData.message || ''}`,
       notes: customSummary ? `Client Preferences: ${customSummary}` : '',
       source: 'Website Enquiry Modal',
-      temperature: 'Hot' // High-intent direct enquiry
+      temperature: 'Hot', // High-intent direct enquiry
+      privacy_consent: true,
+      marketing_consent: marketingConsent,
+      terms_accepted: termsAccepted,
+      policy_version: 'v2026.1',
+      consent_timestamp: new Date().toISOString()
     });
 
+    setIsSubmitting(false);
     setSubmitted(true);
   };
 
@@ -269,12 +309,31 @@ export const EnquiryModal = ({ initialProject, onClose }) => {
                 </div>
               )}
 
-              <div className="col-span-full pt-1">
+              <div className="col-span-full pt-1 space-y-3">
+                <PrivacyConsentGroup
+                  privacyConsent={privacyConsent}
+                  setPrivacyConsent={(val) => {
+                    setPrivacyConsent(val);
+                    if (val) setConsentError(false);
+                  }}
+                  termsAccepted={termsAccepted}
+                  setTermsAccepted={setTermsAccepted}
+                  marketingConsent={marketingConsent}
+                  setMarketingConsent={setMarketingConsent}
+                  honeypot={honeypot}
+                  setHoneypot={setHoneypot}
+                  hasError={consentError}
+                  errorMessage="You must consent to AR Homes collecting and processing your information before submitting."
+                  companyName="AR Homes"
+                  variant="modal"
+                />
+
                 <button
                   type="submit"
-                  className="w-full py-3 bg-gradient-to-r from-[#D4AF37] via-[#E5C86C] to-[#D4AF37] text-[#013724] font-bold text-xs uppercase tracking-wider rounded-xl hover:brightness-105 transition-all shadow-md active:scale-95 cursor-pointer"
+                  disabled={isSubmitting}
+                  className="w-full py-3 bg-gradient-to-r from-[#D4AF37] via-[#E5C86C] to-[#D4AF37] text-[#013724] font-bold text-xs uppercase tracking-wider rounded-xl hover:brightness-105 transition-all shadow-md active:scale-95 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Submit Enquiry to Concierge
+                  {isSubmitting ? 'Transmitting Securely...' : 'Submit Enquiry to Concierge'}
                 </button>
               </div>
             </form>
