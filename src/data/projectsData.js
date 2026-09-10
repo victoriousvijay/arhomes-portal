@@ -21,6 +21,15 @@ export const BRAND = {
 
 export const BRAND_INFO = BRAND;
 
+export const getWhatsAppUrl = (phoneOrNumber, message = "Hello AR Homes, I am interested in your luxury properties.") => {
+  const raw = String(phoneOrNumber || BRAND.whatsapp || '918875566970')
+    .replace(/\D/g, '')
+    .replace(/^0+/, '');
+  const cleanNumber = raw.length === 10 ? `91${raw}` : (raw.startsWith('91') ? raw : `91${raw}`);
+  const encoded = encodeURIComponent(message);
+  return `https://wa.me/${cleanNumber}${encoded ? `?text=${encoded}` : ''}`;
+};
+
 export const RESIDENCES = [
   {
     id: "c2-civil-lines",

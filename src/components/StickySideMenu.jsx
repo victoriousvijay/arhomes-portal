@@ -1,7 +1,7 @@
 import React from 'react';
 import { Phone } from 'lucide-react';
 import { useSiteData } from '../context/SiteDataContext';
-import { BRAND } from '../data/projectsData';
+import { BRAND, getWhatsAppUrl } from '../data/projectsData';
 
 export const StickySideMenu = ({ onOpenCallback }) => {
   const { settings } = useSiteData();
@@ -14,7 +14,7 @@ export const StickySideMenu = ({ onOpenCallback }) => {
       
       {/* 1. WhatsApp Button */}
       <a
-        href={`https://wa.me/${whatsappVal}?text=Hello%20AR%20Homes,%20I%20am%20interested%20in%20your%20luxury%20properties.`}
+        href={getWhatsAppUrl(whatsappVal, 'Hello AR Homes, I am interested in your luxury properties.')}
         target="_blank"
         rel="noopener noreferrer"
         className="w-11 h-12 flex items-center justify-center hover:bg-[#0B5B3E] transition-colors border-b border-[#205843]/60 group"

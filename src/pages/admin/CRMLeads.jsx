@@ -128,7 +128,8 @@ export const CRMLeads = () => {
   };
 
   const formatWhatsAppLink = (phone, name, prop) => {
-    const cleanPhone = phone.replace(/[^0-9]/g, '');
+    let cleanPhone = String(phone || '').replace(/[^0-9]/g, '').replace(/^0+/, '');
+    if (cleanPhone.length === 10) cleanPhone = `91${cleanPhone}`;
     const text = encodeURIComponent(
       `Hello ${name || 'Sir/Ma\'am'}, this is AR Homes Client Relations regarding your interest in ${prop || 'our luxury residences in Jaipur'}. How may I assist you today?`
     );

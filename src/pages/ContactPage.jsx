@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { PageHeader } from '../components/PageHeader';
 import { useSiteData } from '../context/SiteDataContext';
-import { BRAND } from '../data/projectsData';
+import { BRAND, getWhatsAppUrl } from '../data/projectsData';
 import { PrivacyConsentGroup } from '../components/PrivacyConsentGroup';
 import { Phone, Mail, MapPin, MessageSquare, Clock, CheckCircle2, Send, ShieldCheck, Sparkles } from 'lucide-react';
 
@@ -168,7 +168,7 @@ export const ContactPage = () => {
               </a>
 
               <a
-                href={`https://wa.me/${whatsappVal}?text=Hi%20AR%20Homes%2C%20I%20would%20like%20to%20enquire%20about%20your%20properties.`}
+                href={getWhatsAppUrl(whatsappVal, 'Hi AR Homes, I would like to enquire about your properties.')}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-4 p-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition-colors group"

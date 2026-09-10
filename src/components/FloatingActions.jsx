@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { MessageSquare, Phone, ArrowUp } from 'lucide-react';
-import { BRAND_INFO } from '../data/projectsData';
+import { BRAND_INFO, getWhatsAppUrl } from '../data/projectsData';
 
 export const FloatingActions = ({ onOpenVipModal }) => {
   const [showBackToTop, setShowBackToTop] = useState(false);
@@ -42,7 +42,7 @@ export const FloatingActions = ({ onOpenVipModal }) => {
 
       {/* Floating WhatsApp Concierge Button */}
       <a
-        href={`https://wa.me/${BRAND_INFO.whatsapp}?text=Hello%20AR%20Homes,%20I%20am%20interested%20in%20your%20luxury%20properties.`}
+        href={getWhatsAppUrl(BRAND_INFO.whatsapp, 'Hello AR Homes, I am interested in your luxury properties.')}
         target="_blank"
         rel="noopener noreferrer"
         className="flex items-center gap-2.5 px-5 py-3 rounded-full bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white font-semibold text-xs tracking-wider uppercase shadow-2xl shadow-emerald-950/60 transition-all hover:scale-105 active:scale-95"

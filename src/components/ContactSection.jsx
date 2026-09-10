@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { BRAND_INFO } from '../data/projectsData';
+import { BRAND_INFO, getWhatsAppUrl } from '../data/projectsData';
 import { useSiteData } from '../context/SiteDataContext';
 import { PrivacyConsentGroup } from './PrivacyConsentGroup';
 import { Phone, Mail, MapPin, Clock, Send, MessageSquare, CheckCircle2, Building, ShieldCheck } from 'lucide-react';
@@ -155,7 +155,7 @@ export const ContactSection = () => {
               </a>
 
               <a
-                href={`https://wa.me/${BRAND_INFO.whatsapp}?text=Hello%20AR%20Homes,%20I%20would%20like%20information%20regarding%20your%20luxury%20properties.`}
+                href={getWhatsAppUrl(BRAND_INFO.whatsapp, 'Hello AR Homes, I would like information regarding your luxury properties.')}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-4 rounded bg-luxury-card border border-emerald-900/50 hover:border-emerald-500 transition-all block group"

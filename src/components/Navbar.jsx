@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useSiteData } from '../context/SiteDataContext';
-import { BRAND } from '../data/projectsData';
+import { BRAND, getWhatsAppUrl } from '../data/projectsData';
 import { ChevronDown, Menu, X, ArrowRight, Home, Phone, MessageCircle, ShieldCheck } from 'lucide-react';
 
 const BUY_LINKS = [
@@ -301,7 +301,7 @@ export const Navbar = ({ onStartChat, onOpenEnquiry }) => {
               <span className="truncate">{phoneDisplayVal}</span>
             </a>
             <a
-              href={`https://wa.me/${whatsappVal}?text=Hello%20AR%20Homes,%20I%20am%20interested%20in%20your%20properties.`}
+              href={getWhatsAppUrl(whatsappVal, 'Hello AR Homes, I am interested in your properties.')}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-[#25D366]/20 hover:bg-[#25D366]/30 text-white text-xs font-semibold border border-[#25D366]/30 transition-colors"

@@ -374,7 +374,7 @@ export const SiteDataProvider = ({ children }) => {
     if (!saved) return DEFAULT_SETTINGS;
     try {
       const parsed = JSON.parse(saved);
-      const isStale = !parsed.youtube || parsed.phone === '+91 84509 84509' || parsed.corporate_address?.includes('Civil Lines / C-Scheme') || parsed.email === 'info@arhomes.in';
+      const isStale = !parsed.youtube || parsed.phone === '+91 84509 84509' || parsed.corporate_address?.includes('Civil Lines / C-Scheme') || parsed.email === 'info@arhomes.in' || parsed.whatsapp === '8875566970' || !String(parsed.whatsapp || '').startsWith('91');
       const merged = { ...DEFAULT_SETTINGS, ...parsed };
       if (isStale) {
         merged.phone = DEFAULT_SETTINGS.phone;
@@ -385,8 +385,12 @@ export const SiteDataProvider = ({ children }) => {
         merged.facebook = DEFAULT_SETTINGS.facebook;
         merged.instagram = DEFAULT_SETTINGS.instagram;
         merged.youtube = DEFAULT_SETTINGS.youtube;
-        localStorage.setItem('arhomes_settings', JSON.stringify(merged));
       }
+      // Always enforce clean country code (91) for WhatsApp
+      let cleanWa = String(merged.whatsapp || DEFAULT_SETTINGS.whatsapp).replace(/\D/g, '').replace(/^0+/, '');
+      if (cleanWa.length === 10) cleanWa = `91${cleanWa}`;
+      merged.whatsapp = cleanWa;
+      localStorage.setItem('arhomes_settings', JSON.stringify(merged));
       return merged;
     } catch {
       return DEFAULT_SETTINGS;
@@ -518,6 +522,11 @@ export const SiteDataProvider = ({ children }) => {
   // Update Global Settings
   const updateSettings = async (newSettings) => {
     const merged = { ...settings, ...newSettings };
+    if (merged.whatsapp) {
+      let cleanWa = String(merged.whatsapp).replace(/\D/g, '').replace(/^0+/, '');
+      if (cleanWa.length === 10) cleanWa = `91${cleanWa}`;
+      merged.whatsapp = cleanWa;
+    }
     setSettings(merged);
     localStorage.setItem('arhomes_settings', JSON.stringify(merged));
 

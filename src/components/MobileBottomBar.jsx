@@ -1,7 +1,7 @@
 import React from 'react';
 import { Phone, MessageCircle, Sparkles } from 'lucide-react';
 import { useSiteData } from '../context/SiteDataContext';
-import { BRAND } from '../data/projectsData';
+import { BRAND, getWhatsAppUrl } from '../data/projectsData';
 
 export const MobileBottomBar = ({ onOpenCallback }) => {
   const { settings } = useSiteData();
@@ -30,7 +30,7 @@ export const MobileBottomBar = ({ onOpenCallback }) => {
 
         {/* 2. Direct WhatsApp Button */}
         <a
-          href={`https://wa.me/${whatsappVal}?text=Hello%20AR%20Homes,%20I%20am%20interested%20in%20your%20luxury%20properties%20in%20Jaipur.`}
+          href={getWhatsAppUrl(whatsappVal, 'Hello AR Homes, I am interested in your luxury properties in Jaipur.')}
           target="_blank"
           rel="noopener noreferrer"
           className="flex-1 min-w-[70px] flex flex-col items-center justify-center py-1.5 px-2 rounded-xl bg-white/5 border border-white/10 text-slate-200 hover:text-white hover:bg-white/15 transition-all active:scale-95 text-center group"

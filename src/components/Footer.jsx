@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSiteData } from '../context/SiteDataContext';
-import { BRAND } from '../data/projectsData';
+import { BRAND, getWhatsAppUrl } from '../data/projectsData';
 import { Phone, Mail, MapPin, Shield, ExternalLink } from 'lucide-react';
 import { ScrollReveal } from './ScrollReveal';
 
@@ -79,7 +79,7 @@ export const Footer = ({ onOpenEnquiry }) => {
               <div className="flex items-center gap-2.5">
                 {/* 1. WhatsApp */}
                 <a
-                  href={`https://wa.me/${whatsappVal}?text=Hello%20AR%20Homes,%20I%20am%20interested%20in%20your%20luxury%20properties.`}
+                  href={getWhatsAppUrl(whatsappVal, 'Hello AR Homes, I am interested in your luxury properties.')}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-9 h-9 rounded-full bg-[#002719] hover:bg-[#25D366] text-[#D4AF37] hover:text-white border border-[#205843] hover:border-[#25D366] flex items-center justify-center transition-all duration-200 shadow-sm hover:scale-110 cursor-pointer"
