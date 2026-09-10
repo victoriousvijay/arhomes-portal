@@ -192,7 +192,7 @@ export const CMSSettings = () => {
                   required
                   value={formData.whatsapp || ''}
                   onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
-                  placeholder="918875566970"
+                  placeholder="916377300724"
                   className="w-full pl-9 pr-3 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 font-mono focus:bg-white focus:outline-none focus:border-[#013724]"
                 />
               </div>

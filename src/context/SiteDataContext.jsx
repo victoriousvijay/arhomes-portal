@@ -8,6 +8,7 @@ const DEFAULT_SETTINGS = {
   phone: BRAND.phone,
   phone_display: BRAND.phoneDisplay,
   whatsapp: BRAND.whatsapp,
+  whatsapp_display: BRAND.whatsappDisplay || '+91 63773 00724',
   email: BRAND.email,
   corporate_address: BRAND.corporateAddress,
   facebook: BRAND.facebook,
@@ -374,12 +375,13 @@ export const SiteDataProvider = ({ children }) => {
     if (!saved) return DEFAULT_SETTINGS;
     try {
       const parsed = JSON.parse(saved);
-      const isStale = !parsed.youtube || parsed.phone === '+91 84509 84509' || parsed.corporate_address?.includes('Civil Lines / C-Scheme') || parsed.email === 'info@arhomes.in' || parsed.whatsapp === '8875566970' || !String(parsed.whatsapp || '').startsWith('91');
+      const isStale = !parsed.youtube || parsed.phone === '+91 84509 84509' || parsed.corporate_address?.includes('Civil Lines / C-Scheme') || parsed.email === 'info@arhomes.in' || parsed.whatsapp?.includes('8875566970') || !String(parsed.whatsapp || '').startsWith('91') || parsed.whatsapp !== DEFAULT_SETTINGS.whatsapp;
       const merged = { ...DEFAULT_SETTINGS, ...parsed };
       if (isStale) {
         merged.phone = DEFAULT_SETTINGS.phone;
         merged.phone_display = DEFAULT_SETTINGS.phone_display;
         merged.whatsapp = DEFAULT_SETTINGS.whatsapp;
+        merged.whatsapp_display = DEFAULT_SETTINGS.whatsapp_display;
         merged.email = DEFAULT_SETTINGS.email;
         merged.corporate_address = DEFAULT_SETTINGS.corporate_address;
         merged.facebook = DEFAULT_SETTINGS.facebook;

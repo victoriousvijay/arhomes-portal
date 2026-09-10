@@ -5,7 +5,10 @@ import { PrivacyConsentGroup } from './PrivacyConsentGroup';
 import { Phone, Mail, MapPin, Clock, Send, MessageSquare, CheckCircle2, Building, ShieldCheck } from 'lucide-react';
 
 export const ContactSection = () => {
-  const { addLead } = useSiteData();
+  const { settings, addLead } = useSiteData();
+  const phoneVal = settings?.phone || BRAND_INFO.phone;
+  const phoneDisplayVal = settings?.phone_display || settings?.phone || BRAND_INFO.phoneDisplay;
+  const whatsappVal = settings?.whatsapp || BRAND_INFO.whatsapp;
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -141,7 +144,7 @@ export const ContactSection = () => {
             {/* Direct Connect Options */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <a
-                href={`tel:${BRAND_INFO.phone}`}
+                href={`tel:${phoneVal}`}
                 className="p-4 rounded bg-luxury-card border border-luxury-border hover:border-luxury-gold transition-all block group"
               >
                 <div className="flex items-center gap-2 text-luxury-gold text-xs font-semibold uppercase tracking-wider mb-1">
@@ -149,13 +152,13 @@ export const ContactSection = () => {
                   <span>Direct Sales Desk</span>
                 </div>
                 <div className="text-sm font-bold text-white group-hover:text-luxury-gold transition-colors">
-                  {BRAND_INFO.phoneDisplay}
+                  {phoneDisplayVal}
                 </div>
                 <div className="text-[10px] text-slate-400 mt-1">Instant connect with relation manager</div>
               </a>
 
               <a
-                href={getWhatsAppUrl(BRAND_INFO.whatsapp, 'Hello AR Homes, I would like information regarding your luxury properties.')}
+                href={getWhatsAppUrl(whatsappVal, 'Hello AR Homes, I would like information regarding your luxury properties.')}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-4 rounded bg-luxury-card border border-emerald-900/50 hover:border-emerald-500 transition-all block group"

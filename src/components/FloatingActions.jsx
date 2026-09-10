@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { MessageSquare, Phone, ArrowUp } from 'lucide-react';
+import { useSiteData } from '../context/SiteDataContext';
 import { BRAND_INFO, getWhatsAppUrl } from '../data/projectsData';
 
 export const FloatingActions = ({ onOpenVipModal }) => {
+  const { settings } = useSiteData();
+  const phoneVal = settings?.phone || BRAND_INFO.phone;
+  const whatsappVal = settings?.whatsapp || BRAND_INFO.whatsapp;
   const [showBackToTop, setShowBackToTop] = useState(false);
 
   useEffect(() => {
@@ -33,7 +37,7 @@ export const FloatingActions = ({ onOpenVipModal }) => {
 
       {/* Direct Call Button */}
       <a
-        href={`tel:${BRAND_INFO.phone}`}
+        href={`tel:${phoneVal}`}
         className="hidden sm:flex items-center gap-2 px-4 py-2.5 rounded-full bg-luxury-dark/95 border border-luxury-border hover:border-luxury-gold text-slate-200 hover:text-white shadow-2xl backdrop-blur-md transition-all hover:-translate-y-0.5 group"
       >
         <Phone className="w-4 h-4 text-luxury-gold" />
@@ -42,7 +46,7 @@ export const FloatingActions = ({ onOpenVipModal }) => {
 
       {/* Floating WhatsApp Concierge Button */}
       <a
-        href={getWhatsAppUrl(BRAND_INFO.whatsapp, 'Hello AR Homes, I am interested in your luxury properties.')}
+        href={getWhatsAppUrl(whatsappVal, 'Hello AR Homes, I am interested in your luxury properties.')}
         target="_blank"
         rel="noopener noreferrer"
         className="flex items-center gap-2.5 px-5 py-3 rounded-full bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white font-semibold text-xs tracking-wider uppercase shadow-2xl shadow-emerald-950/60 transition-all hover:scale-105 active:scale-95"

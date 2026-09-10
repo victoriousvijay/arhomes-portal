@@ -10,6 +10,7 @@ export const ContactPage = () => {
   const phoneVal = settings?.phone || BRAND.phone;
   const phoneDisplayVal = settings?.phone_display || settings?.phone || BRAND.phoneDisplay;
   const whatsappVal = settings?.whatsapp || BRAND.whatsapp;
+  const whatsappDisplayVal = settings?.whatsapp_display || BRAND.whatsappDisplay || '+91 63773 00724';
   const emailVal = settings?.email || BRAND.email;
   const addressVal = settings?.corporate_address || BRAND.corporateAddress;
 
@@ -178,7 +179,7 @@ export const ContactPage = () => {
                 </div>
                 <div>
                   <span className="block text-[10px] uppercase tracking-wider text-gray-400">Official WhatsApp Desk</span>
-                  <span className="text-sm font-semibold text-white group-hover:text-[#D4AF37] transition-colors">Instant Chat Connect</span>
+                  <span className="text-sm font-semibold text-white group-hover:text-[#D4AF37] transition-colors">{whatsappDisplayVal}</span>
                 </div>
               </a>
 

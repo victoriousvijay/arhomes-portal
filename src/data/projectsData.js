@@ -7,7 +7,8 @@ export const BRAND = {
   philosophyText: "The celebrations, the quiet evenings, the moments that bring everyone together — life's best moments happen at home. At AR Homes, this is where moments like these find their place. Thoughtfully planned, beautifully finished and built to a standard that makes every day feel a little more special.",
   phone: "+91 88755 66970",
   phoneDisplay: "+91 88755 66970",
-  whatsapp: "918875566970",
+  whatsapp: "916377300724",
+  whatsappDisplay: "+91 63773 00724",
   email: "arhomesjaipur@gmail.com",
   salesEmail: "arhomesjaipur@gmail.com",
   corporateAddress: "Shop No. 1&2, opposed Chaska restaurant & BAR, Saket Vihar, Hatoj - Kalwar - Jaipur Rd, Jaipur, Rajasthan 302012",
@@ -22,7 +23,7 @@ export const BRAND = {
 export const BRAND_INFO = BRAND;
 
 export const getWhatsAppUrl = (phoneOrNumber, message = "Hello AR Homes, I am interested in your luxury properties.") => {
-  const raw = String(phoneOrNumber || BRAND.whatsapp || '918875566970')
+  const raw = String(phoneOrNumber || BRAND.whatsapp || '916377300724')
     .replace(/\D/g, '')
     .replace(/^0+/, '');
   const cleanNumber = raw.length === 10 ? `91${raw}` : (raw.startsWith('91') ? raw : `91${raw}`);
