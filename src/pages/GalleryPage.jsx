@@ -19,15 +19,6 @@ const formatImageUrl = (url) => {
   return url;
 };
 
-const CATEGORIES = [
-  { id: 'all', label: 'All Portfolio' },
-  { id: 'villas', label: 'Villas & Mansions' },
-  { id: 'floors', label: 'Independent Floors' },
-  { id: 'apartments', label: 'Apartments' },
-  { id: 'commercial', label: 'Commercial' },
-  { id: 'land', label: 'Plots & Land Estates' },
-  { id: 'interiors', label: 'Interiors & Salons' }
-];
 
 const GALLERY_ITEMS = [
   {
@@ -226,27 +217,22 @@ const GALLERY_ITEMS = [
 
 export const GalleryPage = () => {
   const { gallery } = useSiteData();
-  const [activeCategory, setActiveCategory] = useState('all');
   const [lightboxIndex, setLightboxIndex] = useState(null);
 
   const displayGallery = gallery && gallery.length > 0 ? gallery : GALLERY_ITEMS;
-
-  const filteredItems = displayGallery.filter(
-    (item) => activeCategory === 'all' || item.category === activeCategory
-  );
 
   const handleOpenLightbox = (index) => setLightboxIndex(index);
   const handleCloseLightbox = () => setLightboxIndex(null);
 
   const handleNext = () => {
     if (lightboxIndex !== null) {
-      setLightboxIndex((lightboxIndex + 1) % filteredItems.length);
+      setLightboxIndex((lightboxIndex + 1) % displayGallery.length);
     }
   };
 
   const handlePrev = () => {
     if (lightboxIndex !== null) {
-      setLightboxIndex((lightboxIndex - 1 + filteredItems.length) % filteredItems.length);
+      setLightboxIndex((lightboxIndex - 1 + displayGallery.length) % displayGallery.length);
     }
   };
 
@@ -265,48 +251,19 @@ export const GalleryPage = () => {
 
       <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 py-10 sm:py-14">
         
-        {/* Horizontal Category Filter Pills */}
-        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-8 sm:mb-12">
-          {CATEGORIES.filter(cat => cat.id === 'all' || displayGallery.some(i => i.category === cat.id)).map((cat) => {
-            const isActive = activeCategory === cat.id;
-            const count = cat.id === 'all' 
-              ? displayGallery.length 
-              : displayGallery.filter(i => i.category === cat.id).length;
-            return (
-              <button
-                key={cat.id}
-                type="button"
-                onClick={() => setActiveCategory(cat.id)}
-                className={`px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 cursor-pointer flex items-center gap-2 ${
-                  isActive
-                    ? 'bg-[#013724] text-white shadow-md shadow-[#013724]/20 scale-[1.02]'
-                    : 'bg-white text-slate-600 hover:bg-slate-100 hover:text-slate-900 border border-slate-200 shadow-sm'
-                }`}
-              >
-                <span>{cat.label}</span>
-                <span className={`text-[11px] px-2 py-0.5 rounded-full font-bold ${
-                  isActive ? 'bg-white/20 text-[#D4AF37]' : 'bg-slate-100 text-slate-500'
-                }`}>
-                  {count}
-                </span>
-              </button>
-            );
-          })}
-        </div>
-
         {/* Gallery Subheader Info */}
-        <div className="flex items-center justify-between mb-6 pb-3 border-b border-slate-200/70">
-          <span className="text-xs sm:text-sm font-medium text-slate-600">
-            Showing <strong className="text-slate-900 font-bold">{filteredItems.length}</strong> {filteredItems.length === 1 ? 'Showcase' : 'Showcases'} in <strong className="text-[#013724] font-bold">{CATEGORIES.find(c => c.id === activeCategory)?.label}</strong>
+        <div className="flex items-center justify-between mb-8 pb-3 border-b border-slate-200/70">
+          <span className="text-xs sm:text-sm font-medium text-slate-500">
+            Showing all <strong className="text-slate-900 font-bold">{displayGallery.length}</strong> photographs
           </span>
           <span className="text-xs text-slate-400 hidden sm:inline-block">
-            Click any photo to enlarge
+            Click any photo to view in full resolution
           </span>
         </div>
 
         {/* Full-Width Responsive Gallery Grid (4 columns on lg/xl, 3 on md, 2 on sm) */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {filteredItems.map((item, idx) => (
+          {displayGallery.map((item, idx) => (
             <div
               key={item.id}
               onClick={() => handleOpenLightbox(idx)}
@@ -342,7 +299,7 @@ export const GalleryPage = () => {
       </div>
 
       {/* Lightbox Modal */}
-      {lightboxIndex !== null && filteredItems[lightboxIndex] && (
+      {lightboxIndex !== null && displayGallery[lightboxIndex] && (
         <div 
           className="fixed inset-0 z-50 bg-black/95 backdrop-blur-xl flex items-center justify-center p-4 sm:p-8 animate-in fade-in duration-200"
           data-lenis-prevent
@@ -377,18 +334,18 @@ export const GalleryPage = () => {
           <div className="max-w-5xl w-full flex flex-col items-center">
             <div className="max-h-[75vh] w-auto overflow-hidden rounded-2xl border border-white/20 shadow-2xl mb-4 bg-black">
               <img
-                src={formatImageUrl(filteredItems[lightboxIndex].image)}
-                alt={filteredItems[lightboxIndex].title}
+                src={formatImageUrl(displayGallery[lightboxIndex].image)}
+                alt={displayGallery[lightboxIndex].title}
                 className="w-full h-auto max-h-[75vh] object-contain"
               />
             </div>
             
             <div className="text-center max-w-xl text-white">
               <span className="text-[#D4AF37] text-[11px] uppercase tracking-widest font-semibold block mb-1">
-                {filteredItems[lightboxIndex].location} • Image {lightboxIndex + 1} of {filteredItems.length}
+                {displayGallery[lightboxIndex].location} • Image {lightboxIndex + 1} of {displayGallery.length}
               </span>
               <h4 className="font-serif text-xl font-bold mb-1">
-                {filteredItems[lightboxIndex].title}
+                {displayGallery[lightboxIndex].title}
               </h4>
             </div>
           </div>
