@@ -44,32 +44,32 @@ const DEFAULT_SETTINGS = {
 const DEFAULT_OWNERS = [
   {
     id: 'anand-verma',
-    name: 'Anand R. Verma',
-    role: 'Co-Founder & Managing Director',
-    expertise: 'Land Acquisitions & Master Planning',
-    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=85',
-    bio: 'Pioneered the AR Homes vision of low-density independent floors in Jaipur. With over 22 years of development leadership, Anand directs land acquisitions, master planning, and strategic partnerships across Civil Lines, C-Scheme, and Vaishali Nagar.',
-    credentials: 'B.E. Civil • 22+ Years Real Estate Experience',
+    name: '',
+    role: '',
+    expertise: '',
+    image: '/assets/owner-1.jpg',
+    bio: '',
+    credentials: '',
     display_order: 1
   },
   {
-    name: 'Rajesh K. Sharma',
+    name: '',
     id: 'rajesh-sharma',
-    role: 'Co-Founder & Director of Architecture',
-    expertise: 'Structural Integrity & Design Execution',
-    image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=800&q=85',
-    bio: 'Dedicated to architectural precision and European finish standards. Rajesh personally supervises structural concrete casting, seismic safety compliance, imported Italian marble joinery, and on-schedule handover across every AR Homes project.',
-    credentials: 'M.Arch Architecture • 19+ Years Engineering Execution',
+    role: '',
+    expertise: '',
+    image: '/assets/owner-2.jpg',
+    bio: '',
+    credentials: '',
     display_order: 2
   },
   {
-    name: 'Amit V. Rathore',
+    name: '',
     id: 'amit-rathore',
-    role: 'Co-Founder & Director of Finance & Legal',
-    expertise: 'Banking Alliances & RERA Compliance',
-    image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=800&q=85',
-    bio: 'Guarantees 100% legal title transparency and buyer security. Amit orchestrates preferred loan alliances with SBI, HDFC, ICICI, and Axis Bank while managing statutory RERA governance and NRI real estate foreign exchange advisory.',
-    credentials: 'FCA & Corporate Finance • 18+ Years Banking & Law',
+    role: '',
+    expertise: '',
+    image: '/assets/owner-3.jpg',
+    bio: '',
+    credentials: '',
     display_order: 3
   }
 ];
@@ -406,7 +406,19 @@ export const SiteDataProvider = ({ children }) => {
 
   const [owners, setOwners] = useState(() => {
     const saved = localStorage.getItem('arhomes_owners');
-    return saved ? JSON.parse(saved) : DEFAULT_OWNERS;
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.some(p => p.image && p.image.includes('unsplash.com'))) {
+          localStorage.removeItem('arhomes_owners');
+          return DEFAULT_OWNERS;
+        }
+        return parsed;
+      } catch (e) {
+        return DEFAULT_OWNERS;
+      }
+    }
+    return DEFAULT_OWNERS;
   });
 
   const [gallery, setGallery] = useState(() => {

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { PageHeader } from '../components/PageHeader';
 import { useSiteData } from '../context/SiteDataContext';
 import { BRAND } from '../data/projectsData';
-import { ShieldCheck, Award, CheckCircle2, ArrowRight, PhoneCall, Building2, UserCheck } from 'lucide-react';
+import { ShieldCheck, Award, CheckCircle2, ArrowRight, PhoneCall, Building2 } from 'lucide-react';
 
 const formatImageUrl = (url) => {
   if (!url) return '';
@@ -16,28 +16,16 @@ const formatImageUrl = (url) => {
 
 const OWNERS = [
   {
-    name: 'Anand R. Verma',
-    role: 'Co-Founder & Managing Director',
-    expertise: 'Land Acquisitions & Master Planning',
-    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=85',
-    bio: 'Pioneered the AR Homes vision of low-density independent floors in Jaipur. With over 22 years of development leadership, Anand directs land acquisitions, master planning, and strategic partnerships across Civil Lines, C-Scheme, and Vaishali Nagar.',
-    credentials: 'B.E. Civil • 22+ Years Real Estate Experience'
+    id: 'owner-1',
+    image: '/assets/owner-1.jpg',
   },
   {
-    name: 'Rajesh K. Sharma',
-    role: 'Co-Founder & Director of Architecture',
-    expertise: 'Structural Integrity & Design Execution',
-    image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=800&q=85',
-    bio: 'Dedicated to architectural precision and European finish standards. Rajesh personally supervises structural concrete casting, seismic safety compliance, imported Italian marble joinery, and on-schedule handover across every AR Homes project.',
-    credentials: 'M.Arch Architecture • 19+ Years Engineering Execution'
+    id: 'owner-2',
+    image: '/assets/owner-2.jpg',
   },
   {
-    name: 'Amit V. Rathore',
-    role: 'Co-Founder & Director of Finance & Legal',
-    expertise: 'Banking Alliances & RERA Compliance',
-    image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=800&q=85',
-    bio: 'Guarantees 100% legal title transparency and buyer security. Amit orchestrates preferred loan alliances with SBI, HDFC, ICICI, and Axis Bank while managing statutory RERA governance and NRI real estate foreign exchange advisory.',
-    credentials: 'FCA & Corporate Finance • 18+ Years Banking & Law'
+    id: 'owner-3',
+    image: '/assets/owner-3.jpg',
   }
 ];
 
@@ -79,51 +67,29 @@ export const AboutPage = ({ onOpenEnquiry }) => {
           </p>
         </div>
 
-        {/* The Three Owners Cards */}
+        {/* The Three Owners Photos */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
-          {displayOwners.map((owner, idx) => (
-            <div
-              key={owner.id || idx}
-              className="bg-white border border-slate-200 rounded-2xl overflow-hidden hover:border-[#D4AF37] hover:shadow-xl transition-all duration-300 flex flex-col justify-between group hover:-translate-y-1 shadow-sm"
-            >
-              <div>
-                {/* Photo with subtle zoom */}
-                <div className="aspect-[4/3] w-full overflow-hidden bg-slate-100 relative">
+          {displayOwners.map((owner, idx) => {
+            const fallbackImages = ['/assets/owner-1.jpg', '/assets/owner-2.jpg', '/assets/owner-3.jpg'];
+            const imgSrc = (owner.image && !owner.image.includes('unsplash.com'))
+              ? formatImageUrl(owner.image)
+              : fallbackImages[idx % 3];
+
+            return (
+              <div
+                key={owner.id || idx}
+                className="bg-white border border-slate-200/80 rounded-2xl overflow-hidden hover:border-[#D4AF37] hover:shadow-2xl transition-all duration-300 group hover:-translate-y-1 shadow-sm"
+              >
+                <div className="aspect-square w-full overflow-hidden bg-slate-100 relative">
                   <img
-                    src={formatImageUrl(owner.image)}
-                    alt={owner.name}
-                    className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                    src={imgSrc}
+                    alt="AR Homes Leadership"
+                    className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                  
-                  <div className="absolute bottom-3 left-3 right-3 text-white">
-                    <span className="text-[10px] uppercase font-bold tracking-wider text-[#F3E5AB] block drop-shadow-md">
-                      {owner.expertise}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Content */}
-                <div className="p-6 sm:p-7">
-                  <h3 className="font-serif text-xl font-bold text-slate-900 group-hover:text-[#013724] transition-colors mb-1">
-                    {owner.name}
-                  </h3>
-                  <span className="text-xs font-semibold text-[#013724] block mb-3.5">
-                    {owner.role}
-                  </span>
-                  <p className="text-xs text-slate-600 font-normal leading-relaxed mb-4">
-                    {owner.bio}
-                  </p>
                 </div>
               </div>
-
-              {/* Footer Credentials */}
-              <div className="px-6 sm:px-7 pb-6 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500 font-medium">
-                <span className="truncate">{owner.credentials}</span>
-                <UserCheck className="w-4 h-4 text-emerald-600 shrink-0 ml-2" />
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Minimal Stats Row */}
