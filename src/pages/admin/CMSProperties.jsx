@@ -168,16 +168,18 @@ export const CMSProperties = () => {
   };
 
   const toggleFeaturedHome = (prop) => {
+    const nextVal = !Boolean(prop.is_featured_home);
     saveProperty({
       ...prop,
-      is_featured_home: !prop.is_featured_home
+      is_featured_home: nextVal
     });
   };
 
   const toggleHeroCarousel = (prop) => {
+    const nextVal = !Boolean(prop.is_hero_carousel);
     saveProperty({
       ...prop,
-      is_hero_carousel: !prop.is_hero_carousel
+      is_hero_carousel: nextVal
     });
   };
 
@@ -331,44 +333,64 @@ export const CMSProperties = () => {
                       Website Placement:
                     </div>
 
-                    <div className="flex items-center justify-between p-2 rounded-xl bg-slate-50 border border-slate-200 text-xs">
+                    {/* Home Page Listing Toggle */}
+                    <div 
+                      onClick={() => toggleFeaturedHome(prop)}
+                      role="switch"
+                      aria-checked={Boolean(prop.is_featured_home)}
+                      className={`flex items-center justify-between p-2.5 rounded-xl border text-xs cursor-pointer transition-all select-none ${
+                        prop.is_featured_home 
+                          ? 'bg-emerald-50/80 border-emerald-300 shadow-sm' 
+                          : 'bg-slate-50 border-slate-200 hover:bg-slate-100'
+                      }`}
+                    >
                       <div className="flex items-center gap-2">
-                        <Home className="w-3.5 h-3.5 text-slate-500" />
-                        <span className="text-slate-700 text-[11px] font-medium">Home Page Listing</span>
+                        <Home className={`w-3.5 h-3.5 ${prop.is_featured_home ? 'text-[#013724]' : 'text-slate-500'}`} />
+                        <span className={`text-[11px] font-medium ${prop.is_featured_home ? 'text-[#013724] font-semibold' : 'text-slate-700'}`}>
+                          Home Page Listing
+                        </span>
                       </div>
-                      <button
-                        onClick={() => toggleFeaturedHome(prop)}
-                        className={`w-9 h-5 rounded-full transition-colors relative cursor-pointer ${
+                      <div
+                        className={`w-10 h-5 rounded-full transition-colors relative flex items-center p-0.5 ${
                           prop.is_featured_home ? 'bg-[#013724]' : 'bg-slate-300'
                         }`}
-                        title="Toggle visibility on home page"
                       >
                         <span
-                          className={`w-3.5 h-3.5 rounded-full bg-white absolute top-0.5 transition-transform ${
-                            prop.is_featured_home ? 'left-4' : 'left-0.5'
+                          className={`w-4 h-4 rounded-full bg-white shadow-md transform transition-transform duration-200 ease-in-out ${
+                            prop.is_featured_home ? 'translate-x-5' : 'translate-x-0'
                           }`}
                         />
-                      </button>
+                      </div>
                     </div>
 
-                    <div className="flex items-center justify-between p-2 rounded-xl bg-slate-50 border border-slate-200 text-xs">
+                    {/* Buy Hero Banner Toggle */}
+                    <div 
+                      onClick={() => toggleHeroCarousel(prop)}
+                      role="switch"
+                      aria-checked={Boolean(prop.is_hero_carousel)}
+                      className={`flex items-center justify-between p-2.5 rounded-xl border text-xs cursor-pointer transition-all select-none ${
+                        prop.is_hero_carousel 
+                          ? 'bg-amber-50/80 border-amber-300 shadow-sm' 
+                          : 'bg-slate-50 border-slate-200 hover:bg-slate-100'
+                      }`}
+                    >
                       <div className="flex items-center gap-2">
-                        <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-                        <span className="text-slate-700 text-[11px] font-medium">Buy Hero Banner</span>
+                        <Sparkles className={`w-3.5 h-3.5 ${prop.is_hero_carousel ? 'text-amber-600' : 'text-slate-500'}`} />
+                        <span className={`text-[11px] font-medium ${prop.is_hero_carousel ? 'text-amber-900 font-semibold' : 'text-slate-700'}`}>
+                          Buy Hero Banner
+                        </span>
                       </div>
-                      <button
-                        onClick={() => toggleHeroCarousel(prop)}
-                        className={`w-9 h-5 rounded-full transition-colors relative cursor-pointer ${
+                      <div
+                        className={`w-10 h-5 rounded-full transition-colors relative flex items-center p-0.5 ${
                           prop.is_hero_carousel ? 'bg-[#D4AF37]' : 'bg-slate-300'
                         }`}
-                        title="Toggle inclusion in Buy page top carousel"
                       >
                         <span
-                          className={`w-3.5 h-3.5 rounded-full bg-white absolute top-0.5 transition-transform ${
-                            prop.is_hero_carousel ? 'left-4' : 'left-0.5'
+                          className={`w-4 h-4 rounded-full bg-white shadow-md transform transition-transform duration-200 ease-in-out ${
+                            prop.is_hero_carousel ? 'translate-x-5' : 'translate-x-0'
                           }`}
                         />
-                      </button>
+                      </div>
                     </div>
                   </div>
 

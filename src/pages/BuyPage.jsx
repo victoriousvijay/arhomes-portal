@@ -165,7 +165,7 @@ export const BuyPage = ({ onOpenEnquiry, onSelectResidence }) => {
   });
 
   // Top showcase properties for the hero banner carousel
-  const heroOnly = catalog.filter(p => p.is_hero_carousel);
+  const heroOnly = catalog.filter(p => Boolean(p.is_hero_carousel));
   const carouselProperties = heroOnly.length > 0 ? heroOnly : catalog.slice(0, 5);
 
   return (

@@ -22,12 +22,12 @@ export const AnimatedHeading = ({
   return (
     <h1
       className={className}
-      style={{ letterSpacing: '-0.03em' }}
+      style={{ letterSpacing: '-0.012em' }}
     >
       {lines.map((line, lineIndex) => {
         const words = line.split(' ');
         return (
-          <span key={lineIndex} className="block md:whitespace-nowrap">
+          <span key={lineIndex} className="block md:whitespace-nowrap mb-1.5 sm:mb-2.5 last:mb-0">
             {words.map((word, wordIndex) => {
               return (
                 <span key={wordIndex} className="inline-block whitespace-nowrap">

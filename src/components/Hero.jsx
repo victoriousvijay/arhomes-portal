@@ -29,12 +29,12 @@ export const Hero = ({ onOpenEnquiry, onStartChat }) => {
             {/* Animated Character-by-Character Heading */}
             <AnimatedHeading
               text={"Where families thrive,\nand dream homes begin."}
-              className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] xl:text-[46px] font-normal mb-3 sm:mb-4 text-white leading-tight tracking-tight"
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-[44px] xl:text-[50px] font-normal mb-5 sm:mb-6 md:mb-7 text-white leading-[1.22] sm:leading-[1.2] drop-shadow-sm"
             />
 
             {/* Subheading with Fade-in (800ms delay, 1000ms duration) */}
             <FadeIn delay={800} duration={1000}>
-              <p className="text-xs sm:text-sm md:text-base text-gray-200 mb-5 max-w-xl font-light leading-relaxed">
+              <p className="text-sm sm:text-base md:text-lg text-slate-100/90 mb-7 sm:mb-9 max-w-xl font-light leading-relaxed drop-shadow-sm">
                 Discover bespoke independent floors and luxury residences crafted for warmth, comfort, and generations to come.
               </p>
             </FadeIn>

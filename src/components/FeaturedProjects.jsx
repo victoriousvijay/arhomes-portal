@@ -16,8 +16,9 @@ const formatImageUrl = (url) => {
 
 export const FeaturedProjects = ({ onSelectResidence, onOpenEnquiry }) => {
   const { properties } = useSiteData();
-  const featured = properties && properties.filter(p => p.is_featured_home);
-  const residencesList = featured && featured.length > 0 ? featured : (properties && properties.length > 0 ? properties : RESIDENCES);
+  const allProps = properties && properties.length > 0 ? properties : RESIDENCES;
+  const featured = allProps.filter(p => Boolean(p.is_featured_home));
+  const residencesList = featured.length > 0 ? featured : allProps;
 
   const [activeIndex, setActiveIndex] = useState(0);
   const [touchStart, setTouchStart] = useState(null);

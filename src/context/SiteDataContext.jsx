@@ -529,7 +529,15 @@ export const SiteDataProvider = ({ children }) => {
 
   const [properties, setProperties] = useState(() => {
     const saved = localStorage.getItem('arhomes_properties');
-    return saved ? JSON.parse(saved) : DEFAULT_PROPERTIES;
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 1) return parsed;
+      } catch (e) {
+        return DEFAULT_PROPERTIES;
+      }
+    }
+    return DEFAULT_PROPERTIES;
   });
 
   const [owners, setOwners] = useState(() => {
@@ -635,8 +643,8 @@ export const SiteDataProvider = ({ children }) => {
             priceUsd: p.priceUsd || p.price_usd || '',
             subCategory: p.subCategory || p.sub_category || p.category,
             isNew: p.isNew !== undefined ? p.isNew : (p.is_new !== undefined ? p.is_new : false),
-            is_featured_home: p.is_featured_home !== undefined ? p.is_featured_home : true,
-            is_hero_carousel: p.is_hero_carousel !== undefined ? p.is_hero_carousel : true
+            is_featured_home: p.is_featured_home !== undefined && p.is_featured_home !== null ? Boolean(p.is_featured_home) : true,
+            is_hero_carousel: p.is_hero_carousel !== undefined && p.is_hero_carousel !== null ? Boolean(p.is_hero_carousel) : false
           }));
           setProperties(mappedProps);
           localStorage.setItem('arhomes_properties', JSON.stringify(mappedProps));
@@ -796,8 +804,8 @@ export const SiteDataProvider = ({ children }) => {
           image: prop.image,
           is_new: prop.isNew !== undefined ? prop.isNew : prop.is_new,
           "isNew": prop.isNew !== undefined ? prop.isNew : prop.is_new,
-          is_featured_home: prop.is_featured_home !== undefined ? prop.is_featured_home : true,
-          is_hero_carousel: prop.is_hero_carousel !== undefined ? prop.is_hero_carousel : false,
+          is_featured_home: prop.is_featured_home !== undefined && prop.is_featured_home !== null ? Boolean(prop.is_featured_home) : true,
+          is_hero_carousel: prop.is_hero_carousel !== undefined && prop.is_hero_carousel !== null ? Boolean(prop.is_hero_carousel) : false,
           display_order: prop.display_order || 1
         };
         await supabase.from('properties').upsert(payload);
