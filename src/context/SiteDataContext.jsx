@@ -92,7 +92,7 @@ const DEFAULT_SERVICES = [
     desc: 'Capital financing for enterprise expansion, corporate office floor acquisition, and commercial property investment backed by flexible tenure and structured repayment.',
     highlights: ['Commercial Asset Financing', 'Working Capital Lines', 'MSME & Corporate Loan Desk'],
     category: 'Commercial Funding',
-    image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80',
+    image: '/services/service-business-loans.webp',
     display_order: 2
   },
   {
@@ -102,7 +102,7 @@ const DEFAULT_SERVICES = [
     desc: 'Unsecured high-value personal credit lines designed for bespoke interior staging, Italian marble upgrades, furnishings, and emergency financial liquidity.',
     highlights: ['Collateral-Free Disbursement', '12 to 60 Months Flexible Tenure', 'Minimal Doorstep Paperwork'],
     category: 'Personal Finance',
-    image: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=800&q=80',
+    image: '/services/service-personal-loans.jpg',
     display_order: 3
   },
   {
@@ -112,7 +112,7 @@ const DEFAULT_SERVICES = [
     desc: 'Professional credit health audits to help buyers elevate their credit rating above 750+. We rectify reporting discrepancies, restructure debt ratios, and secure lower interest rates.',
     highlights: ['Credit Report Dispute Redressal', 'Debt-to-Income Optimization', 'Rate-Reduction Consulting'],
     category: 'Credit Advisory',
-    image: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=800&q=80',
+    image: '/services/service-cibil-score.jpg',
     display_order: 4
   },
   {
@@ -122,7 +122,7 @@ const DEFAULT_SERVICES = [
     desc: 'Comprehensive, end-to-end loan coordination. From document collection and property valuation to title search and bank disbursement, our dedicated banking officers handle everything.',
     highlights: ['100% Dedicated Relationship Manager', 'Doorstep Verification & Pickup', 'Zero Hidden Advisory Charges'],
     category: 'Banking Concierge',
-    image: 'https://images.unsplash.com/photo-1450133064473-71024230f91b?auto=format&fit=crop&w=800&q=80',
+    image: '/services/service-all-loans.jpg',
     display_order: 5
   },
   {
@@ -132,7 +132,7 @@ const DEFAULT_SERVICES = [
     desc: 'Verified acquisition consulting for buyers seeking prime Jaipur real estate. We curate high-return independent floors, luxury villas, apartments, commercial suites, and freehold plots.',
     highlights: ['Villas & Triplex Mansions', 'Apartments & Commercial Towers', 'Freehold Plots & Estate Land'],
     category: 'Property Portfolio',
-    image: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=800&q=80',
+    image: '/services/service-land-acquisition.jpg',
     display_order: 6
   }
 ];
@@ -568,7 +568,25 @@ export const SiteDataProvider = ({ children }) => {
 
   const [services, setServices] = useState(() => {
     const saved = localStorage.getItem('arhomes_services');
-    return saved ? JSON.parse(saved) : DEFAULT_SERVICES;
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) {
+          const hasStaleImages = parsed.some(s => 
+            ['business-loans', 'personal-loans', 'cibil-desk', 'banking-desk', 'land-acquisition'].includes(s.id) &&
+            s.image && s.image.includes('unsplash.com')
+          );
+          if (hasStaleImages) {
+            localStorage.removeItem('arhomes_services');
+            return DEFAULT_SERVICES;
+          }
+          return parsed;
+        }
+      } catch (e) {
+        return DEFAULT_SERVICES;
+      }
+    }
+    return DEFAULT_SERVICES;
   });
 
   const [leads, setLeads] = useState(() => {

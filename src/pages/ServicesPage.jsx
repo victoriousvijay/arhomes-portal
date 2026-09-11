@@ -377,7 +377,7 @@ export const ServicesPage = ({ onOpenEnquiry }) => {
                   className="bg-white border border-slate-200 rounded-2xl overflow-hidden hover:border-[#D4AF37] hover:shadow-xl transition-all duration-300 group flex flex-col justify-between shadow-sm hover:-translate-y-1"
                 >
                   {/* Card Image Header with Badges */}
-                  <div className="relative h-44 w-full overflow-hidden bg-slate-100">
+                  <div className="relative h-48 sm:h-52 w-full overflow-hidden bg-slate-100">
                     <img
                       src={formatGoogleDriveUrl(svc.image)}
                       alt={svc.title}
