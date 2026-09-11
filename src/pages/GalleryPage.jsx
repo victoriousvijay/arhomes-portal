@@ -9,7 +9,6 @@ import {
   Maximize2 
 } from 'lucide-react';
 
-import { LineSidebar } from '../components/LineSidebar';
 
 const formatImageUrl = (url) => {
   if (!url) return '';
@@ -228,23 +227,9 @@ const GALLERY_ITEMS = [
 export const GalleryPage = () => {
   const { gallery } = useSiteData();
   const [activeCategory, setActiveCategory] = useState('all');
-  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(null);
 
   const displayGallery = gallery && gallery.length > 0 ? gallery : GALLERY_ITEMS;
-
-  const gallerySidebarItems = CATEGORIES.map((cat) => {
-    const count = cat.id === 'all' 
-      ? displayGallery.length 
-      : displayGallery.filter(i => i.category === cat.id).length;
-    return {
-      id: cat.id,
-      label: cat.label,
-      count
-    };
-  });
-
-  const activeCategoryIndex = Math.max(0, CATEGORIES.findIndex(c => c.id === activeCategory));
 
   const filteredItems = displayGallery.filter(
     (item) => activeCategory === 'all' || item.category === activeCategory
@@ -278,94 +263,49 @@ export const GalleryPage = () => {
         breadcrumbs={[{ label: 'Gallery' }]}
       />
 
-      <div className="max-w-[1440px] mx-auto px-6 sm:px-12 py-10 sm:py-16">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 py-10 sm:py-14">
         
-        {/* Mobile / Tablet Responsive Filter Bar */}
-        <div className="lg:hidden mb-8">
-          <div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
-            <div className="flex items-center justify-between">
-              <div>
-                <span className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold block">Active Filter</span>
-                <span className="text-sm font-bold text-[#013724]">
-                  {CATEGORIES.find(c => c.id === activeCategory)?.label || 'All Portfolio'} ({filteredItems.length})
-                </span>
-              </div>
+        {/* Horizontal Category Filter Pills */}
+        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-8 sm:mb-12">
+          {CATEGORIES.filter(cat => cat.id === 'all' || displayGallery.some(i => i.category === cat.id)).map((cat) => {
+            const isActive = activeCategory === cat.id;
+            const count = cat.id === 'all' 
+              ? displayGallery.length 
+              : displayGallery.filter(i => i.category === cat.id).length;
+            return (
               <button
+                key={cat.id}
                 type="button"
-                onClick={() => setIsMobileFilterOpen(!isMobileFilterOpen)}
-                className="px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-colors flex items-center gap-1.5 cursor-pointer"
+                onClick={() => setActiveCategory(cat.id)}
+                className={`px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 cursor-pointer flex items-center gap-2 ${
+                  isActive
+                    ? 'bg-[#013724] text-white shadow-md shadow-[#013724]/20 scale-[1.02]'
+                    : 'bg-white text-slate-600 hover:bg-slate-100 hover:text-slate-900 border border-slate-200 shadow-sm'
+                }`}
               >
-                <span>{isMobileFilterOpen ? 'Close Categories' : 'Select Category'}</span>
-                <span className="text-xs">{isMobileFilterOpen ? '▲' : '▼'}</span>
+                <span>{cat.label}</span>
+                <span className={`text-[11px] px-2 py-0.5 rounded-full font-bold ${
+                  isActive ? 'bg-white/20 text-[#D4AF37]' : 'bg-slate-100 text-slate-500'
+                }`}>
+                  {count}
+                </span>
               </button>
-            </div>
-
-            {isMobileFilterOpen && (
-              <div className="mt-4 pt-4 border-t border-slate-100 animate-in fade-in slide-in-from-top-2">
-                <LineSidebar
-                  items={gallerySidebarItems}
-                  activeIndex={activeCategoryIndex}
-                  onItemClick={(index, label, item) => {
-                    setActiveCategory(item.id);
-                    setIsMobileFilterOpen(false);
-                  }}
-                  accentColor="#013724"
-                  textColor="#64748b"
-                  markerColor="#cbd5e1"
-                  showIndex={true}
-                  showMarker={true}
-                  fontSize={0.92}
-                  itemGap={10}
-                  markerLength={28}
-                  maxShift={12}
-                />
-              </div>
-            )}
-          </div>
+            );
+          })}
         </div>
 
-        {/* Desktop Layout: Side-by-Side LineSidebar + Pure Photo Gallery Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 xl:gap-12 items-start">
-          
-          {/* Left Column: Interactive LineSidebar */}
-          <aside className="hidden lg:block lg:col-span-4 xl:col-span-3 sticky top-28 bg-white/80 backdrop-blur-md border border-slate-200/90 rounded-3xl p-6 sm:p-7 shadow-sm">
-            <div className="mb-5 pb-3 border-b border-slate-100">
-              <span className="text-[10px] uppercase tracking-widest text-[#013724] font-bold block">
-                Portfolio Filter
-              </span>
-              <h3 className="font-serif text-lg font-bold text-slate-900 mt-0.5">
-                Curated Archives
-              </h3>
-              <p className="text-xs text-slate-500 mt-1 font-light">
-                Hover & click to navigate through property sectors.
-              </p>
-            </div>
+        {/* Gallery Subheader Info */}
+        <div className="flex items-center justify-between mb-6 pb-3 border-b border-slate-200/70">
+          <span className="text-xs sm:text-sm font-medium text-slate-600">
+            Showing <strong className="text-slate-900 font-bold">{filteredItems.length}</strong> {filteredItems.length === 1 ? 'Showcase' : 'Showcases'} in <strong className="text-[#013724] font-bold">{CATEGORIES.find(c => c.id === activeCategory)?.label}</strong>
+          </span>
+          <span className="text-xs text-slate-400 hidden sm:inline-block">
+            Click any photo to enlarge
+          </span>
+        </div>
 
-            <LineSidebar
-              items={gallerySidebarItems}
-              activeIndex={activeCategoryIndex}
-              onItemClick={(index, label, item) => setActiveCategory(item.id)}
-              accentColor="#013724"
-              textColor="#64748b"
-              markerColor="#cbd5e1"
-              showIndex={true}
-              showMarker={true}
-              fontSize={0.98}
-              itemGap={15}
-              markerLength={44}
-              maxShift={20}
-            />
-          </aside>
-
-          {/* Right Column: Photo Gallery Grid */}
-          <div className="lg:col-span-8 xl:col-span-9">
-            <div className="flex items-center justify-between mb-6 pb-2 border-b border-slate-200/60">
-              <span className="text-xs font-semibold text-slate-600">
-                Showing <strong className="text-slate-900">{filteredItems.length}</strong> {filteredItems.length === 1 ? 'Showcase' : 'Showcases'} in <strong className="text-[#013724]">{CATEGORIES.find(c => c.id === activeCategory)?.label}</strong>
-              </span>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 sm:gap-7">
+        {/* Full-Width Responsive Gallery Grid (4 columns on lg/xl, 3 on md, 2 on sm) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {filteredItems.map((item, idx) => (
             <div
               key={item.id}
@@ -386,19 +326,17 @@ export const GalleryPage = () => {
               </div>
 
               {/* Minimal Card Footer */}
-              <div className="p-5 bg-white">
+              <div className="p-4 sm:p-5 bg-white">
                 <div className="flex items-center gap-1 text-[#013724] text-[10px] uppercase tracking-widest font-bold mb-1">
                   <MapPin className="w-3 h-3 text-[#013724]" />
                   <span>{item.location}</span>
                 </div>
-                <h4 className="font-serif text-base sm:text-lg font-bold text-slate-900 group-hover:text-[#013724] transition-colors">
+                <h4 className="font-serif text-sm sm:text-base font-bold text-slate-900 group-hover:text-[#013724] transition-colors line-clamp-2">
                   {item.title}
                 </h4>
               </div>
             </div>
           ))}
-            </div>
-          </div>
         </div>
 
       </div>
