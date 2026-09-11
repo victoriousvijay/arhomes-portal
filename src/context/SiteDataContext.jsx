@@ -224,67 +224,195 @@ const DEFAULT_PROPERTIES = [
 const DEFAULT_GALLERY = [
   {
     id: 1,
-    category: 'villas',
-    title: 'The Imperial Mansions & Villas',
-    location: 'Sirsi Road / Vaishali Estate, Jaipur',
-    image: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=1200&q=85',
+    title: 'AR Homes Corporate Headquarters & Executive Team',
+    category: 'commercial',
+    location: 'Main Headquarters, Jaipur',
+    image: '/gallery/gallery-01.jpg',
     display_order: 1
   },
   {
     id: 2,
-    category: 'floors',
-    title: 'C2 Boutique Independent Floor',
-    location: 'Civil Lines, Jaipur',
-    image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=85',
+    title: 'AR Homes Office Grand Opening & Inauguration',
+    category: 'commercial',
+    location: 'Corporate Office, Jaipur',
+    image: '/gallery/gallery-02.jpg',
     display_order: 2
   },
   {
     id: 3,
-    category: 'land',
-    title: 'AR Palm Meadows Freehold Estate Land & Plots',
-    location: 'Ajmer Road Express Corridor, Jaipur',
-    image: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1200&q=85',
+    title: 'Executive Leadership & Founding Partners',
+    category: 'commercial',
+    location: 'Corporate Office, Jaipur',
+    image: '/gallery/gallery-03.jpg',
     display_order: 3
   },
   {
     id: 4,
+    title: 'Client Consultation Desks & Workstation Cabins',
     category: 'commercial',
-    title: 'AR Pinnacle Business Suites Commercial Tower',
-    location: 'Tonk Road Commercial District, Jaipur',
-    image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=85',
+    location: 'Corporate Office, Jaipur',
+    image: '/gallery/gallery-04.jpg',
     display_order: 4
   },
   {
     id: 5,
-    category: 'apartments',
-    title: 'AR Homes Altura High-Rise Monolith',
-    location: 'Tonk Road Corridor, Jaipur',
-    image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=85',
+    title: 'Architectural Planning & Engineering Studio',
+    category: 'commercial',
+    location: 'Corporate Office, Jaipur',
+    image: '/gallery/gallery-05.jpg',
     display_order: 5
   },
   {
     id: 6,
-    category: 'floors',
-    title: 'C5 Sculpted Verandas & Facade',
-    location: 'Vaishali Nagar, Jaipur',
-    image: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=85',
+    title: 'Corporate Reception & Client Greeting Zone',
+    category: 'commercial',
+    location: 'Corporate Office, Jaipur',
+    image: '/gallery/gallery-06.jpg',
     display_order: 6
   },
   {
     id: 7,
-    category: 'land',
-    title: 'Gated Luxury Residential Land Enclave',
-    location: 'Sirsi Road Corridor, Jaipur',
-    image: 'https://images.unsplash.com/photo-1500076656116-558758c991c1?auto=format&fit=crop&w=1200&q=85',
+    title: 'VIP Client Waiting Lounge & Project Showcase Wall',
+    category: 'commercial',
+    location: 'Corporate Office, Jaipur',
+    image: '/gallery/gallery-07.jpg',
     display_order: 7
   },
   {
     id: 8,
-    category: 'interiors',
-    title: 'Double-Height Living Salon in Statuario Marble',
-    location: 'Civil Lines, Jaipur',
-    image: 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1200&q=85',
+    title: 'Executive Chamber & Deal Closure Suite',
+    category: 'commercial',
+    location: 'Corporate Office, Jaipur',
+    image: '/gallery/gallery-08.jpg',
     display_order: 8
+  },
+  {
+    id: 9,
+    title: 'Executive Bedroom with Cove Ceiling & Full-Height Wardrobes',
+    category: 'interiors',
+    location: 'Civil Lines, Jaipur',
+    image: '/gallery/gallery-09.jpg',
+    display_order: 9
+  },
+  {
+    id: 10,
+    title: 'Designer Living Room Salon with Italian Marble & Chandelier',
+    category: 'interiors',
+    location: 'Vaishali Nagar, Jaipur',
+    image: '/gallery/gallery-10.jpg',
+    display_order: 10
+  },
+  {
+    id: 11,
+    title: 'Contemporary Guest Bedroom with Geometric Feature Wall',
+    category: 'interiors',
+    location: 'Civil Lines, Jaipur',
+    image: '/gallery/gallery-11.jpg',
+    display_order: 11
+  },
+  {
+    id: 12,
+    title: 'Modern Master Bedroom with Accent Lighting & Slatted Panels',
+    category: 'interiors',
+    location: 'C-Scheme, Jaipur',
+    image: '/gallery/gallery-12.jpg',
+    display_order: 12
+  },
+  {
+    id: 13,
+    title: 'Designer Dressing Area with Mirrored Storage & Ambient Glow',
+    category: 'interiors',
+    location: 'Vaishali Nagar, Jaipur',
+    image: '/gallery/gallery-13.jpg',
+    display_order: 13
+  },
+  {
+    id: 14,
+    title: 'Spacious Family Lounge & Architectural Display Niches',
+    category: 'interiors',
+    location: 'Civil Lines, Jaipur',
+    image: '/gallery/gallery-14.jpg',
+    display_order: 14
+  },
+  {
+    id: 15,
+    title: 'Modern Independent Floor Facade & Designer Boundary Gate',
+    category: 'floors',
+    location: 'Civil Lines, Jaipur',
+    image: '/gallery/gallery-15.jpg',
+    display_order: 15
+  },
+  {
+    id: 16,
+    title: 'Covered Portico & Stilt Parking with False Ceiling Spotlights',
+    category: 'floors',
+    location: 'Vaishali Nagar, Jaipur',
+    image: '/gallery/gallery-16.jpg',
+    display_order: 16
+  },
+  {
+    id: 17,
+    title: 'Covered Front Courtyard & Double Entry Doors',
+    category: 'floors',
+    location: 'Civil Lines, Jaipur',
+    image: '/gallery/gallery-17.jpg',
+    display_order: 17
+  },
+  {
+    id: 18,
+    title: 'Expansive Sunlit Balcony with Glass Railing & Wooden Soffit',
+    category: 'floors',
+    location: 'Civil Lines, Jaipur',
+    image: '/gallery/gallery-18.jpg',
+    display_order: 18
+  },
+  {
+    id: 19,
+    title: 'Full Modular Kitchen with Quartz Countertops & Gloss Cabinets',
+    category: 'interiors',
+    location: 'Vaishali Nagar, Jaipur',
+    image: '/gallery/gallery-19.jpg',
+    display_order: 19
+  },
+  {
+    id: 20,
+    title: 'Contemporary L-Shaped Modular Kitchen & Stainless Sink',
+    category: 'interiors',
+    location: 'Civil Lines, Jaipur',
+    image: '/gallery/gallery-20.jpg',
+    display_order: 20
+  },
+  {
+    id: 21,
+    title: 'Modern Bathroom Vanity with Ceramic Countertop & Wall Mirror',
+    category: 'interiors',
+    location: 'Vaishali Nagar, Jaipur',
+    image: '/gallery/gallery-21.jpg',
+    display_order: 21
+  },
+  {
+    id: 22,
+    title: 'Opulent Master Suite with Wooden Flooring & Built-in Headboard',
+    category: 'interiors',
+    location: 'Civil Lines, Jaipur',
+    image: '/gallery/gallery-22.jpg',
+    display_order: 22
+  },
+  {
+    id: 23,
+    title: 'En-Suite Bathroom with Large Format Italian Marble Tiles',
+    category: 'interiors',
+    location: 'Civil Lines, Jaipur',
+    image: '/gallery/gallery-23.jpg',
+    display_order: 23
+  },
+  {
+    id: 24,
+    title: 'Upper Level Terrace Landing with Panoramic Neighborhood View',
+    category: 'villas',
+    location: 'Vaishali Nagar, Jaipur',
+    image: '/gallery/gallery-24.jpg',
+    display_order: 24
   }
 ];
 
@@ -423,7 +551,19 @@ export const SiteDataProvider = ({ children }) => {
 
   const [gallery, setGallery] = useState(() => {
     const saved = localStorage.getItem('arhomes_gallery');
-    return saved ? JSON.parse(saved) : DEFAULT_GALLERY;
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.some(p => p.image && p.image.includes('unsplash.com'))) {
+          localStorage.removeItem('arhomes_gallery');
+          return DEFAULT_GALLERY;
+        }
+        return parsed;
+      } catch (e) {
+        return DEFAULT_GALLERY;
+      }
+    }
+    return DEFAULT_GALLERY;
   });
 
   const [services, setServices] = useState(() => {
